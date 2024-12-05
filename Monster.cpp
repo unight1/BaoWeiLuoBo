@@ -51,9 +51,9 @@ void Sheep::moveToSequence(const std::vector<Vec2>& positions)
 
     auto attacked = CallFunc::create([=]() {
         auto target = this->getParent();
-        auto scene = dynamic_cast<Carrot*>(target);
-        scene->takeDamage(hurt);
-        this->setHP(0);
+        auto Scene = dynamic_cast<SceneBase*>(target);
+        Scene->getCarrot()->takeDamage(hurt);//根据怪物的伤害对萝卜造成伤害
+        this->setHP(0);//攻击后怪物死亡
 
         });
     auto sequenceAction = Sequence::create(actions); // 创建序列动作
@@ -128,9 +128,9 @@ void Bird::moveToSequence(const std::vector<Vec2>& positions)
 
     auto attacked = CallFunc::create([=]() {
         auto target = this->getParent();
-        auto scene = dynamic_cast<Carrot*>(target);
-        scene->takeDamage(hurt);
-        this->setHP(0);
+        auto Scene = dynamic_cast<SceneBase*>(target);
+        Scene->getCarrot()->takeDamage(hurt);//根据怪物的伤害对萝卜造成伤害
+        this->setHP(0);//攻击后怪物死亡
 
         });
     auto sequenceAction = Sequence::create(actions); // 创建序列动作
@@ -205,9 +205,9 @@ void Star::moveToSequence(const std::vector<Vec2>& positions)
 
     auto attacked = CallFunc::create([=]() {
         auto target = this->getParent();
-        auto scene = dynamic_cast<Carrot*>(target);
-        scene->takeDamage(hurt);
-        this->setHP(0);
+        auto Scene = dynamic_cast<SceneBase*>(target);
+        Scene->getCarrot()->takeDamage(hurt);//根据怪物的伤害对萝卜造成伤害
+        this->setHP(0);//攻击后怪物死亡
         });
     auto sequenceAction = Sequence::create(actions); // 创建序列动作
     auto sequence = Sequence::create(sequenceAction, attacked, nullptr);
