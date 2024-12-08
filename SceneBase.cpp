@@ -90,7 +90,7 @@ void SceneBase::initScene(std::string& mapName)
     // 创建萝卜并放置在地图上的位置
    
     carrot->setCarrotPosition(Vec2(xC, yC)); //设置萝卜位置
-    carrot->putCarrot(10);          //真初始化，10:萝卜血量
+    carrot->putCarrot(10+ 5*m_levelScene->getItem2Level());          //真初始化，10:萝卜血量
     this->addChild(carrot, 1);      // 添加到场景中，显示在第1层，确保在地图上方显示
 
     TMXObjectGroup* towerPositions = map->getObjectGroup("TowerPosition");
@@ -107,7 +107,7 @@ void SceneBase::initScene(std::string& mapName)
         Vec2 position = Vec2(xP, yP);
         TowerPosition* towerPos = TowerPosition::create();
         towerPos->setPosition(position);
-        towerPos->setVisible(true);        // 初始化时设置为隐藏状态
+        towerPos->setVisible(false);        // 初始化时设置为隐藏状态
         this->addChild(towerPos, 3);        // 添加到场景中，显示在第3层，确保在地图上方显示
 
     }
@@ -475,9 +475,8 @@ void SceneBase::onGameWin()
 
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("main.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", true);
-        //Director::getInstance()->resume();          // 恢复游戏
         int nextLevel = m_level + 1;
-        m_levelScene->money += 100;
+        m_levelScene->consumeMoney(-100);
         m_levelScene->unlockLevel(nextLevel);       // 解锁下一关
         Director::getInstance()->popScene();        // 返回到上一个场景
     }
