@@ -4,7 +4,6 @@
 #include "UpScene.h"
 #include "audio/include/SimpleAudioEngine.h"
 
-extern bool _SOUND_IS_OPEN_;
 
 Scene* LevelScene::createScene()
 {
@@ -18,29 +17,29 @@ bool LevelScene::init()
         return false;
     }
 
-    // ¼ÓÔØ±£´æµÄÊı¾İ
+    // åŠ è½½ä¿å­˜çš„æ•°æ®
     money = UserDefault::getInstance()->getIntegerForKey("Money", 0);
-    m_unlockLevel = UserDefault::getInstance()->getIntegerForKey("UnlockedLevel", 1); // Ä¬ÈÏ½âËøµÚÒ»¹Ø
+    m_unlockLevel = UserDefault::getInstance()->getIntegerForKey("UnlockedLevel", 1); // é»˜è®¤è§£é”ç¬¬ä¸€å…³
     skill1 = UserDefault::getInstance()->getIntegerForKey("Skill1Level", 0);
     skill2 = UserDefault::getInstance()->getIntegerForKey("Skill2Level", 0);
 
-    // Ìí¼Ó±³¾°
+    // æ·»åŠ èƒŒæ™¯
     auto background = Sprite::create("start_background.jpg");
-    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // ÉèÖÃ±³¾°Î»ÖÃÎªÆÁÄ»ÖĞĞÄ
+    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // è®¾ç½®èƒŒæ™¯ä½ç½®ä¸ºå±å¹•ä¸­å¿ƒ
     background->setScale(1.5f);
-    this->addChild(background, 0); // ½«±³¾°Ìí¼Óµ½³¡¾°ÖĞ£¬²ã¼¶Îª0
+    this->addChild(background, 0); // å°†èƒŒæ™¯æ·»åŠ åˆ°åœºæ™¯ä¸­ï¼Œå±‚çº§ä¸º0
 
-    // Éı¼¶½çÃæ
+    // å‡çº§ç•Œé¢
     auto upgradeButton = MenuItemImage::create("upgrade.png", "upgrade.png", CC_CALLBACK_1(LevelScene::enterUpgradeScene, this));
     upgradeButton->setPosition(Vec2(1100, 100));
 
-    // ·µ»Ø¼ü
+    // è¿”å›é”®
     auto backButton = ui::Button::create("exit.png", "exit.png");
     backButton->setPosition(Vec2(100, 600));
     backButton->addClickEventListener(CC_CALLBACK_1(LevelScene::goBack, this));
     this->addChild(backButton);
 
-    // Ñ¡Ôñ¹Ø¿¨°´Å¥
+    // é€‰æ‹©å…³å¡æŒ‰é’®
     auto level1Button = MenuItemImage::create("game1.png", "game1.png", CC_CALLBACK_1(LevelScene::selectLevel1, this));
     auto level2Button = MenuItemImage::create("game2.png", "game2.png", CC_CALLBACK_1(LevelScene::selectLevel2, this));
     auto level3Button = MenuItemImage::create("game3.png", "game3.png", CC_CALLBACK_1(LevelScene::selectLevel3, this));
@@ -53,13 +52,13 @@ bool LevelScene::init()
     m_level2Button = level2Button;
     m_level3Button = level3Button;
 
-    // ÉèÖÃ³õÊ¼µÄÍ¼Æ¬
+    // è®¾ç½®åˆå§‹çš„å›¾ç‰‡
     m_level1Button->setNormalImage(Sprite::create("game1.png"));
     m_level2Button->setNormalImage(Sprite::create("game2.png"));
     m_level3Button->setNormalImage(Sprite::create("game3.png"));
 
-    // ÏÔÊ¾ money ÊıÁ¿µÄ Label
-    auto background1 = Sprite::create("qian.png"); // Ê¹ÓÃÖ¸¶¨µÄÍ¼Æ¬ÎÄ¼ş´´½¨ Sprite ¶ÔÏó×÷Îª±³¾°
+    // æ˜¾ç¤º money æ•°é‡çš„ Label
+    auto background1 = Sprite::create("qian.png"); // ä½¿ç”¨æŒ‡å®šçš„å›¾ç‰‡æ–‡ä»¶åˆ›å»º Sprite å¯¹è±¡ä½œä¸ºèƒŒæ™¯
     background1->setPosition(Vec2(100, 700)); 
     this->addChild(background1);
 
@@ -71,25 +70,25 @@ bool LevelScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu);
 
-    // ³õÊ¼»¯°´Å¥×´Ì¬
+    // åˆå§‹åŒ–æŒ‰é’®çŠ¶æ€
     m_unlockedLevel1 = true;
     m_unlockedLevel2 = (m_unlockLevel >= 2);
     m_unlockedLevel3 = (m_unlockLevel >= 3);
 
-    updateButtonState(); // ¸üĞÂ°´Å¥×´Ì¬
+    updateButtonState(); // æ›´æ–°æŒ‰é’®çŠ¶æ€
 
     return true;
 }
 
-// ·µ»Ø±êÌâ½çÃæ
+// è¿”å›æ ‡é¢˜ç•Œé¢
 void LevelScene::goBack(Ref* pSender)
 {
-    // ±£´æÊı¾İ
+    // ä¿å­˜æ•°æ®
     UserDefault::getInstance()->setIntegerForKey("Money", money);
     UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", m_unlockLevel);
     UserDefault::getInstance()->setIntegerForKey("Skill1Level", skill1);
     UserDefault::getInstance()->setIntegerForKey("Skill2Level", skill2);
-    UserDefault::getInstance()->flush(); // È·±£Êı¾İ±»Ğ´Èë
+    UserDefault::getInstance()->flush(); // ç¡®ä¿æ•°æ®è¢«å†™å…¥
 
     Director::getInstance()->popScene();
 }
@@ -99,30 +98,30 @@ void LevelScene::selectLevel1(Ref* sender)
 
     CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-    m_gameScene = Scene1::createScene(1, this); // ´«µİ¹Ø¿¨±àºÅ
+    m_gameScene = Scene1::createScene(1, this); // ä¼ é€’å…³å¡ç¼–å·
     Director::getInstance()->pushScene(m_gameScene);
 }
 
 void LevelScene::selectLevel2(Ref* sender)
 {
-    if (m_unlockLevel >= 2) // Èç¹ûµÚ¶ş¹ØÒÑ½âËø
+    if (m_unlockLevel >= 2) // å¦‚æœç¬¬äºŒå…³å·²è§£é”
     {
 
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-        m_gameScene = Scene2::createScene(2, this); // ´«µİ¹Ø¿¨±àºÅºÍ LevelScene ³¡¾°µÄÖ¸Õë
+        m_gameScene = Scene2::createScene(2, this); // ä¼ é€’å…³å¡ç¼–å·å’Œ LevelScene åœºæ™¯çš„æŒ‡é’ˆ
         Director::getInstance()->pushScene(m_gameScene);
     }
 }
 
 void LevelScene::selectLevel3(Ref* sender)
 {
-    if (m_unlockedLevel3) // Èç¹ûµÚÈı¹ØÒÑ½âËø
+    if (m_unlockedLevel3) // å¦‚æœç¬¬ä¸‰å…³å·²è§£é”
     {
 
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-        m_gameScene = Scene3::createScene(3, this); // ´«µİ¹Ø¿¨±àºÅºÍ LevelScene ³¡¾°µÄÖ¸Õë
+        m_gameScene = Scene3::createScene(3, this); // ä¼ é€’å…³å¡ç¼–å·å’Œ LevelScene åœºæ™¯çš„æŒ‡é’ˆ
         Director::getInstance()->pushScene(m_gameScene);
     }
 }
@@ -132,20 +131,20 @@ void LevelScene::updateButtonState()
     m_moneyLabel->setString("       " + std::to_string(money));
     if (m_unlockedLevel2)
     {
-        m_level2Button->setNormalImage(Sprite::create("game2.png")); // ½âËøºóµÄÍ¼Æ¬
+        m_level2Button->setNormalImage(Sprite::create("game2.png")); // è§£é”åçš„å›¾ç‰‡
     }
     else
     {
-        m_level2Button->setNormalImage(Sprite::create("game2_locked.png")); // Î´½âËøµÄÍ¼Æ¬
+        m_level2Button->setNormalImage(Sprite::create("game2_locked.png")); // æœªè§£é”çš„å›¾ç‰‡
     }
 
     if (m_unlockedLevel3)
     {
-        m_level3Button->setNormalImage(Sprite::create("game3.png")); // ½âËøºóµÄÍ¼Æ¬
+        m_level3Button->setNormalImage(Sprite::create("game3.png")); // è§£é”åçš„å›¾ç‰‡
     }
     else
     {
-        m_level3Button->setNormalImage(Sprite::create("game3_locked.png")); // Î´½âËøµÄÍ¼Æ¬
+        m_level3Button->setNormalImage(Sprite::create("game3_locked.png")); // æœªè§£é”çš„å›¾ç‰‡
     }
 }
 
@@ -162,7 +161,7 @@ void LevelScene::unlockLevel(int level)
         m_unlockedLevel3 = true;
     }
 
-    updateButtonState(); // ¸üĞÂ°´Å¥×´Ì¬ºÍÍ¼Æ¬
+    updateButtonState(); // æ›´æ–°æŒ‰é’®çŠ¶æ€å’Œå›¾ç‰‡
 }
 
 void LevelScene::consumeMoney(int n) {
@@ -179,22 +178,22 @@ void LevelScene::enterUpgradeScene(Ref* sender)
     Director::getInstance()->pushScene(scene);
 }
 
-// ¼¼ÄÜ1Éı¼¶
+// æŠ€èƒ½1å‡çº§
 void LevelScene::upgradeItem1() {
     skill1 += 1;
 }
 
-// ¼¼ÄÜ2Éı¼¶
+// æŠ€èƒ½2å‡çº§
 void LevelScene::upgradeItem2() {
     skill2 += 1;
 }
 
-// ·µ»Ø¼¼ÄÜ1µÈ¼¶
+// è¿”å›æŠ€èƒ½1ç­‰çº§
 int LevelScene::getItem1Level() {
     return skill1;
 }
 
-// ·µ»Ø¼¼ÄÜ2µÈ¼¶
+// è¿”å›æŠ€èƒ½2ç­‰çº§
 int LevelScene::getItem2Level() {
     return skill2;
 }
