@@ -39,6 +39,13 @@ bool LevelScene::init()
     backButton->addClickEventListener(CC_CALLBACK_1(LevelScene::goBack, this));
     this->addChild(backButton);
 
+    //清空历史记录键
+    auto clearButton = ui::Button::create("clear.png", "clear.png");
+    clearButton->setPosition(Vec2(100, 100));
+    clearButton->setScale(0.5f);
+    clearButton->addClickEventListener(CC_CALLBACK_1(LevelScene::clear, this));
+    this->addChild(clearButton);
+
     // 选择关卡按钮
     auto level1Button = MenuItemImage::create("game1.png", "game1.png", CC_CALLBACK_1(LevelScene::selectLevel1, this));
     auto level2Button = MenuItemImage::create("game2.png", "game2.png", CC_CALLBACK_1(LevelScene::selectLevel2, this));
@@ -196,4 +203,23 @@ int LevelScene::getItem1Level() {
 // 返回技能2等级
 int LevelScene::getItem2Level() {
     return skill2;
+}
+
+//清空历史记录
+void LevelScene::clear(Ref* sender) {
+    // 清空保存的数据
+    UserDefault::getInstance()->setIntegerForKey("Money", 0);
+    UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", 1); // 重置为默认解锁第一关
+    UserDefault::getInstance()->setIntegerForKey("Skill1Level", 0);
+    UserDefault::getInstance()->setIntegerForKey("Skill2Level", 0);
+    UserDefault::getInstance()->flush(); 
+
+    // 更新当前场景的状态
+    money = 0;
+    m_unlockLevel = 1;
+    skill1 = 0;
+    skill2 = 0;
+
+    updateButtonState(); // 更新按钮状态
+    Director::getInstance()->popScene();
 }
