@@ -1,39 +1,49 @@
+#pragma once
+
 #ifndef __LEVEL_SCENE_H__
 #define __LEVEL_SCENE_H__
 #include "cocos2d.h"
+#include "ui/CocosGUI.h"
+
 USING_NS_CC;
 class LevelScene : public Scene
 {
 public:
-    static LevelScene* create();
+    static Scene* createScene();
+
     void unlockLevel(int level);
     virtual bool init();
     bool m_unlockedLevels[3];
     int m_unlockedLevel1;
-    int m_unlockedLevel2 ;
-    int m_unlockedLevel3 ;
+    int m_unlockedLevel2;
+    int m_unlockedLevel3;
     void selectLevel1(Ref* sender);
     void selectLevel2(Ref* sender);
     void selectLevel3(Ref* sender);
-    int m_unlockLevel ;// ±£´æÒÑ½âËøµÄ¹Ø¿¨±àºÅ
+    void LevelScene::goBack(Ref* pSender);
+    int m_unlockLevel;// æ·‡æ¿†ç“¨å®¸èŒ¶Ğ’é–¿ä½ºæ®‘éå†²å´±ç¼‚æ §å½¿
+
     MenuItemImage* m_level1Button;
     MenuItemImage* m_level2Button;
     MenuItemImage* m_level3Button;
     void updateButtonState();
-    Sprite* m_gameImage; // mubu
-    Label* m_moneyLabel;//ÏÔÊ¾Ç®
-    void consumeMoney(int n);//»¨Ç®
-    int getMoney();//·µ»ØÇ®
+    //Sprite* m_gameImage; // mubu
+    Label* m_moneyLabel;//é„å‰§ãšé–½ï¿½
+    void consumeMoney(int n);//é‘ºéæŒ¶
+    int getMoney();//æ©æ–¿æ´–é–½ï¿½
     void enterUpgradeScene(Ref* sender);
-    void upgradeItem1();//»ñÈ¡¼¼ÄÜµÈ¼¶Óë·µ»Ø
+    void upgradeItem1();//é‘¾å³°å½‡é¶ï¿½é‘³ç•Œç“‘ç»¾Ñ‚ç¬Œæ©æ–¿æ´–
     void upgradeItem2();
     int getItem1Level();
     int getItem2Level();
+    CREATE_FUNC(LevelScene);
+    void clear(Ref* sender);//å¨“å‘¯â”–ç’æ¿ç¶
 private:
-    int money;//¾ÖÍâ»õ±Ò
-    int skill1 = 0;//¼¼ÄÜµÈ¼¶
+    int money;//çï¿½æ¾¶æ ¬æ£ç”¯ï¿½
+    int skill1 = 0;//é¶ï¿½é‘³ç•Œç“‘ç»¾ï¿½
     int skill2 = 0;
-    Scene* m_gameScene; // ±£´æ GameScene ³¡¾°µÄÖ¸Õë
+    Scene* m_gameScene; // æ·‡æ¿†ç“¨ GameScene é¦çƒ˜æ«™é¨å‹¬å¯šé–½ï¿½
 };
 
 #endif // __LEVEL_SCENE_H__
+
