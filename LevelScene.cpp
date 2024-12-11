@@ -17,36 +17,37 @@ bool LevelScene::init()
         return false;
     }
 
-    // ���ر��������
+    // 加载保存的数据
     money = UserDefault::getInstance()->getIntegerForKey("Money", 0);
-    m_unlockLevel = UserDefault::getInstance()->getIntegerForKey("UnlockedLevel", 1); // Ĭ�Ͻ�����һ��
+    m_unlockedLevel = UserDefault::getInstance()->getIntegerForKey("UnlockedLevel", 1); // 默认解锁第一关
     skill1 = UserDefault::getInstance()->getIntegerForKey("Skill1Level", 0);
     skill2 = UserDefault::getInstance()->getIntegerForKey("Skill2Level", 0);
+    
 
-    // ���ӱ���
+    // 添加背景
     auto background = Sprite::create("start_background.jpg");
-    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // ���ñ���λ��Ϊ��Ļ����
+    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // 设置背景位置为屏幕中心
     background->setScale(1.5f);
-    this->addChild(background, 0); // ���������ӵ������У��㼶Ϊ0
+    this->addChild(background, 0); // 将背景添加到场景中，层级为0
 
-    // ��������
+    // 升级界面
     auto upgradeButton = MenuItemImage::create("upgrade.png", "upgrade.png", CC_CALLBACK_1(LevelScene::enterUpgradeScene, this));
     upgradeButton->setPosition(Vec2(1100, 100));
 
-    // ���ؼ�
+    // 返回键
     auto backButton = ui::Button::create("exit.png", "exit.png");
     backButton->setPosition(Vec2(100, 600));
     backButton->addClickEventListener(CC_CALLBACK_1(LevelScene::goBack, this));
     this->addChild(backButton);
 
-    //�����ʷ��¼��
+    //清空历史记录键
     auto clearButton = ui::Button::create("clear.png", "clear.png");
     clearButton->setPosition(Vec2(100, 100));
     clearButton->setScale(0.5f);
     clearButton->addClickEventListener(CC_CALLBACK_1(LevelScene::clear, this));
     this->addChild(clearButton);
 
-    // ѡ��ؿ���ť
+    // 选择关卡按钮
     auto level1Button = MenuItemImage::create("game1.png", "game1.png", CC_CALLBACK_1(LevelScene::selectLevel1, this));
     auto level2Button = MenuItemImage::create("game2.png", "game2.png", CC_CALLBACK_1(LevelScene::selectLevel2, this));
     auto level3Button = MenuItemImage::create("game3.png", "game3.png", CC_CALLBACK_1(LevelScene::selectLevel3, this));
@@ -57,13 +58,13 @@ bool LevelScene::init()
     m_level2Button = level2Button;
     m_level3Button = level3Button;
 
-    // ���ó�ʼ��ͼƬ
+    // 设置初始的图片
     m_level1Button->setNormalImage(Sprite::create("game1.png"));
     m_level2Button->setNormalImage(Sprite::create("game2.png"));
     m_level3Button->setNormalImage(Sprite::create("game3.png"));
 
-    // ��ʾ money ������ Label
-    auto background1 = Sprite::create("qian.png"); // ʹ��ָ����ͼƬ�ļ����� Sprite ������Ϊ����
+    // 显示 money 数量的 Label
+    auto background1 = Sprite::create("qian.png"); // 使用指定的图片文件创建 Sprite 对象作为背景
     background1->setPosition(Vec2(100, 700)); 
     this->addChild(background1);
 
@@ -75,25 +76,15 @@ bool LevelScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu);
 
-    // ��ʼ����ť״̬
-    m_unlockedLevel1 = true;
-    m_unlockedLevel2 = (m_unlockLevel >= 2);
-    m_unlockedLevel3 = (m_unlockLevel >= 3);
-
-    updateButtonState(); // ���°�ť״̬
+    updateButtonState(); // 更新按钮状态
 
     return true;
 }
 
-// ���ر������
+// 返回标题界面
 void LevelScene::goBack(Ref* pSender)
 {
-    // ��������
-    UserDefault::getInstance()->setIntegerForKey("Money", money);
-    UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", m_unlockLevel);
-    UserDefault::getInstance()->setIntegerForKey("Skill1Level", skill1);
-    UserDefault::getInstance()->setIntegerForKey("Skill2Level", skill2);
-    UserDefault::getInstance()->flush(); // ȷ�����ݱ�д��
+    save();
 
     Director::getInstance()->popScene();
 }
@@ -103,74 +94,69 @@ void LevelScene::selectLevel1(Ref* sender)
 
     CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-    m_gameScene = Scene1::createScene(1, this); // ���ݹؿ����
+    m_gameScene = Scene1::createScene(1, this); // 传递关卡编号
     Director::getInstance()->pushScene(m_gameScene);
+    save();
 }
 
 void LevelScene::selectLevel2(Ref* sender)
 {
-    if (m_unlockLevel >= 2) // ����ڶ����ѽ���
+    if (m_unlockedLevel >= 2) // 如果第二关已解锁
     {
 
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-        m_gameScene = Scene2::createScene(2, this); // ���ݹؿ���ź� LevelScene ������ָ��
+        m_gameScene = Scene2::createScene(2, this); // 传递关卡编号和 LevelScene 场景的指针
         Director::getInstance()->pushScene(m_gameScene);
     }
+    save();
 }
 
 void LevelScene::selectLevel3(Ref* sender)
 {
-    if (m_unlockedLevel3) // ����������ѽ���
+    if (m_unlockedLevel >= 3) // 如果第三关已解锁
     {
 
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-        m_gameScene = Scene3::createScene(3, this); // ���ݹؿ���ź� LevelScene ������ָ��
+        m_gameScene = Scene3::createScene(3, this); // 传递关卡编号和 LevelScene 场景的指针
         Director::getInstance()->pushScene(m_gameScene);
     }
+    save();
 }
 
 void LevelScene::updateButtonState()
 {
     m_moneyLabel->setString("       " + std::to_string(money));
-    if (m_unlockedLevel2)
+    if (m_unlockedLevel>=2)
     {
-        m_level2Button->setNormalImage(Sprite::create("game2.png")); // �������ͼƬ
+        m_level2Button->setNormalImage(Sprite::create("game2.png")); // 解锁后的图片
     }
     else
     {
-        m_level2Button->setNormalImage(Sprite::create("game2_locked.png")); // δ������ͼƬ
+        m_level2Button->setNormalImage(Sprite::create("game2_locked.png")); // 未解锁的图片
     }
 
-    if (m_unlockedLevel3)
+    if (m_unlockedLevel>=3)
     {
-        m_level3Button->setNormalImage(Sprite::create("game3.png")); // �������ͼƬ
+        m_level3Button->setNormalImage(Sprite::create("game3.png")); // 解锁后的图片
     }
     else
     {
-        m_level3Button->setNormalImage(Sprite::create("game3_locked.png")); // δ������ͼƬ
+        m_level3Button->setNormalImage(Sprite::create("game3_locked.png")); // 未解锁的图片
     }
 }
 
 void LevelScene::unlockLevel(int level)
 {
-    m_unlockLevel = level;
-
-    if (level == 2)
-    {
-        m_unlockedLevel2 = true;
-    }
-    else if (level == 3)
-    {
-        m_unlockedLevel3 = true;
-    }
-
-    updateButtonState(); // ���°�ť״̬��ͼƬ
+    m_unlockedLevel = level;
+    save();
+    updateButtonState(); // 更新按钮状态和图片
 }
 
 void LevelScene::consumeMoney(int n) {
     money = money - n;
+    save();
 }
 
 int LevelScene::getMoney() {
@@ -183,41 +169,56 @@ void LevelScene::enterUpgradeScene(Ref* sender)
     Director::getInstance()->pushScene(scene);
 }
 
-// ����1����
+// 技能1升级
 void LevelScene::upgradeItem1() {
     skill1 += 1;
+    save();
 }
 
-// ����2����
+// 技能2升级
 void LevelScene::upgradeItem2() {
     skill2 += 1;
+    save();
 }
 
-// ���ؼ���1�ȼ�
+// 返回技能1等级
 int LevelScene::getItem1Level() {
     return skill1;
 }
 
-// ���ؼ���2�ȼ�
+// 返回技能2等级
 int LevelScene::getItem2Level() {
     return skill2;
 }
 
-//�����ʷ��¼
+//清空历史记录
 void LevelScene::clear(Ref* sender) {
-    // ��ձ��������
+    // 清空保存的数据
     UserDefault::getInstance()->setIntegerForKey("Money", 0);
-    UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", 1); // ����ΪĬ�Ͻ�����һ��
+    UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", 1); // 重置为默认解锁第一关
     UserDefault::getInstance()->setIntegerForKey("Skill1Level", 0);
     UserDefault::getInstance()->setIntegerForKey("Skill2Level", 0);
     UserDefault::getInstance()->flush(); 
 
-    // ���µ�ǰ������״̬
+    // 更新当前数据
     money = 0;
-    m_unlockLevel = 1;
+    m_unlockedLevel = 1;
     skill1 = 0;
     skill2 = 0;
 
-    updateButtonState(); // ���°�ť״̬
+    save();
+
+    updateButtonState(); // 更新按钮状态
     Director::getInstance()->popScene();
+}
+
+//存档
+void LevelScene::save()
+{
+    // 保存数据
+    UserDefault::getInstance()->setIntegerForKey("Money", money);
+    UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", m_unlockedLevel);
+    UserDefault::getInstance()->setIntegerForKey("Skill1Level", skill1);
+    UserDefault::getInstance()->setIntegerForKey("Skill2Level", skill2);
+    UserDefault::getInstance()->flush(); // 确保数据被写入
 }
