@@ -56,6 +56,13 @@ void Scene1::initMonster(int choose)
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
+    else if (choose == 7)
+    {
+        Boss* Monster = Boss::create();
+        Monster->setPosition(Vec2(300+50, 500+50));
+        this->addChild(Monster);
+        Monster->moveToSequence(path);
+    }
     else if (choose == 4)
     {
         Grass* Obstacle1 = Grass::create();
@@ -120,6 +127,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
     auto createGrass = CallFunc::create([=]() {initMonster(4); });
     auto createStone = CallFunc::create([=]() {initMonster(5); });
     auto createTreasure = CallFunc::create([=]() {initMonster(6); });
+    auto createBoss = CallFunc::create([=]() {initMonster(7); });
 
     runAction(Sequence::create(
         createGrass,
@@ -129,6 +137,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
         DelayTime::create(2), createFastr,
         DelayTime::create(2), createRabbit,
         DelayTime::create(2), createRabbit,
+        DelayTime::create(2), createBoss,
 
         DelayTime::create(12), createFlying,
         DelayTime::create(2), createRabbit,
