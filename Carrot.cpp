@@ -64,28 +64,28 @@ void Carrot::putCarrot(int hp) {
     // 初始化HP
     MaxHP = HP = hp;
     // 初始化外观和属性
-    auto carrot = Sprite::create("carrot1.png");
-    carrot->setPosition(Position);
-    addChild(carrot);
+    this->carrot = Sprite::create("carrot1.png"); // 假设1是满血的萝卜图片
+    this->carrot->setPosition(Position);
+    this->addChild(this->carrot);
 
     // 为萝卜添加血量的可视化
-    auto carrot_HP = Sprite::create("CarrotHP.png");
-    carrot_HP->setPosition(Vec2(Position.x, Position.y + 90));
+    this->carrot_HP = Sprite::create("CarrotHP.png");
+    this->carrot_HP->setPosition(Vec2(Position.x, Position.y + 90));
     addChild(carrot_HP);
 
     // 初始化Label
     std::string text = std::to_string(HP); // 将数字转换为字符串
-    auto carrotHP = Label::createWithTTF(text, "fonts/arial.ttf", 28);
-    carrotHP->setTextColor(Color4B::BLACK);
-    carrotHP->setPosition(Vec2(Position.x - 20, Position.y + 90));
-    addChild(carrotHP);
+    this->carrotHP = Label::createWithTTF(text, "fonts/arial.ttf", 28);
+    this->carrotHP->setTextColor(Color4B::BLACK);
+    this->carrotHP->setPosition(Vec2(Position.x - 20, Position.y + 90));
+    this->addChild(this->carrotHP);
 
     //点击萝卜，萝卜扭动事件
     ui::Button* BUTTON = ui::Button::create("botton.png");
     BUTTON->setOpacity(0); // 设置按钮不透明度为0，使其不可见
-    BUTTON->setContentSize(Size(carrot->getContentSize().width, carrot->getContentSize().height));
+    BUTTON->setContentSize(Size(this->carrot->getContentSize().width, this->carrot->getContentSize().height));
     BUTTON->setPosition(Position); // 设置按钮位置与萝卜精灵相同
-    BUTTON->addClickEventListener([carrot](Ref* sender) {// 处理按钮点击事件
+    BUTTON->addClickEventListener([this](Ref* sender) {// 处理按钮点击事件
         // 创建一个空的动画对象
         auto animation = Animation::create();
         // 添加动画帧
@@ -104,7 +104,7 @@ void Carrot::putCarrot(int hp) {
         auto animate = Animate::create(animation);
 
         // 将动画动作应用到carrot精灵上
-        carrot->runAction(Spawn::create(animate, nullptr));
+        this->carrot->runAction(Spawn::create(animate, nullptr));
         });
     addChild(BUTTON);
 }
