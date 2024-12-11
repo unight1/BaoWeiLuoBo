@@ -1,19 +1,18 @@
 #include "Setting.h"
 #include "StartScene.h"
 #include "SimpleAudioEngine.h"
-
+#include "LevelScene.h"
 
 USING_NS_CC;
 
 
-
-//åˆ›å»ºåœºæ™¯
+//´´½¨³¡¾°
 Scene* SettingScene::createScene()
 {
     return SettingScene::create();
 }
 
-//æ‰“å°é”™è¯¯ä¿¡æ¯
+//´òÓ¡´íÎóÐÅÏ¢
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -30,22 +29,22 @@ bool SettingScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    //æ·»åŠ èƒŒæ™¯
+    //Ìí¼Ó±³¾°
     auto background = Sprite::create("start_background.jpg");
-    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // è®¾ç½®èƒŒæ™¯ä½ç½®ä¸ºå±å¹•ä¸­å¿ƒ
+    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // ÉèÖÃ±³¾°Î»ÖÃÎªÆÁÄ»ÖÐÐÄ
     background->setScale(1.5);
-    this->addChild(background, 0); // å°†èƒŒæ™¯æ·»åŠ åˆ°åœºæ™¯ä¸­ï¼Œå±‚çº§ä¸º0
+    this->addChild(background, 0); // ½«±³¾°Ìí¼Óµ½³¡¾°ÖÐ£¬²ã¼¶Îª0
 
 
 
-    //è¿”å›žé”®
+    //·µ»Ø¼ü
     auto back = ui::Button::create("exit.png", "exit.png");
     back->setPosition(Vec2(400, 600));
     back->addClickEventListener(CC_CALLBACK_1(SettingScene::goBack, this));
     this->addChild(back);
 
 
-    //éŸ³é‡å¼€å…³
+    //ÒôÁ¿¿ª¹Ø
 
     auto music_switch = Sprite::create("music_switch.png");
     music_switch->setPosition(Vec2(480,450)); 
@@ -53,20 +52,20 @@ bool SettingScene::init()
     this->addChild(music_switch); 
 
     auto volumeCheckBox = ui::CheckBox::create("checkbox_normal.png", "checkbox_selected.png");
-    volumeCheckBox->setPosition(Vec2(580,450)); // è®¾ç½®å¤é€‰æ¡†ä½ç½®
-    volumeCheckBox->addEventListener(CC_CALLBACK_2(SettingScene::checkBoxEvent, this)); // æ·»åŠ äº‹ä»¶ç›‘å¬
+    volumeCheckBox->setPosition(Vec2(580,450)); // ÉèÖÃ¸´Ñ¡¿òÎ»ÖÃ
+    volumeCheckBox->addEventListener(CC_CALLBACK_2(SettingScene::checkBoxEvent, this)); // Ìí¼ÓÊÂ¼þ¼àÌý
     this->addChild(volumeCheckBox);
-    const bool isChecked = UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState",true); // é»˜è®¤å€¼ä¸º true
-    volumeCheckBox->setSelected(isChecked); // è®¾ç½®å¤é€‰æ¡†çŠ¶æ€
+    const bool isChecked = UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState",true); // Ä¬ÈÏÖµÎª true
+    volumeCheckBox->setSelected(isChecked); // ÉèÖÃ¸´Ñ¡¿ò×´Ì¬
 
-
+    
 
 
     return true;
 }
 
 
-//å¼€å…³éŸ³é‡
+//¿ª¹ØÒôÁ¿
 void SettingScene::checkBoxEvent(Ref* sender, ui::CheckBox::EventType type) 
 {
     
@@ -84,7 +83,7 @@ void SettingScene::checkBoxEvent(Ref* sender, ui::CheckBox::EventType type)
 
 
 
-//è¿”å›žæ ‡é¢˜ç•Œé¢
+//·µ»Ø±êÌâ½çÃæ
 void SettingScene::goBack(Ref* pSender)
 {
     Director::getInstance()->popScene();

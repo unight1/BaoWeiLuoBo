@@ -26,14 +26,14 @@ Scene1* Scene1::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-// æ‰“å°æœ‰ç”¨çš„é”™è¯¯æ¶ˆæ¯ï¼Œè€Œä¸æ˜¯åœ¨æ–‡ä»¶ä¸å­˜åœ¨æ—¶æ®µé”™è¯¯ã€‚
+// ´òÓ¡ÓÐÓÃµÄ´íÎóÏûÏ¢£¬¶ø²»ÊÇÔÚÎÄ¼þ²»´æÔÚÊ±¶Î´íÎó¡£
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-//1ä¸ºæ™®é€šå…”å­ï¼Œ2ä¸ºæ»‘æ¿å…”ï¼Œ3ä¸ºé£žè¡Œå…”
+//1ÎªÆÕÍ¨ÍÃ×Ó£¬2Îª»¬°åÍÃ£¬3Îª·ÉÐÐÍÃ
 void Scene1::initMonster(int choose)
 {
     if (choose == 1)
@@ -62,7 +62,7 @@ void Scene1::initMonster(int choose)
 // on "init" you need to initialize your instance
 bool Scene1::init(int level, LevelScene* levelScene)
 {
-    // è°ƒç”¨äº†çˆ¶ç±»Sceneçš„init()å‡½æ•°è¿›è¡Œåˆå§‹åŒ–ï¼Œå¦‚æžœåˆå§‹åŒ–å¤±è´¥ï¼Œåˆ™è¿”å›žfalse
+    // µ÷ÓÃÁË¸¸ÀàSceneµÄinit()º¯Êý½øÐÐ³õÊ¼»¯£¬Èç¹û³õÊ¼»¯Ê§°Ü£¬Ôò·µ»Øfalse
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -73,7 +73,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
 
     moneyScene = 500 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
+    m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
   
     std::string mapName = "L1.tmx";
     initScene(mapName);
@@ -163,7 +163,7 @@ void Scene2::initMonster(int choose)
 
 bool Scene2::init(int level, LevelScene* levelScene)
 {
-    // è°ƒç”¨äº†çˆ¶ç±»Sceneçš„init()å‡½æ•°è¿›è¡Œåˆå§‹åŒ–ï¼Œå¦‚æžœåˆå§‹åŒ–å¤±è´¥ï¼Œåˆ™è¿”å›žfalse
+    // µ÷ÓÃÁË¸¸ÀàSceneµÄinit()º¯Êý½øÐÐ³õÊ¼»¯£¬Èç¹û³õÊ¼»¯Ê§°Ü£¬Ôò·µ»Øfalse
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -174,7 +174,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
 
     moneyScene = 700 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
+    m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
 
     std::string mapName = "L2.tmx";
     initScene(mapName);
@@ -241,7 +241,7 @@ Scene3* Scene3::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-void Scene3::initMonster(int choose)    //1-3åœ¨ä¸Šæ–¹å‡ºç”Ÿç‚¹ï¼Œ4-6åœ¨ä¸‹æ–¹å‡ºç”Ÿç‚¹
+void Scene3::initMonster(int choose)    //1-3ÔÚÉÏ·½³öÉúµã£¬4-6ÔÚÏÂ·½³öÉúµã
 {
     if (choose == 1)
     {
@@ -290,7 +290,7 @@ void Scene3::initMonster(int choose)    //1-3åœ¨ä¸Šæ–¹å‡ºç”Ÿç‚¹ï¼Œ4-6åœ¨ä¸‹æ–¹å‡
 // on "init" you need to initialize your instance
 bool Scene3::init(int level, LevelScene* levelScene)
 {
-    // è°ƒç”¨äº†çˆ¶ç±»Sceneçš„init()å‡½æ•°è¿›è¡Œåˆå§‹åŒ–ï¼Œå¦‚æžœåˆå§‹åŒ–å¤±è´¥ï¼Œåˆ™è¿”å›žfalse
+    // µ÷ÓÃÁË¸¸ÀàSceneµÄinit()º¯Êý½øÐÐ³õÊ¼»¯£¬Èç¹û³õÊ¼»¯Ê§°Ü£¬Ôò·µ»Øfalse
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -301,14 +301,14 @@ bool Scene3::init(int level, LevelScene* levelScene)
 
     moneyScene = 1000 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
+    m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
 
     std::string mapName = "Level 3.tmx";
     initScene(mapName);
 
-    // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
-    int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
-    std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+    // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
+    int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
+    std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
     m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
     m_lable->setPosition(Vec2(260, 763));
     this->addChild(m_lable, 1);

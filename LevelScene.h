@@ -15,32 +15,32 @@ public:
     void selectLevel2(Ref* sender);
     void selectLevel3(Ref* sender);
     void LevelScene::goBack(Ref* pSender);
-    int m_unlockedLevel;// ä¿å­˜å·²è§£é”çš„å…³å¡ç¼–å·
+    int m_unlockedLevel;// ±£´æÒÑ½âËøµÄ¹Ø¿¨±àºÅ
     MenuItemImage* m_level1Button;
     MenuItemImage* m_level2Button;
     MenuItemImage* m_level3Button;
     void updateButtonState();
     //Sprite* m_gameImage; // mubu
-    Label* m_moneyLabel;//æ˜¾ç¤ºé’±
-    void consumeMoney(int n);//èŠ±é’±
-    int getMoney();//è¿”å›é’±
+    Label* m_moneyLabel;//ÏÔÊ¾Ç®
+    void consumeMoney(int n);//»¨Ç®
+    int getMoney();//·µ»ØÇ®
     void enterUpgradeScene(Ref* sender);
-    void upgradeItem1();//è·å–æŠ€èƒ½ç­‰çº§ä¸è¿”å›
+    void upgradeItem1();//»ñÈ¡¼¼ÄÜµÈ¼¶Óë·µ»Ø
     void upgradeItem2();
     int getItem1Level();
     int getItem2Level();
     CREATE_FUNC(LevelScene);
     
-    void clear(Ref* sender);//æ¸…ç©ºè®°å½•
+    void clear(Ref* sender);//Çå¿Õ¼ÇÂ¼
 
-    void save();//ä¿å­˜è®°å½•
+    void save();//±£´æ¼ÇÂ¼
 
 
 private:
-    int money;//å±€å¤–è´§å¸
-    int skill1 = 0;//æŠ€èƒ½ç­‰çº§
+    int money;//¾ÖÍâ»õ±Ò
+    int skill1 = 0;//¼¼ÄÜµÈ¼¶
     int skill2 = 0;
-    Scene* m_gameScene; // ä¿å­˜ GameScene åœºæ™¯çš„æŒ‡é’ˆ
+    Scene* m_gameScene; // ±£´æ GameScene ³¡¾°µÄÖ¸Õë
 };
 
 #endif // __LEVEL_SCENE_H__

@@ -5,13 +5,15 @@
 
 USING_NS_CC;
 
-//åˆ›å»ºåœºæ™¯
+
+
+//´´½¨³¡¾°
 Scene* StartScene::createScene()
 {
     return StartScene::create();
 }
 
-//æ‰“å°é”™è¯¯ä¿¡æ¯
+//´òÓ¡´íÎóĞÅÏ¢
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -29,28 +31,28 @@ bool StartScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    //æ·»åŠ èƒŒæ™¯
+    //Ìí¼Ó±³¾°
     auto background = Sprite::create("start_background.jpg");
-    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // è®¾ç½®èƒŒæ™¯ä½ç½®ä¸ºå±å¹•ä¸­å¿ƒ
+    background->setPosition(Director::getInstance()->getVisibleSize() / 2); // ÉèÖÃ±³¾°Î»ÖÃÎªÆÁÄ»ÖĞĞÄ
     background->setScale(1.5);
-    this->addChild(background, 0); // å°†èƒŒæ™¯æ·»åŠ åˆ°åœºæ™¯ä¸­ï¼Œå±‚çº§ä¸º0
+    this->addChild(background, 0); // ½«±³¾°Ìí¼Óµ½³¡¾°ÖĞ£¬²ã¼¶Îª0
 
     CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.1f);
 
-    //åŠ å…¥èœå•æŒ‰é’®
+    //¼ÓÈë²Ëµ¥°´Å¥
     auto start = MenuItemImage::create("start.png", "start.png", CC_CALLBACK_1(StartScene::menuSelectLevel, this));
     auto end = MenuItemImage::create("end.png", "end.png", CC_CALLBACK_1(StartScene::menuCloseCallback, this));
     auto setting = MenuItemImage::create("set.png", "set.png", CC_CALLBACK_1(StartScene::menuSetting, this));
 
-    // åˆ›å»ºèœå•
+    // ´´½¨²Ëµ¥
     auto menu = Menu::create(start, end, setting, nullptr);
-    menu->alignItemsVertically(); // å‚ç›´æ’åˆ—èœå•é¡¹
+    menu->alignItemsVertically(); // ´¹Ö±ÅÅÁĞ²Ëµ¥Ïî
     this->addChild(menu, 1);
 
     return true;
 }
 
-//é€€å‡ºç¨‹åº
+//ÍË³ö³ÌĞò
 void StartScene::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();
@@ -58,7 +60,7 @@ void StartScene::menuCloseCallback(Ref* pSender)
 
 
 
-//è·³è½¬åˆ°é€‰å…³ç•Œé¢
+//Ìø×ªµ½Ñ¡¹Ø½çÃæ
 void StartScene::menuSelectLevel(cocos2d::Ref* pSender)
 {
     auto levelSelectingScene = LevelScene::create();
@@ -66,7 +68,7 @@ void StartScene::menuSelectLevel(cocos2d::Ref* pSender)
 }
 
 
-//è¿›å…¥è®¾ç½®ç•Œé¢
+//½øÈëÉèÖÃ½çÃæ
 void StartScene::menuSetting(Ref* pSender)
 {
     auto settingScene = SettingScene::create();
