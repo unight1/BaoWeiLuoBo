@@ -29,10 +29,9 @@ public:
     static Scene3* createScene(int level, LevelScene* levelScene);
     virtual bool init(int level, LevelScene* levelScene) override;
     virtual void initMonster(int choose) override;
-    void initMonsterPlace2();                       //第二个怪物出生点
     // 虚析构
     virtual ~Scene3() {};
 protected:
-    std::vector<cocos2d::Vec2> path1;                //另一条移动路径
+    std::vector<Vec2> path1;
 };
 #endif // __SCENCEMAIN_SCENE_H__
