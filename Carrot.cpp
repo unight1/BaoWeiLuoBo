@@ -15,7 +15,7 @@ bool Carrot::isAlive() {
 void Carrot::takeDamage(int damage)
 {
     HP -= damage;
-    Sprite* newCarrot = nullptr; // ´´½¨Ò»¸öĞÂµÄÖ¸ÕëÀ´´æ´¢ĞÂ¾«Áé
+    Sprite* newCarrot = nullptr; // åˆ›å»ºä¸€ä¸ªæ–°çš„æŒ‡é’ˆæ¥å­˜å‚¨æ–°ç²¾çµ
 
     if (HP <= MaxHP / 3)
     {
@@ -31,15 +31,15 @@ void Carrot::takeDamage(int damage)
     }
 
     if (newCarrot) {
-        // ÒÆ³ı¾É¾«Áé
+        // ç§»é™¤æ—§ç²¾çµ
         this->removeChild(this->carrot, true);
-        // ¸üĞÂÀà³ÉÔ±±äÁ¿ carrot ÎªĞÂ¾«Áé£¬²¢ÉèÖÃÎ»ÖÃ
+        // æ›´æ–°ç±»æˆå‘˜å˜é‡ carrot ä¸ºæ–°ç²¾çµï¼Œå¹¶è®¾ç½®ä½ç½®
         this->carrot = newCarrot;
         this->carrot->setPosition(Position);
         this->addChild(this->carrot);
     }
 
-    // ¸üĞÂÑªÁ¿Êı×Ö
+    // æ›´æ–°è¡€é‡æ•°å­—
     std::string text = std::to_string(HP);
     if (this->carrotHP) {
         this->removeChild(this->carrotHP, true);
@@ -61,50 +61,75 @@ Vec2 Carrot::getCarrotPosition() const
 }
 
 void Carrot::putCarrot(int hp) {
-    // ³õÊ¼»¯HP
+    // åˆå§‹åŒ–HP
     MaxHP = HP = hp;
-    // ³õÊ¼»¯Íâ¹ÛºÍÊôĞÔ
-    this->carrot = Sprite::create("carrot1.png"); // ¼ÙÉè1ÊÇÂúÑªµÄÂÜ²·Í¼Æ¬
+    // åˆå§‹åŒ–å¤–è§‚å’Œå±æ€§
+    this->carrot = Sprite::create("carrot1.png"); // å‡è®¾1æ˜¯æ»¡è¡€çš„èåœå›¾ç‰‡
     this->carrot->setPosition(Position);
     this->addChild(this->carrot);
 
-    // ÎªÂÜ²·Ìí¼ÓÑªÁ¿µÄ¿ÉÊÓ»¯
+    // ä¸ºèåœæ·»åŠ è¡€é‡çš„å¯è§†åŒ–
     this->carrot_HP = Sprite::create("CarrotHP.png");
     this->carrot_HP->setPosition(Vec2(Position.x, Position.y + 90));
     addChild(carrot_HP);
 
-    // ³õÊ¼»¯Label
-    std::string text = std::to_string(HP); // ½«Êı×Ö×ª»»Îª×Ö·û´®
+    // åˆå§‹åŒ–Label
+    std::string text = std::to_string(HP); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
     this->carrotHP = Label::createWithTTF(text, "fonts/arial.ttf", 28);
     this->carrotHP->setTextColor(Color4B::BLACK);
     this->carrotHP->setPosition(Vec2(Position.x - 20, Position.y + 90));
     this->addChild(this->carrotHP);
 
-    //µã»÷ÂÜ²·£¬ÂÜ²·Å¤¶¯ÊÂ¼ş
-    ui::Button* BUTTON = ui::Button::create("botton.png");
-    BUTTON->setOpacity(0); // ÉèÖÃ°´Å¥²»Í¸Ã÷¶ÈÎª0£¬Ê¹Æä²»¿É¼û
-    BUTTON->setContentSize(Size(this->carrot->getContentSize().width, this->carrot->getContentSize().height));
-    BUTTON->setPosition(Position); // ÉèÖÃ°´Å¥Î»ÖÃÓëÂÜ²·¾«ÁéÏàÍ¬
-    BUTTON->addClickEventListener([this](Ref* sender) {// ´¦Àí°´Å¥µã»÷ÊÂ¼ş
-        // ´´½¨Ò»¸ö¿ÕµÄ¶¯»­¶ÔÏó
-        auto animation = Animation::create();
-        // Ìí¼Ó¶¯»­Ö¡
-        for (int i = 1; i <= 8; i++) {
-            char filename[100];
-            sprintf(filename, "carrot%d.png", i);
-            auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
-            animation->addSpriteFrame(frame);
+    //ç‚¹å‡»èåœï¼Œèåœæ‰­åŠ¨äº‹ä»¶
+ui::Button* BUTTON = ui::Button::create("botton.png");
+BUTTON->setOpacity(0); // è®¾ç½®æŒ‰é’®ä¸é€æ˜åº¦ä¸º0ï¼Œä½¿å…¶ä¸å¯è§
+BUTTON->setContentSize(Size(this->carrot->getContentSize().width, this->carrot->getContentSize().height));
+BUTTON->setPosition(Position); // è®¾ç½®æŒ‰é’®ä½ç½®ä¸èåœç²¾çµç›¸åŒ
+BUTTON->addClickEventListener([this](Ref* sender) {// å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
+
+    // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
+    auto animation = Animation::create();
+
+    // æ·»åŠ åŠ¨ç”»å¸§
+    for (int i = 1; i <= 8; i++) {
+        char filename[100];
+        sprintf(filename, "carrot%d.png", i);
+        auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
+        animation->addSpriteFrame(frame);
+    }
+
+    // è®¾ç½®åŠ¨ç”»å±æ€§
+    animation->setDelayPerUnit(0.1f); // æ¯éš”0.1ç§’æ’­æ”¾ä¸€å¸§
+    animation->setLoops(1); // åŠ¨ç”»æ’­æ”¾ä¸€æ¬¡
+
+    // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
+    auto animate = Animate::create(animation);
+
+    // åŠ¨ç”»å®Œæˆåæ¢å¤carrotç²¾çµåˆ°åŠ¨ç”»å¼€å§‹å‰çš„ä½ç½®
+    auto callback = [this]() {
+        this->removeChild(this->carrot, true);
+        if (HP == MaxHP)
+            carrot = Sprite::create("carrot1.png");
+        else {
+            if (HP <= MaxHP / 3)
+            {
+                carrot = Sprite::create("carrot11.png");
+            }
+            else if (HP <= MaxHP * 2 / 3)
+            {
+                carrot = Sprite::create("carrot10.png");
+            }
+            else
+            {
+                carrot = Sprite::create("carrot9.png");
+            }
         }
+        this->carrot->setPosition(Position);
+        this->addChild(this->carrot);
+        };
 
-        // ÉèÖÃ¶¯»­ÊôĞÔ
-        animation->setDelayPerUnit(0.1f); // Ã¿¸ô0.1Ãë²¥·ÅÒ»Ö¡
-        animation->setLoops(1); // ¶¯»­²¥·ÅÒ»´Î
-
-        // ´´½¨¶¯»­¶¯×÷¶ÔÏó
-        auto animate = Animate::create(animation);
-
-        // ½«¶¯»­¶¯×÷Ó¦ÓÃµ½carrot¾«ÁéÉÏ
-        this->carrot->runAction(Spawn::create(animate, nullptr));
-        });
-    addChild(BUTTON);
+    // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°carrotç²¾çµä¸Šï¼Œå¹¶æ·»åŠ å®Œæˆå›è°ƒ
+    this->carrot->runAction(Sequence::create(animate, CallFunc::create(callback), nullptr));
+    });
+this->addChild(BUTTON);
 }
