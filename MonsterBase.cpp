@@ -34,8 +34,8 @@ void Monster::moveToSequence(const std::vector<Vec2>& positions)
     //创建攻击动作
     auto attacked = CallFunc::create([=]() {
         auto target = this->getParent();
-        auto scene = dynamic_cast<Carrot*>(target);
-        scene->takeDamage(hurt);//根据怪物的伤害对萝卜造成伤害
+        auto Scene = dynamic_cast<SceneBase*>(target);
+        Scene->getCarrot()->takeDamage(hurt);//根据怪物的伤害对萝卜造成伤害
         this->setHP(0);//攻击后怪物死亡
 
         });

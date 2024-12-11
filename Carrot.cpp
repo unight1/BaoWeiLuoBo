@@ -1,4 +1,5 @@
 #include "Carrot.h"
+#include "audio/include/SimpleAudioEngine.h"
 
 bool Carrot::init()
 {
@@ -15,6 +16,11 @@ bool Carrot::isAlive() {
 void Carrot::takeDamage(int damage)
 {
     HP -= damage;
+    // 播放受伤音效
+    if (HP > 0) { // 确保萝卜还活着
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("carrothurt.mp3"); //播放受击音效
+    }
+
     Sprite* newCarrot = nullptr; // 创建一个新的指针来存储新精灵
 
     if (HP <= MaxHP / 3)
@@ -71,7 +77,7 @@ void Carrot::putCarrot(int hp) {
     // 为萝卜添加血量的可视化
     this->carrot_HP = Sprite::create("CarrotHP.png");
     this->carrot_HP->setPosition(Vec2(Position.x, Position.y + 90));
-    addChild(carrot_HP);
+    this->addChild(carrot_HP);
 
     // 初始化Label
     std::string text = std::to_string(HP); // 将数字转换为字符串
@@ -86,8 +92,10 @@ void Carrot::putCarrot(int hp) {
     BUTTON->setContentSize(Size(this->carrot->getContentSize().width, this->carrot->getContentSize().height));
     BUTTON->setPosition(Position); // 设置按钮位置与萝卜精灵相同
     BUTTON->addClickEventListener([this](Ref* sender) {// 处理按钮点击事件
+        
         // 创建一个空的动画对象
         auto animation = Animation::create();
+
         // 添加动画帧
         for (int i = 1; i <= 8; i++) {
             char filename[100];
@@ -103,8 +111,31 @@ void Carrot::putCarrot(int hp) {
         // 创建动画动作对象
         auto animate = Animate::create(animation);
 
-        // 将动画动作应用到carrot精灵上
-        this->carrot->runAction(Spawn::create(animate, nullptr));
+        // 动画完成后恢复carrot精灵到动画开始前的位置
+        auto callback = [this]() {
+            this->removeChild(this->carrot, true);
+            if(HP==MaxHP)
+                carrot = Sprite::create("carrot1.png");
+            else {
+                if (HP <= MaxHP / 3)
+                {
+                    carrot = Sprite::create("carrot11.png");
+                }
+                else if (HP <= MaxHP * 2 / 3)
+                {
+                    carrot = Sprite::create("carrot10.png");
+                }
+                else
+                {
+                    carrot = Sprite::create("carrot9.png");
+                }
+            }
+            this->carrot->setPosition(Position);
+            this->addChild(this->carrot);
+        };
+
+        // 将动画动作应用到carrot精灵上，并添加完成回调
+        this->carrot->runAction(Sequence::create(animate, CallFunc::create(callback), nullptr));
         });
-    addChild(BUTTON);
+    this->addChild(BUTTON);
 }

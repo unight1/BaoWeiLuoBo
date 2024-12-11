@@ -1,4 +1,4 @@
-#ifndef __MONSTERBASE_H__
+  #ifndef __MONSTERBASE_H__
 #define __MONSTERBASE_H__
 
 #include "Target.h"

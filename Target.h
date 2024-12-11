@@ -26,7 +26,7 @@ protected:
     int maxHP; // 最大血量
     int value;// 击杀奖励
     int radius;// 半径
-    ProgressTimer* Health = nullptr;// 保存条的指针
+    ProgressTimer* Health = nullptr;// 血条的指针
     Sprite* choose;//选中精灵
     Target() {};// 受保护的构造函数
 };
