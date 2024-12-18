@@ -86,8 +86,10 @@ void Carrot::putCarrot(int hp) {
     BUTTON->setContentSize(Size(this->carrot->getContentSize().width, this->carrot->getContentSize().height));
     BUTTON->setPosition(Position); // 设置按钮位置与萝卜精灵相同
     BUTTON->addClickEventListener([this](Ref* sender) {// 处理按钮点击事件
+
         // 创建一个空的动画对象
         auto animation = Animation::create();
+
         // 添加动画帧
         for (int i = 1; i <= 8; i++) {
             char filename[100];
@@ -103,8 +105,31 @@ void Carrot::putCarrot(int hp) {
         // 创建动画动作对象
         auto animate = Animate::create(animation);
 
-        // 将动画动作应用到carrot精灵上
-        this->carrot->runAction(Spawn::create(animate, nullptr));
+        // 动画完成后恢复carrot精灵到动画开始前的位置
+        auto callback = [this]() {
+            this->removeChild(this->carrot, true);
+            if (HP == MaxHP)
+                carrot = Sprite::create("carrot1.png");
+            else {
+                if (HP <= MaxHP / 3)
+                {
+                    carrot = Sprite::create("carrot11.png");
+                }
+                else if (HP <= MaxHP * 2 / 3)
+                {
+                    carrot = Sprite::create("carrot10.png");
+                }
+                else
+                {
+                    carrot = Sprite::create("carrot9.png");
+                }
+            }
+            this->carrot->setPosition(Position);
+            this->addChild(this->carrot);
+            };
+
+        // 将动画动作应用到carrot精灵上，并添加完成回调
+        this->carrot->runAction(Sequence::create(animate, CallFunc::create(callback), nullptr));
         });
-    addChild(BUTTON);
+    this->addChild(BUTTON);
 }

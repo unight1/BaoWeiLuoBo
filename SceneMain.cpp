@@ -5,6 +5,7 @@
 #include "Tower.h"
 #include "Carrot.h"
 #include "TowerPosition.h"
+#include "LevelScene.h"
 #include "ui/CocosGUI.h"
 #include "audio/include/SimpleAudioEngine.h"
 
@@ -26,33 +27,33 @@ Scene1* Scene1::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-// ´òÓ¡ÓÐÓÃµÄ´íÎóÏûÏ¢£¬¶ø²»ÊÇÔÚÎÄ¼þ²»´æÔÚÊ±¶Î´íÎó¡£
+// æ‰“å°æœ‰ç”¨çš„é”™è¯¯æ¶ˆæ¯ï¼Œè€Œä¸æ˜¯åœ¨æ–‡ä»¶ä¸å­˜åœ¨æ—¶æ®µé”™è¯¯ã€‚
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-//1ÎªÆÕÍ¨ÍÃ×Ó£¬2Îª»¬°åÍÃ£¬3Îª·ÉÐÐÍÃ
+//1ä¸ºæ™®é€šå…”å­ï¼Œ2ä¸ºæ»‘æ¿å…”ï¼Œ3ä¸ºé£žè¡Œå…”
 void Scene1::initMonster(int choose)
 {
     if (choose == 1)
     {
-        Rabbit* Monster = Rabbit::create();
+        Sheep* Monster = Sheep::create();
         Monster->setPosition(Vec2(200 + 50, 500 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 2)
     {
-        FastrRabbit* Monster = FastrRabbit::create();
+        Bird* Monster = Bird::create();
         Monster->setPosition(Vec2(200 + 50, 500 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 3)
     {
-        FlyingRabbit* Monster = FlyingRabbit::create();
+        Star* Monster = Star::create();
         Monster->setPosition(Vec2(200 + 50, 500 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
@@ -67,13 +68,13 @@ bool Scene1::init(int level, LevelScene* levelScene)
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-1.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-1.mp3", true);
 
-        moneyScene = 500 + 100 * (levelScene->skill1);
+        moneyScene = 500 + 100 * (levelScene->getItem1Level());
         m_level = level;
-        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
-        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
+        m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
+        // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
 
-        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
-        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
+        int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
+        std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
@@ -97,7 +98,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
         auto createFastr = CallFunc::create([=]() {initMonster(2); });
         auto createFlying = CallFunc::create([=]() {initMonster(3); });
 
-        Sprite* gameProgress = Sprite::create("Rabbit.png");    //´´½¨½ø¶ÈÌõ
+        Sprite* gameProgress = Sprite::create("Rabbit.png");    //åˆ›å»ºè¿›åº¦æ¡
         gameProgress->setPosition(Vec2(420, 750));
         gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
         this->addChild(gameProgress, 4);
@@ -132,21 +133,21 @@ void Scene2::initMonster(int choose)
 {
     if (choose == 1)
     {
-        Rabbit* Monster = Rabbit::create();
+        Sheep* Monster = Sheep::create();
         Monster->setPosition(Vec2(100 + 50, 300 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 2)
     {
-        FastrRabbit* Monster = FastrRabbit::create();
+        Bird* Monster = Bird::create();
         Monster->setPosition(Vec2(100 + 50, 300 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 3)
     {
-        FlyingRabbit* Monster = FlyingRabbit::create();
+        Star* Monster = Star::create();
         Monster->setPosition(Vec2(100 + 50, 300 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
@@ -160,13 +161,13 @@ bool Scene2::init(int level, LevelScene* levelScene)
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-2.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-2.mp3", true);
 
-        moneyScene = 700 + 100 * (levelScene->skill1);
+        moneyScene = 700 + 100 * (levelScene->getItem1Level());
         m_level = level;
-        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
+        m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
 
-        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
-        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
-        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
+        // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
+        int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
+        std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
@@ -187,7 +188,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
         cocos2d::Vec2(1150 + 50, 550 + 50),
         };
 
-        Sprite* gameProgress = Sprite::create("Rabbit.png");    //´´½¨½ø¶ÈÌõ
+        Sprite* gameProgress = Sprite::create("Rabbit.png");    //åˆ›å»ºè¿›åº¦æ¡
         gameProgress->setPosition(Vec2(420, 750));
         gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
         this->addChild(gameProgress, 4);
@@ -201,7 +202,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
 
         return true;
 
-    }while (0);
+    } while (0);
 }
 
 Scene3* Scene3::createScene(int level, LevelScene* levelScene)
@@ -220,32 +221,32 @@ Scene3* Scene3::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-void Scene3::initMonster(int choose)    //1-3ÔÚÉÏ·½³öÉúµã
+void Scene3::initMonster(int choose)    //1-3åœ¨ä¸Šæ–¹å‡ºç”Ÿç‚¹
 {
     if (choose == 1)
     {
-        Rabbit* Monster = Rabbit::create();
+        Sheep* Monster = Sheep::create();
         Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 2)
     {
-        FastrRabbit* Monster = FastrRabbit::create();
+        Bird* Monster = Bird::create();
         Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 3)
     {
-        FlyingRabbit* Monster = FlyingRabbit::create();
+        Star* Monster = Star::create();
         Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 4)
     {
-        Rabbit* Monster = Rabbit::create();
+        Sheep* Monster = Sheep::create();
         Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path1);
@@ -259,16 +260,16 @@ bool Scene3::init(int level, LevelScene* levelScene)
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-3.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-3.mp3", true);
 
-        moneyScene = 1000 + 100 * (levelScene->skill1);
+        moneyScene = 1000 + 100 * (levelScene->getItem1Level());
         m_level = level;
-        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
+        m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
 
         std::string mapName = "L3.tmx";
         initScene(mapName);
 
-        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
-        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
-        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
+        // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
+        int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
+        std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
@@ -320,5 +321,5 @@ bool Scene3::init(int level, LevelScene* levelScene)
             nullptr));
         return true;
 
-    }while (0);
+    } while (0);
 }
