@@ -12,12 +12,12 @@ bool Sheep::init() {
     //在怪物身上添加一个不可见按钮，用于实现集火
     ui::Button* BUTTON = ui::Button::create("botton.png");
     BUTTON->setOpacity(0);
-    BUTTON->setContentSize(Size(this->getContentSize().width, this->getContentSize().height));
+    BUTTON->setContentSize(Size(this->getContentSize().width , this->getContentSize().height ));
     BUTTON->addClickEventListener([this](Ref* sender) {
         // 处理按钮点击事件
         setAllTarget();
         });
-    BUTTON->setPosition(Vec2(this->getContentSize().width/2, this->getContentSize().height/2));
+    BUTTON->setPosition(Vec2(this->getContentSize().width + 50, this->getContentSize().height + 50));
     addChild(BUTTON);
 
     // 初始化HP
@@ -100,12 +100,12 @@ bool Bird::init() {
     //在怪物身上添加一个不可见按钮，用于实现集火
     ui::Button* BUTTON = ui::Button::create("botton.png");
     BUTTON->setOpacity(0);
-    BUTTON->setContentSize(Size(this->getContentSize().width, this->getContentSize().height));
+    BUTTON->setContentSize(Size(20, 20));
     BUTTON->addClickEventListener([this](Ref* sender) {
         // 处理按钮点击事件
         setAllTarget();
         });
-    BUTTON->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+    BUTTON->setPosition(Vec2(this->getContentSize().width +50, this->getContentSize().height +50));
     addChild(BUTTON);
 
     return true;
@@ -182,7 +182,7 @@ bool Star::init() {
         // 处理按钮点击事件
         setAllTarget();
         });
-    BUTTON->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height / 2));
+    BUTTON->setPosition(Vec2(this->getContentSize().width + 50, this->getContentSize().height + 50));
     addChild(BUTTON);
 
     return true;
