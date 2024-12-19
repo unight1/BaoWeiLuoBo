@@ -149,7 +149,8 @@ void LevelScene::updateButtonState()
 
 void LevelScene::unlockLevel(int level)
 {
-    m_unlockedLevel = level;
+    if (m_unlockedLevel < level)
+        m_unlockedLevel = level;
     save();
     updateButtonState(); // 更新按钮状态和图片
 }
