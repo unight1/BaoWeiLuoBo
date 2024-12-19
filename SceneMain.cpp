@@ -104,9 +104,28 @@ bool Scene1::init(int level, LevelScene* levelScene)
         this->addChild(gameProgress, 4);
 
         runAction(Sequence::create(
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+
+            DelayTime::create(12), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+
+            DelayTime::create(12), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(1), createRabbit,
+
 
             CallFunc::create([=]() {monsterFlag = true; }),
             nullptr));
+
 
         return true;
 
@@ -196,7 +215,31 @@ bool Scene2::init(int level, LevelScene* levelScene)
         auto createRabbit = CallFunc::create([=]() {initMonster(1); });
         auto createFastr = CallFunc::create([=]() {initMonster(2); });
         auto createFlying = CallFunc::create([=]() {initMonster(3); });
+
         runAction(Sequence::create(
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+
+            DelayTime::create(12), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+
+            DelayTime::create(12), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+
+            DelayTime::create(12), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createFastr,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(1), createRabbit,
             CallFunc::create([=]() {monsterFlag = true; }),
             nullptr));
 
