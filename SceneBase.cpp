@@ -1,5 +1,5 @@
 #include "SceneBase.h"
-#include "SimpleAudioEngine.h"//Cocos2d-x游戏引擎中的音频引擎库的头文件
+#include "SimpleAudioEngine.h"
 #include "Obstacle.h"
 #include "Monster.h"
 #include "Tower.h"
@@ -7,7 +7,7 @@
 #include "ui/CocosGUI.h"
 #include "levelScene.h"
 
-USING_NS_CC; //using namespace cocos2d
+USING_NS_CC;
 
 Sprite* plusIcon;
 
@@ -34,19 +34,12 @@ static void problemLoading(const char* filename)
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-cocos2d::Vec2 SceneBase::getCarrotPosition() const
-{
-    return this->carrotPosition;
-}
-
-void SceneBase::setCarrotPosition(cocos2d::Vec2 position)
-{
-    this->carrotPosition = position;
-}
-
 void SceneBase::update(float delta)
 {
     time += delta;
+    if (!carrot->isAlive()) {
+        this->setButton(false);
+    }
     if (monsterFlag)
     {
         int num = 0;
@@ -60,66 +53,18 @@ void SceneBase::update(float delta)
                 num++;
             }
         }
-        if (num == 0 && carrotHP > 0)
+        if (num == 0 && carrot->isAlive())
         {
             this->setButton(true);
         }
     }
 }
 
-void SceneBase::takeCarrotDamage(int damage)
-{
-    if (carrotHP > damage)
-    {
-        carrotHP -= damage;
-        if (carrotHP == 9)
-        {
-            this->removeChild(m_carrot);
-            Sprite* Carrot7_9 = Sprite::create("luobo7-9.png");
-            Carrot7_9->setPosition(carrotPosition);
-            this->m_carrot = Carrot7_9;
-            this->addChild(Carrot7_9, 1);
-        }
-        if (carrotHP == 6)
-        {
-            this->removeChild(m_carrot);
-            Sprite* Carrot4_6 = Sprite::create("luobo4-6.png");
-            Carrot4_6->setPosition(carrotPosition);
-            this->m_carrot = Carrot4_6;
-            this->addChild(Carrot4_6, 1);
-        }
-        if (carrotHP == 3)
-        {
-            this->removeChild(m_carrot);
-            Sprite* Carrot1_3 = Sprite::create("luobo1-3.png");
-            Carrot1_3->setPosition(carrotPosition);
-            this->m_carrot = Carrot1_3;
-            this->addChild(Carrot1_3, 1);
-        }
-    }
-    else
-    {
-        carrotHP = 0;
-        this->setButton(false);
-    }
-
-    this->removeChild(m_carrotHP);
-    // 创建 Label，并设置字体、字号和初始文本内容
-    int number = carrotHP; // 要显示的数字
-    std::string text = std::to_string(number); // 将数字转换为字符串
-    m_carrotHP = Label::createWithTTF(text, "fonts/arial.ttf", 28);
-    m_carrotHP->setTextColor(Color4B::BLACK);
-    Vec2 tempPosition = carrotPosition;
-    tempPosition.x -= 20;
-    tempPosition.y += 90;
-    m_carrotHP->setPosition(tempPosition);
-    this->addChild(m_carrotHP, 1);
-}
 
 /*
 * 显示层数：
 * 0层：地图背景
-* 1层：萝卜、炮塔的底座、钱
+* 1层：萝卜、障碍物、炮塔的底座、钱
 * 2层：放置的炮塔、子弹
 * 3层：炮塔位置的加号、加号上面的可选炮塔按钮
 * 4层：进度条
@@ -132,9 +77,9 @@ void SceneBase::initScene(std::string& mapName)
     this->addChild(map, 0);     // 添加到场景中，显示在第0层
 
     setPauseButton();           //放置暂停按钮
-    setMenuButton();            
+    setMenuButton();
 
-    // 获取萝卜对象层
+    // 获取萝卜对象层需要调整
     TMXObjectGroup* carrotObjects = map->getObjectGroup("Carrot");
 
     // 获取萝卜对象的位置信息
@@ -143,25 +88,10 @@ void SceneBase::initScene(std::string& mapName)
     float yC = firstCarrotObject.asValueMap().at("y").asFloat() + 70;
 
     // 创建萝卜并放置在地图上的位置
-    Vec2 carrotPos = Vec2(xC, yC);
-    Sprite* carrot = Sprite::create("luobo.png");
-    carrot->setPosition(carrotPos);
+
+    carrot->setCarrotPosition(Vec2(xC, yC)); //设置萝卜位置
+    carrot->putCarrot(10 + 5 * m_levelScene->getItem2Level());          //真初始化，10:萝卜血量
     this->addChild(carrot, 1);      // 添加到场景中，显示在第1层，确保在地图上方显示
-    this->carrotPosition = carrotPos;
-    this->m_carrot = carrot;
-
-    Sprite* carrot_HP = Sprite::create("CarrotHP.png");
-    Vec2 carrotHPPosition = Vec2(xC, yC + 90);
-    carrot_HP->setPosition(carrotHPPosition);
-    this->addChild(carrot_HP, 1);
-
-    // 创建 Label，并设置字体、字号和初始文本内容
-    int number = carrotHP; // 要显示的数字
-    std::string text = std::to_string(number); // 将数字转换为字符串
-    m_carrotHP = Label::createWithTTF(text, "fonts/arial.ttf", 28);
-    m_carrotHP->setTextColor(Color4B::BLACK);
-    m_carrotHP->setPosition(Vec2(xC - 20, yC + 90));
-    this->addChild(m_carrotHP, 1);
 
     TMXObjectGroup* towerPositions = map->getObjectGroup("TowerPosition");
     // 处理位置对象
@@ -398,7 +328,7 @@ bool SceneBase::init(int level, LevelScene* levelScene)
     {
         return false;
     }
-    
+
 
     m_levelScene = levelScene;
     // 创建定时器，定时更新怪物状态
@@ -444,16 +374,16 @@ void SceneBase::setButton(bool flag)
 void SceneBase::setPauseButton()
 {
     // 创建按钮                 
-    auto pauseGame = cocos2d::ui::Button::create("Pause2.png", "Pause2.png");
-    pauseGame->setPosition(Vec2(1100, 750));    // 设置按钮位置
+    auto pauseGame = cocos2d::ui::Button::create("Pause.png", "Pause.png");
+    pauseGame->setPosition(Vec2(1000, 750));    // 设置按钮位置
     pauseGame->addClickEventListener(CC_CALLBACK_0(SceneBase::pauseOperate, this));
-    this->addChild(pauseGame, 4, "Pause");
+    this->addChild(pauseGame, 6, "Pause");
 
-    auto continueGame = cocos2d::ui::Button::create("Pause1.png", "Pause1.png");
-    continueGame->setPosition(Vec2(1100, 750));    // 设置按钮位置
+    auto continueGame = cocos2d::ui::Button::create("Pause.png", "Pause.png");
+    continueGame->setPosition(Vec2(1000, 750));    // 设置按钮位置
     continueGame->addClickEventListener(CC_CALLBACK_0(SceneBase::continueOperate, this));
     continueGame->setVisible(false);
-    this->addChild(continueGame, 5, "Continue");
+    this->addChild(continueGame, 7, "Continue");
 
     //Director::getInstance()->pause();           // 暂停游戏
 }
@@ -475,10 +405,10 @@ void SceneBase::continueOperate()
 void SceneBase::setMenuButton()
 {
     // 创建按钮
-    auto menuButton = cocos2d::ui::Button::create("touming-hd.png", "touming-hd.png");
-    menuButton->setPosition(Vec2(1200, 750));    // 设置按钮位置
+    auto menuButton = cocos2d::ui::Button::create("Menu.png", "Menu.png");
+    menuButton->setPosition(Vec2(1100, 750));    // 设置按钮位置
     menuButton->addClickEventListener(CC_CALLBACK_0(SceneBase::onGameMenu, this));
-    this->addChild(menuButton, 4, "Menu");
+    this->addChild(menuButton, 6, "Menu");
 
     auto GameMenu = Sprite::create("GameMenu.png");
     GameMenu->setPosition(Vec2(650, 400));
@@ -545,9 +475,8 @@ void SceneBase::onGameWin()
 
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("main.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", true);
-        //Director::getInstance()->resume();          // 恢复游戏
         int nextLevel = m_level + 1;
-        m_levelScene->money += 100;
+        m_levelScene->consumeMoney(-100);
         m_levelScene->unlockLevel(nextLevel);       // 解锁下一关
         Director::getInstance()->popScene();        // 返回到上一个场景
     }
@@ -578,7 +507,7 @@ void SceneBase::updateMoney(int money)
     this->removeChild(m_lable);
     std::string text = std::to_string(moneyScene); // 将数字转换为字符串
     auto lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
-    lable->setPosition(Vec2(150, 750));
+    lable->setPosition(Vec2(260, 763));
     this->m_lable = lable;
     this->addChild(m_lable, 1);
 }
