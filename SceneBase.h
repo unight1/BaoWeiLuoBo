@@ -13,39 +13,39 @@ class SceneBase : public Scene
 public:
     static SceneBase* createScene(int level, LevelScene* levelScene);
 
-    // è™šææ„
+    // ĞéÎö¹¹
     virtual ~SceneBase() {};
 
     virtual bool init(int level, LevelScene* levelScene);
 
-    virtual void initMonster(int choose) {};    //åˆå§‹åŒ–æ€ªç‰©æˆ–éšœç¢ç‰©ï¼Œchooseé€‰æ‹©åˆå§‹åŒ–å“ªç§æ€ªç‰©æˆ–éšœç¢ç‰©
+    virtual void initMonster(int choose) {};    //³õÊ¼»¯¹ÖÎï»òÕÏ°­Îï£¬chooseÑ¡Ôñ³õÊ¼»¯ÄÄÖÖ¹ÖÎï»òÕÏ°­Îï
 
-    void setButton(bool flag);   // æ¸¸æˆå®Œæˆæ—¶è°ƒç”¨çš„æ”¾ç½®æŒ‰é’®å‡½æ•°ï¼Œä¸ºtrueè·èƒœï¼Œä¸ºfalseå¤±è´¥
+    void setButton(bool flag);   // ÓÎÏ·Íê³ÉÊ±µ÷ÓÃµÄ·ÅÖÃ°´Å¥º¯Êı£¬Îªtrue»ñÊ¤£¬ÎªfalseÊ§°Ü
 
-    void setPauseButton();       //æ”¾ç½®æš‚åœæŒ‰é’®
+    void setPauseButton();       //·ÅÖÃÔİÍ£°´Å¥
 
-    void pauseOperate();         //æš‚åœæ“ä½œ
+    void pauseOperate();         //ÔİÍ£²Ù×÷
 
-    void continueOperate();      //ç»§ç»­æ¸¸æˆ
+    void continueOperate();      //¼ÌĞøÓÎÏ·
 
-    void setMenuButton();        //æ”¾ç½®èœå•æŒ‰é’®
+    void setMenuButton();        //·ÅÖÃ²Ëµ¥°´Å¥
 
-    void onGameMenu();           //èœå•ç•Œé¢
+    void onGameMenu();           //²Ëµ¥½çÃæ
 
-    void continueGame();         //ç»§ç»­æ¸¸æˆ
+    void continueGame();         //¼ÌĞøÓÎÏ·
 
-    void goBack();               //è¿”å›
+    void goBack();               //·µ»Ø
 
     void initScene(std::string& mapname);   
     
     // a selector callback
     void menuCloseCallback(Ref* pSender);
 
-    void createBottle(Ref* sender);     //æ”¾ç½®ç“¶å­ç‚®å¡”
+    void createBottle(Ref* sender);     //·ÅÖÃÆ¿×ÓÅÚËş
 
-    void createStar(Ref* sender);       //æ”¾ç½®æ˜Ÿæ˜Ÿç‚®å¡”
+    void createStar(Ref* sender);       //·ÅÖÃĞÇĞÇÅÚËş
 
-    void createSunflower(Ref* sender);  //æ”¾ç½®å¤ªé˜³èŠ±ç‚®å¡”
+    void createSunflower(Ref* sender);  //·ÅÖÃÌ«Ñô»¨ÅÚËş
 
     void onGameWin();
 
@@ -57,18 +57,18 @@ public:
 
     void updateMoney(int money);
 
-    int moneyScene;                     //åœºæ™¯ä¸­çš„çš„é’±
+    int moneyScene;                     //³¡¾°ÖĞµÄµÄÇ®
 
     Carrot* getCarrot()const { return carrot; }
 
 protected:
-    Label* m_lable;                     //æ˜¾ç¤ºå½“å‰é‡‘é’±
-    bool monsterFlag = false;           //æ€ªç‰©æ˜¯å¦ç”Ÿæˆå®Œæ¯•çš„æ ‡å¿—ï¼Œtrueä¸ºç”Ÿæˆå®Œæ¯•
-    float time = 0.0f;                  //æ¸¸æˆçš„æŒç»­æ—¶é—´
-    std::vector<Vec2> path;             //ç§»åŠ¨è·¯å¾„
-    int m_level;                        //ä¿å­˜å½“å‰çš„å…³å¡ç¼–å·
-    LevelScene* m_levelScene;           //ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
-    Carrot* carrot=Carrot::create();    //æŒ‡å‘èåœçš„å”¯ä¸€å®ä¾‹
+    Label* m_lable;                     //ÏÔÊ¾µ±Ç°½ğÇ®
+    bool monsterFlag = false;           //¹ÖÎïÊÇ·ñÉú³ÉÍê±ÏµÄ±êÖ¾£¬trueÎªÉú³ÉÍê±Ï
+    float time = 0.0f;                  //ÓÎÏ·µÄ³ÖĞøÊ±¼ä
+    std::vector<Vec2> path;             //ÒÆ¶¯Â·¾¶
+    int m_level;                        //±£´æµ±Ç°µÄ¹Ø¿¨±àºÅ
+    LevelScene* m_levelScene;           //±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
+    Carrot* carrot=Carrot::create();    //Ö¸ÏòÂÜ²·µÄÎ¨Ò»ÊµÀı
 };
 
 #endif  //__SCENCEBASE_SCENE_H__
