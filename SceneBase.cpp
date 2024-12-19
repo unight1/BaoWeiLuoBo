@@ -6,6 +6,7 @@
 #include "TowerPosition.h"
 #include "ui/CocosGUI.h"
 #include "levelScene.h"
+#include "audio/include/SimpleAudioEngine.h"
 
 USING_NS_CC; 
 
@@ -120,7 +121,7 @@ void SceneBase::initScene(std::string& mapName)
         for (Node* child : children)
         {
             TowerPosition* towerPos = dynamic_cast<TowerPosition*>(child);
-
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSelect.mp3"); //播放点击音效
             // 移除所有的升级按钮
             if (towerPos && towerPos->towerofThisPosition)
             {
@@ -145,16 +146,21 @@ void SceneBase::initScene(std::string& mapName)
                 else {
                     towerPos->setVisible(true);
                     // 创建按钮
-                    Vec2 positionButtonBottle = Vec2(40, 120);
-                    Vec2 positionButtonStar = Vec2(-40, 120);
-                    Vec2 positionButtonSunflower = Vec2(120, 120);
+                    Vec2 positionButtonBottle = Vec2(-100, 120);
+                    Vec2 positionButtonFire = Vec2(-20, 120);
+                    Vec2 positionButtonStar = Vec2(60, 120);
+                    Vec2 positionButtonSunflower = Vec2(140, 120);
+                    Vec2 positionButtonShit = Vec2(220, 120);
                     Vec2 positionCheck = towerPos->getPosition();
                     if (positionCheck.x == 50)      //如果位置紧贴左边缘，对建立的按钮相对坐标进行处理，使按钮显示在右侧
                     {
-                        positionButtonBottle = Vec2(120, 40);
-                        positionButtonStar = Vec2(120, 120);
-                        positionButtonSunflower = Vec2(120, -40);
+                        positionButtonBottle = Vec2(120, -100);
+                        positionButtonFire = Vec2(120, -20);
+                        positionButtonStar = Vec2(120, 60);
+                        positionButtonSunflower = Vec2(120, 140);
+                        positionButtonShit = Vec2(120, 220);
                     }
+                    // 创建按钮
                     auto buttonBottle = cocos2d::ui::Button::create("BottleButton.png", "BottleButton.png", "BottleButtonUn.png");
                     buttonBottle->setPosition(positionButtonBottle);
                     buttonBottle->addClickEventListener(CC_CALLBACK_1(SceneBase::createBottle, this));  // 添加按钮点击回调函数
@@ -166,7 +172,18 @@ void SceneBase::initScene(std::string& mapName)
                     else {
                         buttonBottle->setEnabled(false);
                     }
-
+                    // 创建按钮
+                    auto buttonFire = cocos2d::ui::Button::create("FireBottleButton.png", "FireBottleButton.png", "FireBottleButtonUn.png");
+                    buttonFire->setPosition(positionButtonFire);
+                    buttonFire->addClickEventListener(CC_CALLBACK_1(SceneBase::createFire, this));  // 添加按钮点击回调函数
+                    towerPos->addChild(buttonFire, 0, "FireButton");
+                    // 设置点击状态
+                    if (this->moneyScene >= 160) {
+                        buttonFire->setEnabled(true);
+                    }
+                    else {
+                        buttonFire->setEnabled(false);
+                    }
                     // 创建按钮                  
                     auto buttonStar = cocos2d::ui::Button::create("StarButton.png", "StarButton.png", "StarButtonUn.png");
                     buttonStar->setPosition(positionButtonStar);
@@ -192,6 +209,19 @@ void SceneBase::initScene(std::string& mapName)
                     else {
                         buttonSunflower->setEnabled(false);
                     }
+
+                    // 创建按钮                  
+                    auto buttonShit = cocos2d::ui::Button::create("ShitButton.png", "ShitButton.png", "ShitButtonUn.png");
+                    buttonShit->setPosition(positionButtonShit);
+                    buttonShit->addClickEventListener(CC_CALLBACK_1(SceneBase::createShit, this));  // 添加按钮点击回调函数
+                    towerPos->addChild(buttonShit, 0, "ShitButton");
+                    // 设置点击状态
+                    if (this->moneyScene >= 120) {
+                        buttonShit->setEnabled(true);
+                    }
+                    else {
+                        buttonShit->setEnabled(false);
+                    }
                 }
             }
             // 没有被点击的方块
@@ -206,6 +236,12 @@ void SceneBase::initScene(std::string& mapName)
                     this->removeChildByName("BottleButton");
                 }
 
+                cocos2d::ui::Button* spriteFire = static_cast<cocos2d::ui::Button*>(this->getChildByName("FireButton"));
+                if (spriteBottle) {
+                    // 子节点存在，可以进行移除操作
+                    this->removeChildByName("FireButton");
+                }
+
                 cocos2d::ui::Button* spriteStar = static_cast<cocos2d::ui::Button*>(this->getChildByName("StarButton"));
                 if (spriteStar) {
                     // 子节点存在，可以进行移除操作
@@ -216,6 +252,12 @@ void SceneBase::initScene(std::string& mapName)
                 if (spriteSunflower) {
                     // 子节点存在，可以进行移除操作
                     this->removeChildByName("SunflowerButton");
+                }
+
+                cocos2d::ui::Button* spriteShit = static_cast<cocos2d::ui::Button*>(this->getChildByName("ShitButton"));
+                if (spriteShit) {
+                    // 子节点存在，可以进行移除操作
+                    this->removeChildByName("ShitButton");
                 }
             }
         }
@@ -241,6 +283,7 @@ void SceneBase::menuCloseCallback(Ref* pSender)
 void SceneBase::createBottle(cocos2d::Ref* sender)
 {
     // 在当前位置创建炮塔
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //播放炮塔建立音效
     auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
     if (button)
     {
@@ -257,7 +300,35 @@ void SceneBase::createBottle(cocos2d::Ref* sender)
                 tower->thisTowerPositionIS = thisTowerPosition;//
 
             }
-            this->addChild(bottom, 1, "BottleBottom");
+            this->addChild(bottom, 1);
+            this->addChild(tower, 2);  // 将炮塔添加到场景中
+            button->getParent()->setVisible(false);
+            tower->bottom = bottom;//
+            this->updateMoney(-100);
+        }
+    }
+}
+void SceneBase::createFire(Ref* sender)
+{
+    // 在当前位置创建炮塔
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //播放炮塔建立音效
+    auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
+    if (button)
+    {
+        auto tower = FireTower_1::create();  // 创建炮塔对象
+        if (moneyScene >= tower->getConsumption())
+        {
+            auto bottom = Sprite::create("Bottom.png");
+            bottom->setPosition(button->getParent()->getPosition());// 设置底座位置
+            tower->setPosition(button->getParent()->getPosition());  // 设置炮塔位置
+            auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
+            if (thisTowerPosition)
+            {
+                thisTowerPosition->towerofThisPosition = tower;//
+                tower->thisTowerPositionIS = thisTowerPosition;//
+
+            }
+            this->addChild(bottom, 1);
             this->addChild(tower, 2);  // 将炮塔添加到场景中
             button->getParent()->setVisible(false);
             tower->bottom = bottom;//
@@ -269,14 +340,13 @@ void SceneBase::createBottle(cocos2d::Ref* sender)
 void SceneBase::createStar(cocos2d::Ref* sender)
 {
     // 在当前位置创建星星炮塔
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //播放炮塔建立音效
     auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
     if (button)
     {
         auto tower = StarTower_1::create();  // 创建炮塔对象
         if (moneyScene >= tower->getConsumption())
         {
-            //auto bottom = Sprite::create("Bottom.png");
-            //bottom->setPosition(button->getParent()->getPosition());
             tower->setPosition(button->getParent()->getPosition());  // 设置炮塔位置
             auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
             if (thisTowerPosition)
@@ -284,7 +354,6 @@ void SceneBase::createStar(cocos2d::Ref* sender)
                 thisTowerPosition->towerofThisPosition = tower;
                 tower->thisTowerPositionIS = thisTowerPosition;
             }
-            //this->addChild(bottom, 1);
             this->addChild(tower, 2);  // 将炮塔添加到场景中
             button->getParent()->setVisible(false);
 
@@ -296,6 +365,7 @@ void SceneBase::createStar(cocos2d::Ref* sender)
 void SceneBase::createSunflower(cocos2d::Ref* sender)
 {
     // 在当前位置创建太阳花炮塔
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //播放炮塔建立音效
     auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
     if (button)
     {
@@ -315,10 +385,36 @@ void SceneBase::createSunflower(cocos2d::Ref* sender)
             this->addChild(tower, 2);  // 将炮塔添加到场景中
             button->getParent()->setVisible(false);
             tower->bottom = bottom;
-            this->updateMoney(-200);
+            this->updateMoney(-120);
         }
     }
 }
+
+void SceneBase::createShit(Ref* sender)
+{
+    // 在当前位置创建屎炮塔
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //播放炮塔建立音效
+    auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
+    if (button)
+    {
+        auto tower = ShitTower_1::create();  // 创建炮塔对象
+        if (moneyScene >= tower->getConsumption())
+        {
+            tower->setPosition(button->getParent()->getPosition());  // 设置炮塔位置
+            auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
+            if (thisTowerPosition)
+            {
+                thisTowerPosition->towerofThisPosition = tower;
+                tower->thisTowerPositionIS = thisTowerPosition;
+            }
+            this->addChild(tower, 2);  // 将炮塔添加到场景中
+            button->getParent()->setVisible(false);
+
+            this->updateMoney(-120);
+        }
+    }
+}
+
 
 // on "init" you need to initialize your instance
 bool SceneBase::init(int level, LevelScene* levelScene)
