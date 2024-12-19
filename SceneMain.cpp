@@ -27,14 +27,14 @@ Scene1* Scene1::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-// æ‰“å°æœ‰ç”¨çš„é”™è¯¯æ¶ˆæ¯ï¼Œè€Œä¸æ˜¯åœ¨æ–‡ä»¶ä¸å­˜åœ¨æ—¶æ®µé”™è¯¯ã€‚
+// ´òÓ¡ÓÐÓÃµÄ´íÎóÏûÏ¢£¬¶ø²»ÊÇÔÚÎÄ¼þ²»´æÔÚÊ±¶Î´íÎó¡£
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-//1ä¸ºæ™®é€šå…”å­ï¼Œ2ä¸ºæ»‘æ¿å…”ï¼Œ3ä¸ºé£žè¡Œå…”
+//1ÎªÆÕÍ¨ÍÃ×Ó£¬2Îª»¬°åÍÃ£¬3Îª·ÉÐÐÍÃ
 void Scene1::initMonster(int choose)
 {
     if (choose == 1)
@@ -70,11 +70,11 @@ bool Scene1::init(int level, LevelScene* levelScene)
 
         moneyScene = 500 + 100 * (levelScene->getItem1Level());
         m_level = level;
-        m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
-        // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
+        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
+        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
 
-        int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
-        std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
+        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
@@ -98,7 +98,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
         auto createFastr = CallFunc::create([=]() {initMonster(2); });
         auto createFlying = CallFunc::create([=]() {initMonster(3); });
 
-        Sprite* gameProgress = Sprite::create("Rabbit.png");    //åˆ›å»ºè¿›åº¦æ¡
+        Sprite* gameProgress = Sprite::create("Rabbit.png");    //´´½¨½ø¶ÈÌõ
         gameProgress->setPosition(Vec2(420, 750));
         gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
         this->addChild(gameProgress, 4);
@@ -163,11 +163,11 @@ bool Scene2::init(int level, LevelScene* levelScene)
 
         moneyScene = 700 + 100 * (levelScene->getItem1Level());
         m_level = level;
-        m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
+        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
 
-        // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
-        int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
-        std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
+        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
+        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
@@ -188,7 +188,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
         cocos2d::Vec2(1150 + 50, 550 + 50),
         };
 
-        Sprite* gameProgress = Sprite::create("Rabbit.png");    //åˆ›å»ºè¿›åº¦æ¡
+        Sprite* gameProgress = Sprite::create("Rabbit.png");    //´´½¨½ø¶ÈÌõ
         gameProgress->setPosition(Vec2(420, 750));
         gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
         this->addChild(gameProgress, 4);
@@ -221,7 +221,7 @@ Scene3* Scene3::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-void Scene3::initMonster(int choose)    //1-3åœ¨ä¸Šæ–¹å‡ºç”Ÿç‚¹
+void Scene3::initMonster(int choose)    //1-3ÔÚÉÏ·½³öÉúµã
 {
     if (choose == 1)
     {
@@ -262,14 +262,14 @@ bool Scene3::init(int level, LevelScene* levelScene)
 
         moneyScene = 1000 + 100 * (levelScene->getItem1Level());
         m_level = level;
-        m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
+        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
 
         std::string mapName = "L3.tmx";
         initScene(mapName);
 
-        // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
-        int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
-        std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
+        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
+        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
