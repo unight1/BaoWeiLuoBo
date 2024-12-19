@@ -41,11 +41,11 @@ bool UpScene::init(LevelScene* levelScene)
     m_moneyLabel->setPosition(Vec2(100, 650));
     this->addChild(m_moneyLabel);
 
-    m_item1LevelLabel = Label::createWithTTF("Level " + std::to_string(m_levelScene->getItem1Level()), "fonts/Marker Felt.ttf", 32);
+    m_item1LevelLabel = Label::createWithTTF("             startmoney:Level " + std::to_string(m_levelScene->getItem1Level()), "fonts/Marker Felt.ttf", 32);
     m_item1LevelLabel->setPosition(Vec2(1000, 630));
     this->addChild(m_item1LevelLabel);
 
-    m_item2LevelLabel = Label::createWithTTF("Level " + std::to_string(m_levelScene->getItem2Level()), "fonts/Marker Felt.ttf", 32);
+    m_item2LevelLabel = Label::createWithTTF("       startHP:Level " + std::to_string(m_levelScene->getItem2Level()), "fonts/Marker Felt.ttf", 32);
     m_item2LevelLabel->setPosition(Vec2(1000, 430));
     this->addChild(m_item2LevelLabel);
 
@@ -80,7 +80,7 @@ void UpScene::onItem1Button(Ref* sender)
             // 升级第一项物品
             m_levelScene->upgradeItem1();
             int item1Level = m_levelScene->getItem1Level();
-            m_item1LevelLabel->setString("Level " + std::to_string(item1Level));
+            m_item1LevelLabel->setString("             startmoney:Level " + std::to_string(item1Level));
         }      
     }
 }
@@ -97,7 +97,7 @@ void UpScene::onItem2Button(Ref* sender)
             // 升级第二项物品
             m_levelScene->upgradeItem2();
             int item2Level = m_levelScene->getItem2Level();
-            m_item2LevelLabel->setString("Level " + std::to_string(item2Level));
+            m_item2LevelLabel->setString("       startHP:Level " + std::to_string(item2Level));
         }
 
     }
