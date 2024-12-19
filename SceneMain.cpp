@@ -325,7 +325,7 @@ void Scene3::initMonster(int choose)    //1-3鍦ㄤ笂鏂瑰嚭鐢熺偣锛�4-
     }
     else if (choose == 4)
     {
-        Star* Monster = Star::create();
+        Boss* Monster = Boss::create();
         Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path1);
