@@ -4,53 +4,48 @@
 #include "LevelScene.h"
 #include "cocos2d.h"
 #include "Target.h"
+#include "Carrot.h"
 
-USING_NS_CC; //using namespace cocos2d
+USING_NS_CC; 
 
-class SceneBase : public cocos2d::Scene
+class SceneBase : public Scene
 {
 public:
     static SceneBase* createScene(int level, LevelScene* levelScene);
 
-    // ĞéÎö¹¹
+    // è™šææ„
     virtual ~SceneBase() {};
 
     virtual bool init(int level, LevelScene* levelScene);
 
-    virtual void initMonster(int choose) {};    //³õÊ¼»¯¹ÖÎï£¬chooseÑ¡Ôñ³õÊ¼»¯ÄÄÖÖ¹ÖÎï
+    virtual void initMonster(int choose) {};    //åˆå§‹åŒ–æ€ªç‰©æˆ–éšœç¢ç‰©ï¼Œchooseé€‰æ‹©åˆå§‹åŒ–å“ªç§æ€ªç‰©æˆ–éšœç¢ç‰©
 
-    void takeCarrotDamage(int damage);
+    void setButton(bool flag);   // æ¸¸æˆå®Œæˆæ—¶è°ƒç”¨çš„æ”¾ç½®æŒ‰é’®å‡½æ•°ï¼Œä¸ºtrueè·èƒœï¼Œä¸ºfalseå¤±è´¥
 
-    void setButton(bool flag);   // ÓÎÏ·Íê³ÉÊ±µ÷ÓÃµÄ·ÅÖÃ°´Å¥º¯Êı£¬Îªtrue»ñÊ¤£¬ÎªfalseÊ§°Ü
+    void setPauseButton();       //æ”¾ç½®æš‚åœæŒ‰é’®
 
-    void setPauseButton();       //·ÅÖÃÔİÍ£°´Å¥
+    void pauseOperate();         //æš‚åœæ“ä½œ
 
-    void pauseOperate();         //ÔİÍ£²Ù×÷
+    void continueOperate();      //ç»§ç»­æ¸¸æˆ
 
-    void continueOperate();      //¼ÌĞøÓÎÏ·
+    void setMenuButton();        //æ”¾ç½®èœå•æŒ‰é’®
 
-    void setMenuButton();        //·ÅÖÃ²Ëµ¥°´Å¥
+    void onGameMenu();           //èœå•ç•Œé¢
 
-    void onGameMenu();           //²Ëµ¥½çÃæ
+    void continueGame();         //ç»§ç»­æ¸¸æˆ
 
-    void continueGame();         //¼ÌĞøÓÎÏ·
-
-    void goBack();               //·µ»Ø
-
-    cocos2d::Vec2 getCarrotPosition() const;
-
-    void setCarrotPosition(cocos2d::Vec2 position);
+    void goBack();               //è¿”å›
 
     void initScene(std::string& mapname);   
     
     // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
+    void menuCloseCallback(Ref* pSender);
 
-    void createBottle(cocos2d::Ref* sender);     //·ÅÖÃÆ¿×ÓÅÚËş
+    void createBottle(Ref* sender);     //æ”¾ç½®ç“¶å­ç‚®å¡”
 
-    void createStar(cocos2d::Ref* sender);       //·ÅÖÃĞÇĞÇÅÚËş
+    void createStar(Ref* sender);       //æ”¾ç½®æ˜Ÿæ˜Ÿç‚®å¡”
 
-    void createSunflower(cocos2d::Ref* sender);  //·ÅÖÃÌ«Ñô»¨ÅÚËş
+    void createSunflower(Ref* sender);  //æ”¾ç½®å¤ªé˜³èŠ±ç‚®å¡”
 
     void onGameWin();
 
@@ -62,18 +57,18 @@ public:
 
     void updateMoney(int money);
 
-    int moneyScene;                     //³¡¾°ÖĞµÄµÄÇ®
+    int moneyScene;                     //åœºæ™¯ä¸­çš„çš„é’±
+
+    Carrot* getCarrot()const { return carrot; }
+
 protected:
-    cocos2d::Label* m_lable;            //ÏÔÊ¾µ±Ç°½ğÇ®
-    bool monsterFlag = false;           //¹ÖÎïÊÇ·ñÉú³ÉÍê±ÏµÄ±êÖ¾£¬trueÎªÉú³ÉÍê±Ï
-    float time = 0.0f;                  //ÓÎÏ·µÄ³ÖĞøÊ±¼ä
-    Sprite* m_carrot;                   //Ö¸ÏòÂÜ²·µÄÖ¸Õë
-    cocos2d::Label* m_carrotHP;         //ÏÔÊ¾ÂÜ²·µÄÑªÁ¿
-    int carrotHP = 10;                  //ÂÜ²·µÄ³õÊ¼ÑªÁ¿
-    cocos2d::Vec2 carrotPosition;       //ÂÜ²·µÄÎ»ÖÃ
-    std::vector<cocos2d::Vec2> path;    //ÒÆ¶¯Â·¾¶
-    int m_level;                        //±£´æµ±Ç°µÄ¹Ø¿¨±àºÅ
-    LevelScene* m_levelScene;           //±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
+    Label* m_lable;                     //æ˜¾ç¤ºå½“å‰é‡‘é’±
+    bool monsterFlag = false;           //æ€ªç‰©æ˜¯å¦ç”Ÿæˆå®Œæ¯•çš„æ ‡å¿—ï¼Œtrueä¸ºç”Ÿæˆå®Œæ¯•
+    float time = 0.0f;                  //æ¸¸æˆçš„æŒç»­æ—¶é—´
+    std::vector<Vec2> path;             //ç§»åŠ¨è·¯å¾„
+    int m_level;                        //ä¿å­˜å½“å‰çš„å…³å¡ç¼–å·
+    LevelScene* m_levelScene;           //ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
+    Carrot* carrot=Carrot::create();    //æŒ‡å‘èåœçš„å”¯ä¸€å®ä¾‹
 };
 
 #endif  //__SCENCEBASE_SCENE_H__
