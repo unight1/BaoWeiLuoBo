@@ -26,14 +26,15 @@ Scene1* Scene1::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-// 打印有用的错误消息，而不是在文件不存在时段错误。
+// 鎵撳嵃鏈夌敤鐨勯敊璇秷鎭紝鑰屼笉鏄湪鏂囦欢涓嶅瓨鍦ㄦ椂娈甸敊璇��
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-//1为普通兔子，2为滑板兔，3为飞行兔
+
+//1涓烘櫘閫氬厰瀛愶紝2涓烘粦鏉垮厰锛�3涓洪琛屽厰
 void Scene1::initMonster(int choose)
 {
     if (choose == 1)
@@ -87,7 +88,7 @@ void Scene1::initMonster(int choose)
 // on "init" you need to initialize your instance
 bool Scene1::init(int level, LevelScene* levelScene)
 {
-    // 调用了父类Scene的init()函数进行初始化，如果初始化失败，则返回false
+    // 璋冪敤浜嗙埗绫籗cene鐨刬nit()鍑芥暟杩涜鍒濆鍖栵紝濡傛灉鍒濆鍖栧け璐ワ紝鍒欒繑鍥瀎alse
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -98,7 +99,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
 
     moneyScene = 500 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // 保存关卡选择场景的指针
+    m_levelScene = levelScene; // 淇濆瓨鍏冲崱閫夋嫨鍦烘櫙鐨勬寚閽�
   
     std::string mapName = "L1.tmx";
     initScene(mapName);
@@ -193,7 +194,7 @@ void Scene2::initMonster(int choose)
 
 bool Scene2::init(int level, LevelScene* levelScene)
 {
-    // 调用了父类Scene的init()函数进行初始化，如果初始化失败，则返回false
+    // 璋冪敤浜嗙埗绫籗cene鐨刬nit()鍑芥暟杩涜鍒濆鍖栵紝濡傛灉鍒濆鍖栧け璐ワ紝鍒欒繑鍥瀎alse
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -204,8 +205,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
 
     moneyScene = 700 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // 保存关卡选择场景的指针
-
+    m_levelScene = levelScene; // 淇濆瓨鍏冲崱閫夋嫨鍦烘櫙鐨勬寚閽�
     std::string mapName = "L2.tmx";
     initScene(mapName);
 
@@ -222,33 +222,62 @@ bool Scene2::init(int level, LevelScene* levelScene)
     cocos2d::Vec2(1150 + 50, 550 + 50),
     };
 
-    auto createRabbit = CallFunc::create([=]() {initMonster(1); });
-    auto createFastr = CallFunc::create([=]() {initMonster(2); });
-    auto createFlying = CallFunc::create([=]() {initMonster(3); });
+    auto create1 = CallFunc::create([=]() {initMonster(1); });
+    auto create3 = CallFunc::create([=]() {initMonster(2); });
+    auto create2 = CallFunc::create([=]() {initMonster(3); });
+    
+    Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
+    gameProgress->setPosition(Vec2(420, 730));
+    do {
+        // 创建一个空的动画对象
+        auto animation = Animation::create();
+        // 添加动画帧
+        for (int i = 1; i <= 5; i++) {
+            char filename[100];
+            sprintf(filename, "gege%d.png", i);
+            auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
+            animation->addSpriteFrame(frame);
+        }
+
+        // 设置动画属性
+        animation->setDelayPerUnit(0.2f);
+        animation->setLoops(100000000);
+
+        // 创建动画动作对象
+        auto animate = Animate::create(animation);
+
+        // 将动画动作应用到精灵上
+        gameProgress->runAction(Spawn::create(animate, nullptr));
+
+        gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
+        this->addChild(gameProgress, 4);
+
+    } while (0);
+
     runAction(Sequence::create(
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFastr,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createRabbit,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create3,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create1,
 
-        DelayTime::create(12), createFlying,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFlying,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createRabbit,
+        DelayTime::create(12), create2,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create1,
 
-        DelayTime::create(12), createRabbit,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFlying,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFlying,
+        DelayTime::create(12), create1,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
 
-        DelayTime::create(12), createRabbit,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFlying,
-        DelayTime::create(2), createFastr, 
-        DelayTime::create(2), createFlying,
-        DelayTime::create(1), createRabbit,
+        DelayTime::create(12), create1,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
+        DelayTime::create(2), create3, 
+        DelayTime::create(2), create2,
+        DelayTime::create(1), create1,
         CallFunc::create([=]() {monsterFlag = true; }),
         nullptr));
 
@@ -271,56 +300,43 @@ Scene3* Scene3::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-void Scene3::initMonster(int choose)    //1-3在上方出生点，4-6在下方出生点
+void Scene3::initMonster(int choose)    //1-3鍦ㄤ笂鏂瑰嚭鐢熺偣锛�4-6鍦ㄤ笅鏂瑰嚭鐢熺偣
 {
     if (choose == 1)
     {
         Sheep* Monster = Sheep::create();
-        Monster->setPosition(Vec2(100 + 50, 500 + 50));
+        Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 2)
     {
         Bird* Monster = Bird::create();
-        Monster->setPosition(Vec2(100 + 50, 500 + 50));
+        Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
     else if (choose == 3)
     {
         Star* Monster = Star::create();
-        Monster->setPosition(Vec2(100 + 50, 500 + 50));
+        Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
-    if (choose == 4)
-    {
-        Sheep* Monster = Sheep::create();
-        Monster->setPosition(Vec2(100 + 50, 100 + 50));
-        this->addChild(Monster);
-        Monster->moveToSequence(path1);
-    }
-    else if (choose == 5)
-    {
-        Bird* Monster = Bird::create();
-        Monster->setPosition(Vec2(100 + 50, 100 + 50));
-        this->addChild(Monster);
-        Monster->moveToSequence(path1);
-    }
-    else if (choose == 6)
+    else if (choose == 4)
     {
         Star* Monster = Star::create();
-        Monster->setPosition(Vec2(100 + 50, 100 + 50));
+        Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path1);
     }
+
 }
 
 // on "init" you need to initialize your instance
 bool Scene3::init(int level, LevelScene* levelScene)
 {
-    // 调用了父类Scene的init()函数进行初始化，如果初始化失败，则返回false
+    // 璋冪敤浜嗙埗绫籗cene鐨刬nit()鍑芥暟杩涜鍒濆鍖栵紝濡傛灉鍒濆鍖栧け璐ワ紝鍒欒繑鍥瀎alse
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -331,84 +347,85 @@ bool Scene3::init(int level, LevelScene* levelScene)
 
     moneyScene = 1000 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // 保存关卡选择场景的指针
+    m_levelScene = levelScene; // 淇濆瓨鍏冲崱閫夋嫨鍦烘櫙鐨勬寚閽�
 
-    std::string mapName = "Level 3.tmx";
+    std::string mapName = "L3.tmx";
     initScene(mapName);
 
-    // 创建 Label，并设置字体、字号和初始文本内容
-    int number = moneyScene; // 要显示的数字
-    std::string text = std::to_string(number); // 将数字转换为字符串
+    // 鍒涘缓 Label锛屽苟璁剧疆瀛椾綋銆佸瓧鍙峰拰鍒濆鏂囨湰鍐呭
+    int number = moneyScene; // 瑕佹樉绀虹殑鏁板瓧
+    std::string text = std::to_string(number); // 灏嗘暟瀛楄浆鎹负瀛楃涓�
     m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
-    m_lable->setPosition(Vec2(260, 763));
+    m_lable->setPosition(Vec2(150, 750));
     this->addChild(m_lable, 1);
 
     path = {
-    cocos2d::Vec2(100 + 50, 400 + 75),
+    cocos2d::Vec2(400 + 50, 200 + 50),
     cocos2d::Vec2(400 + 50, 400 + 75),
-    cocos2d::Vec2(400 + 50, 300 + 75),
-    cocos2d::Vec2(600 + 50, 300 + 75),
-    cocos2d::Vec2(600 + 50, 200 + 75),
-    cocos2d::Vec2(900 + 50, 200 + 75),
-    cocos2d::Vec2(900 + 50, 0 + 75),
-    cocos2d::Vec2(1200 + 50, 0 + 75),
-    cocos2d::Vec2(1200 + 50, 350 + 75)
+    cocos2d::Vec2(200 + 50, 400 + 75),
+    cocos2d::Vec2(200 + 50, 500 + 75),
+    cocos2d::Vec2(900 + 50, 500 + 75),
+    cocos2d::Vec2(900 + 50, 400 + 75),
+    cocos2d::Vec2(1100 + 50, 400 + 75),
+    cocos2d::Vec2(1100 + 50, 82 + 50)
     };
 
-    path1= {
-    cocos2d::Vec2(100 + 50, 200 + 75),
-    cocos2d::Vec2(300 + 50, 200 + 75),
-    cocos2d::Vec2(300 + 50, 100 + 75),
-    cocos2d::Vec2(500 + 50, 100 + 75),
-    cocos2d::Vec2(500 + 50, 0 + 75),
-    cocos2d::Vec2(1200 + 50, 0 + 75),
-    cocos2d::Vec2(1200 + 50, 350 + 75)
+    path1 = {
+    cocos2d::Vec2(1100 + 50, 200 + 50),
+    cocos2d::Vec2(1100 + 50, 82 + 50)
     };
 
-    Sprite* gameProgress = Sprite::create("Rabbit.png");
-    gameProgress->setPosition(Vec2(420, 765));
-    gameProgress->runAction(cocos2d::MoveBy::create(95, Vec2(400, 0)));
-    this->addChild(gameProgress, 4);
+    Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
+    gameProgress->setPosition(Vec2(420, 730));
+    do {
+        // 创建一个空的动画对象
+        auto animation = Animation::create();
+        // 添加动画帧
+        for (int i = 1; i <= 5; i++) {
+            char filename[100];
+            sprintf(filename, "gege%d.png", i);
+            auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
+            animation->addSpriteFrame(frame);
+        }
 
-    auto createRabbitUp = CallFunc::create([=]() {initMonster(1); });
-    auto createFastrUp = CallFunc::create([=]() {initMonster(2); });
-    auto createFlyingUp = CallFunc::create([=]() {initMonster(3); });
-    auto createRabbitDown = CallFunc::create([=]() {initMonster(4); });
-    auto createFastrDown = CallFunc::create([=]() {initMonster(5); });
-    auto createFlyingDown = CallFunc::create([=]() {initMonster(6); });
+        // 设置动画属性
+        animation->setDelayPerUnit(0.2f);
+        animation->setLoops(100000000);
+
+        // 创建动画动作对象
+        auto animate = Animate::create(animation);
+
+        // 将动画动作应用到精灵上
+        gameProgress->runAction(Spawn::create(animate, nullptr));
+
+        gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
+        this->addChild(gameProgress, 4);
+
+    } while (0);
+
+    auto create1 = CallFunc::create([=]() {initMonster(1); });
+    auto create2 = CallFunc::create([=]() {initMonster(2); });
+    auto create3 = CallFunc::create([=]() {initMonster(3); });
+    auto createBoss = CallFunc::create([=]() {initMonster(4); });
 
     runAction(Sequence::create(
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFastrUp,
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFastrUp,
+        DelayTime::create(2), createBoss,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
 
-        DelayTime::create(12), createFlyingDown,
-        DelayTime::create(2), createRabbitDown,
-        DelayTime::create(2), createFlyingDown,
-        DelayTime::create(2), createRabbitDown,
-        DelayTime::create(2), createFastrDown,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
 
-        DelayTime::create(12), createRabbitDown,
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFlyingDown,
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFlyingDown,
-        DelayTime::create(2), createFastrUp,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create1,
 
-        DelayTime::create(12), createFastrDown,
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFlyingDown,
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFlyingDown,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
 
-        DelayTime::create(12), createFastrDown,
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFlyingDown,
-        DelayTime::create(2), createRabbitUp,
-        DelayTime::create(2), createFlyingDown,
-        DelayTime::create(2), createFastrUp,
-        DelayTime::create(1), createFlyingDown,
         CallFunc::create([=]() {monsterFlag = true; }),
         nullptr));
     return true;
