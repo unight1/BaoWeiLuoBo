@@ -334,7 +334,7 @@ void Scene3::initMonster(int choose)    //1-3在上方出生点，4-6在下方出生点
     }
     else if (choose == 4)
     {
-        Star* Monster = Star::create();
+        Boss* Monster = Boss::create();
         Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path1);
