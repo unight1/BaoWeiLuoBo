@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="13" height="8" tilewidth="100" tileheight="100" infinite="0" nextlayerid="13" nextobjectid="90">
+ <tileset firstgid="1" name="BG1" tilewidth="100" tileheight="100" tilecount="84" columns="12">
+  <image source="BG1.png" width="1200" height="703"/>
+ </tileset>
+ <tileset firstgid="85" name="Background1.1" tilewidth="100" tileheight="100" tilecount="96" columns="12">
+  <image source="Background1.1.png" width="1202" height="803"/>
+ </tileset>
+ <tileset firstgid="181" name="Headline" tilewidth="100" tileheight="100" tilecount="13" columns="13">
+  <image source="Headline.png" width="1300" height="118"/>
+ </tileset>
+ <layer id="5" name="Background" width="13" height="8">
+  <data encoding="csv">
+85,86,87,88,89,90,90,91,92,93,94,95,96,
+97,98,99,100,101,102,102,103,104,105,106,107,108,
+109,110,111,112,113,114,114,115,116,117,118,119,120,
+121,122,123,124,125,126,126,127,128,129,130,131,132,
+133,134,135,136,137,138,138,139,140,141,142,143,144,
+145,146,147,148,149,150,150,151,152,153,154,155,156,
+157,158,159,160,161,162,162,163,164,165,166,167,168,
+169,170,171,172,173,174,174,175,176,177,178,179,180
+</data>
+ </layer>
+ <layer id="8" name="Headline" width="13" height="8">
+  <data encoding="csv">
+181,182,183,184,185,186,187,188,189,190,191,192,193,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="4" name="Map" width="13" height="8">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,15,0,0,18,19,20,21,0,23,0,0,
+0,0,27,0,0,30,0,0,33,0,35,0,0,
+0,0,39,0,0,42,0,44,45,0,47,0,0,
+0,0,51,52,53,54,0,56,0,0,59,0,0,
+61,62,63,64,0,0,0,68,69,70,71,0,72,
+73,74,75,76,0,0,0,0,0,0,82,83,84
+</data>
+ </layer>
+ <objectgroup id="2" name="TowerPosition">
+  <object id="3" x="0" y="100" width="100" height="100"/>
+  <object id="4" x="100" y="100" width="100" height="100"/>
+  <object id="8" x="0" y="200" width="100" height="100"/>
+  <object id="11" x="0" y="200" width="100" height="100"/>
+  <object id="12" x="100" y="200" width="100" height="100"/>
+  <object id="13" x="0" y="300" width="100" height="100"/>
+  <object id="14" x="100" y="300" width="100" height="100"/>
+  <object id="15" x="0" y="400" width="100" height="100"/>
+  <object id="16" x="100" y="400" width="100" height="100"/>
+  <object id="17" x="0" y="500" width="100" height="100"/>
+  <object id="18" x="100" y="500" width="100" height="100"/>
+  <object id="23" x="200" y="100" width="100" height="100"/>
+  <object id="25" x="300" y="100" width="100" height="100"/>
+  <object id="28" x="400" y="100" width="100" height="100"/>
+  <object id="29" x="300" y="200" width="100" height="100"/>
+  <object id="30" x="400" y="200" width="100" height="100"/>
+  <object id="31" x="300" y="300" width="100" height="100"/>
+  <object id="32" x="400" y="300" width="100" height="100"/>
+  <object id="33" x="300" y="400" width="100" height="100"/>
+  <object id="34" x="400" y="400" width="100" height="100"/>
+  <object id="37" x="200" y="600" width="100" height="100"/>
+  <object id="38" x="300" y="600" width="100" height="100"/>
+  <object id="39" x="400" y="600" width="100" height="100"/>
+  <object id="40" x="500" y="600" width="100" height="100"/>
+  <object id="41" x="400" y="700" width="100" height="100"/>
+  <object id="42" x="500" y="700" width="100" height="100"/>
+  <object id="43" x="600" y="300" width="100" height="100"/>
+  <object id="44" x="700" y="300" width="100" height="100"/>
+  <object id="45" x="600" y="400" width="100" height="100"/>
+  <object id="46" x="600" y="500" width="100" height="100"/>
+  <object id="47" x="600" y="600" width="100" height="100"/>
+  <object id="48" x="600" y="700" width="100" height="100"/>
+  <object id="49" x="700" y="700" width="100" height="100"/>
+  <object id="50" x="800" y="700" width="100" height="100"/>
+  <object id="51" x="1100" y="500" width="100" height="100"/>
+  <object id="52" x="1100" y="400" width="100" height="100"/>
+  <object id="53" x="800" y="500" width="100" height="100"/>
+  <object id="54" x="900" y="500" width="100" height="100"/>
+  <object id="55" x="900" y="400" width="100" height="100"/>
+  <object id="56" x="900" y="300" width="100" height="100"/>
+  <object id="57" x="900" y="200" width="100" height="100"/>
+  <object id="58" x="500" y="100" width="100" height="100"/>
+  <object id="60" x="600" y="100" width="100" height="100"/>
+  <object id="62" x="800" y="104" width="2" height="2"/>
+  <object id="63" x="700" y="100" width="100" height="100"/>
+  <object id="65" x="800" y="100" width="100" height="100"/>
+  <object id="66" x="900" y="100" width="100" height="100"/>
+  <object id="69" x="1000" y="100" width="100" height="100"/>
+  <object id="70" x="1100" y="200" width="100" height="100"/>
+  <object id="71" x="1100" y="300" width="100" height="100"/>
+  <object id="72" x="1100" y="100" width="100" height="100"/>
+  <object id="76" x="900" y="700" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="3" name="Carrot">
+  <object id="2" x="1000" y="200" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="12" name="Treasure">
+  <object id="88" x="300" y="200" width="200" height="200"/>
+ </objectgroup>
+ <objectgroup id="9" name="Grass">
+  <object id="78" x="300" y="400" width="100" height="100"/>
+  <object id="80" x="400" y="400" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="10" name="Stone">
+  <object id="83" x="200" y="600" width="200" height="100"/>
+  <object id="84" x="800" y="500" width="200" height="100"/>
+ </objectgroup>
+</map>
