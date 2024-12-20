@@ -645,7 +645,7 @@ void SceneBase::updateMoney(int money)
     this->removeChild(m_lable);
     std::string text = std::to_string(moneyScene); // 将数字转换为字符串
     auto lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
-    lable->setPosition(Vec2(260, 763));
+    lable->setPosition(Vec2(150, 750));
     this->m_lable = lable;
     this->addChild(m_lable, 1);
 }
