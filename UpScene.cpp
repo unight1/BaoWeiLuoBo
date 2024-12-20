@@ -26,17 +26,17 @@ bool UpScene::init(LevelScene* levelScene)
 
     m_levelScene = levelScene;
 
-    // ±³¾°
-    auto background = Sprite::create("shengji-2.png");
+    // èƒŒæ™¯
+    auto background = Sprite::create("shengji.png");
     background->setPosition(Vec2(650, 400));
     this->addChild(background);
 
-    // ½ð¶î±êÇ©
-    auto background1 = Sprite::create("qian.png"); // ÉèÖÃÇ®°ü±³¾°
-    background1->setPosition(Vec2(100, 650)); // ÉèÖÃÇ®°üÎ»ÖÃ
+    // é‡‘é¢æ ‡ç­¾
+    auto background1 = Sprite::create("qian.png"); // è®¾ç½®é’±åŒ…èƒŒæ™¯
+    background1->setPosition(Vec2(100, 650)); // è®¾ç½®é’±åŒ…ä½ç½®
     this->addChild(background1);
 
-    // ÏÔÊ¾ money ÊýÁ¿µÄ Label
+    // æ˜¾ç¤º money æ•°é‡çš„ Label
     m_moneyLabel = Label::createWithTTF("      " + std::to_string(m_levelScene->getMoney()), "fonts/Marker Felt.ttf", 32);
     m_moneyLabel->setPosition(Vec2(100, 650));
     this->addChild(m_moneyLabel);
@@ -49,15 +49,15 @@ bool UpScene::init(LevelScene* levelScene)
     m_item2LevelLabel->setPosition(Vec2(1000, 430));
     this->addChild(m_item2LevelLabel);
 
-    // µÚÒ»ÏîÎïÆ·Éý¼¶°´Å¥
+    // ç¬¬ä¸€é¡¹ç‰©å“å‡çº§æŒ‰é’®
     auto item1Button = MenuItemImage::create("skill1.png", "skill1.png", CC_CALLBACK_1(UpScene::onItem1Button, this));
     item1Button->setPosition(Vec2(850, 550));
 
-    // µÚ¶þÏîÎïÆ·Éý¼¶°´Å¥
+    // ç¬¬äºŒé¡¹ç‰©å“å‡çº§æŒ‰é’®
     auto item2Button = MenuItemImage::create("skill2.png", "skill2.png", CC_CALLBACK_1(UpScene::onItem2Button, this));
     item2Button->setPosition(Vec2(850, 350));
 
-    // ·µ»Ø°´Å¥
+    // è¿”å›žæŒ‰é’®
     auto backButton = MenuItemImage::create("exit.png", "exit.png", CC_CALLBACK_1(UpScene::onBackButton, this));
     backButton->setPosition(Vec2(70, 760));
 
@@ -77,7 +77,7 @@ void UpScene::onItem1Button(Ref* sender)
             m_levelScene->consumeMoney(100);
             m_moneyLabel->setString("       " + std::to_string(m_levelScene->getMoney()));
 
-            // Éý¼¶µÚÒ»ÏîÎïÆ·
+            // å‡çº§ç¬¬ä¸€é¡¹ç‰©å“
             m_levelScene->upgradeItem1();
             int item1Level = m_levelScene->getItem1Level();
             m_item1LevelLabel->setString("             startmoney:Level " + std::to_string(item1Level));
@@ -94,7 +94,7 @@ void UpScene::onItem2Button(Ref* sender)
             m_levelScene->consumeMoney(100);
             m_moneyLabel->setString("       " + std::to_string(m_levelScene->getMoney()));
 
-            // Éý¼¶µÚ¶þÏîÎïÆ·
+            // å‡çº§ç¬¬äºŒé¡¹ç‰©å“
             m_levelScene->upgradeItem2();
             int item2Level = m_levelScene->getItem2Level();
             m_item2LevelLabel->setString("       startHP:Level " + std::to_string(item2Level));
