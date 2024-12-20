@@ -1,4 +1,4 @@
-#ifndef __TOWERBASE_H__
+﻿#ifndef __TOWERBASE_H__
 #define __TOWERBASE_H__
 
 #include "Target.h"
