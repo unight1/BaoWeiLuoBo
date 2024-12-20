@@ -1,4 +1,4 @@
-#include "SceneBase.h"
+﻿#include "SceneBase.h"
 #include "SimpleAudioEngine.h"
 #include "Obstacle.h"
 #include "Monster.h"
@@ -8,7 +8,7 @@
 #include "levelScene.h"
 #include "audio/include/SimpleAudioEngine.h"
 
-USING_NS_CC; 
+USING_NS_CC;
 
 Sprite* plusIcon;
 
@@ -72,15 +72,15 @@ void SceneBase::update(float delta)
 * 5层：结束界面
 * 6层：结束界面上面的按钮
 */
-
-void SceneBase::initScene(std::string& mapName) {
+void SceneBase::initScene(std::string& mapName)
+{
     auto map = TMXTiledMap::create(mapName);
     this->addChild(map, 0);     // 添加到场景中，显示在第0层
 
     setPauseButton();           //放置暂停按钮
     setMenuButton();
 
-    // 获取萝卜对象层
+    // 获取萝卜对象层需要调整
     TMXObjectGroup* carrotObjects = map->getObjectGroup("Carrot");
 
     // 获取萝卜对象的位置信息
@@ -109,7 +109,7 @@ void SceneBase::initScene(std::string& mapName) {
         TowerPosition* towerPos = TowerPosition::create();
         towerPos->setPosition(position);
         towerPos->setVisible(false);        // 初始化时设置为隐藏状态
-        this->addChild(towerPos, 1);        // 添加到场景中，显示在第3层，确保在地图上方显示
+        this->addChild(towerPos, 3);        // 添加到场景中，显示在第3层，确保在地图上方显示
 
     }
 
@@ -155,12 +155,13 @@ void SceneBase::initScene(std::string& mapName) {
     }
 
 
-    // 添加鼠标事件监听器，用于处理塔位置对象的显示和隐藏
+    // 添加鼠标事件监听器，用于处理炮塔位置对象的显示和隐藏
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     listener->onTouchBegan = [&](Touch* touch, Event* event) {
         auto children = this->getChildren();
-        for (Node* child : children) {
+        for (Node* child : children)
+        {
             TowerPosition* towerPos = dynamic_cast<TowerPosition*>(child);
             CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSelect.mp3"); //播放点击音效
             // 移除所有的升级按钮
@@ -172,29 +173,17 @@ void SceneBase::initScene(std::string& mapName) {
                     towerPos->towerofThisPosition->bottom->removeAllChildren();
                 }
             }
-                 if (towerPos) {
-                if (towerPos->getBoundingBox().containsPoint(touch->getLocation())) {
-                    // 检查是否可以在此位置放置塔
-                    bool canBuild = true;
-                    for (Node* child : this->getChildren()) {
-                        Obstacle* obstacle = dynamic_cast<Obstacle*>(child);
-                        if (obstacle && obstacle->getBoundingBox().intersectsRect(towerPos->getBoundingBox())) {
-                            canBuild = false; // 如果存在重叠，不能建造
-                            break;
-                        }
-                    }
+            // 被点击的方块
+            if (towerPos && towerPos->getBoundingBox().containsPoint(touch->getLocation()))
+            {
+                // 当前位置有塔
+                if (towerPos->towerofThisPosition)
+                {
+                    towerPos->setVisible(false);
 
-                    // 当前位置没有障碍物，可以显示建造界面
-                    if (canBuild) {
-                        // 当前位置有塔
-                        if (towerPos->towerofThisPosition)
-                        {
-                            towerPos->setVisible(false);
+                    towerPos->towerofThisPosition->clicked(moneyScene);
 
-                            towerPos->towerofThisPosition->clicked(moneyScene);
-
-                        }
-                    }
+                }
                 // 没有塔，显示建造界面
                 else {
                     towerPos->setVisible(true);
@@ -247,18 +236,17 @@ void SceneBase::initScene(std::string& mapName) {
                         buttonStar->setEnabled(true);
                     }
                     else {
-                        // 提示用户无法在障碍物上建造
-                        CCLOG("无法在障碍物上建造!");
+                        buttonStar->setEnabled(false);
                     }
-                }
-                else {
-                    towerPos->setVisible(false);
 
-                    // 查找和移除所有的建造按钮
-                    cocos2d::ui::Button* spriteBottle = static_cast<cocos2d::ui::Button*>(this->getChildByName("BottleButton"));
-                    if (spriteBottle) {
-                        // 子节点存在，可以进行移除操作
-                        this->removeChildByName("BottleButton");
+                    // 创建按钮                 
+                    auto buttonSunflower = cocos2d::ui::Button::create("SunflowerButton.png", "SunflowerButton.png", "SunflowerButtonUn.png");
+                    buttonSunflower->setPosition(positionButtonSunflower);
+                    buttonSunflower->addClickEventListener(CC_CALLBACK_1(SceneBase::createSunflower, this));  // 添加按钮点击回调函数
+                    towerPos->addChild(buttonSunflower, 0, "SunflowerButton");
+                    // 设置点击状态
+                    if (this->moneyScene >= 200) {
+                        buttonSunflower->setEnabled(true);
                     }
                     else {
                         buttonSunflower->setEnabled(false);
@@ -283,11 +271,12 @@ void SceneBase::initScene(std::string& mapName) {
             {
                 towerPos->setVisible(false);
 
-                    cocos2d::ui::Button* spriteStar = static_cast<cocos2d::ui::Button*>(this->getChildByName("StarButton"));
-                    if (spriteStar) {
-                        // 子节点存在，可以进行移除操作
-                        this->removeChildByName("StarButton");
-                    }
+                // 查找和移除所有的建造按钮
+                cocos2d::ui::Button* spriteBottle = static_cast<cocos2d::ui::Button*>(this->getChildByName("BottleButton"));
+                if (spriteBottle) {
+                    // 子节点存在，可以进行移除操作
+                    this->removeChildByName("BottleButton");
+                }
 
                 cocos2d::ui::Button* spriteFire = static_cast<cocos2d::ui::Button*>(this->getChildByName("FireButton"));
                 if (spriteBottle) {
@@ -295,12 +284,16 @@ void SceneBase::initScene(std::string& mapName) {
                     this->removeChildByName("FireButton");
                 }
 
-                    cocos2d::ui::Button* spriteSunflower = static_cast<cocos2d::ui::Button*>(this->getChildByName("SunflowerButton"));
-                    if (spriteSunflower) {
-                        // 子节点存在，可以进行移除操作
-                        this->removeChildByName("SunflowerButton");
-                    }
+                cocos2d::ui::Button* spriteStar = static_cast<cocos2d::ui::Button*>(this->getChildByName("StarButton"));
+                if (spriteStar) {
+                    // 子节点存在，可以进行移除操作
+                    this->removeChildByName("StarButton");
+                }
 
+                cocos2d::ui::Button* spriteSunflower = static_cast<cocos2d::ui::Button*>(this->getChildByName("SunflowerButton"));
+                if (spriteSunflower) {
+                    // 子节点存在，可以进行移除操作
+                    this->removeChildByName("SunflowerButton");
                 }
 
                 cocos2d::ui::Button* spriteShit = static_cast<cocos2d::ui::Button*>(this->getChildByName("ShitButton"));
@@ -311,9 +304,10 @@ void SceneBase::initScene(std::string& mapName) {
             }
         }
         return true;
-    };
+        };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
 }
 
 void SceneBase::menuCloseCallback(Ref* pSender)
@@ -472,7 +466,7 @@ bool SceneBase::init(int level, LevelScene* levelScene)
     {
         return false;
     }
-    
+
 
     m_levelScene = levelScene;
     // 创建定时器，定时更新怪物状态
@@ -518,16 +512,16 @@ void SceneBase::setButton(bool flag)
 void SceneBase::setPauseButton()
 {
     // 创建按钮                 
-    auto pauseGame = cocos2d::ui::Button::create("Pause2.png", "Pause2.png");
-    pauseGame->setPosition(Vec2(1100, 750));    // 设置按钮位置
+    auto pauseGame = cocos2d::ui::Button::create("Pause.png", "Pause.png");
+    pauseGame->setPosition(Vec2(1000, 750));    // 设置按钮位置
     pauseGame->addClickEventListener(CC_CALLBACK_0(SceneBase::pauseOperate, this));
-    this->addChild(pauseGame, 4, "Pause");
+    this->addChild(pauseGame, 6, "Pause");
 
-    auto continueGame = cocos2d::ui::Button::create("Pause1.png", "Pause1.png");
-    continueGame->setPosition(Vec2(1100, 750));    // 设置按钮位置
+    auto continueGame = cocos2d::ui::Button::create("Pause.png", "Pause.png");
+    continueGame->setPosition(Vec2(1000, 750));    // 设置按钮位置
     continueGame->addClickEventListener(CC_CALLBACK_0(SceneBase::continueOperate, this));
     continueGame->setVisible(false);
-    this->addChild(continueGame, 5, "Continue");
+    this->addChild(continueGame, 7, "Continue");
 
     //Director::getInstance()->pause();           // 暂停游戏
 }
@@ -549,10 +543,10 @@ void SceneBase::continueOperate()
 void SceneBase::setMenuButton()
 {
     // 创建按钮
-    auto menuButton = cocos2d::ui::Button::create("touming-hd.png", "touming-hd.png");
-    menuButton->setPosition(Vec2(1200, 750));    // 设置按钮位置
+    auto menuButton = cocos2d::ui::Button::create("Menu.png", "Menu.png");
+    menuButton->setPosition(Vec2(1100, 750));    // 设置按钮位置
     menuButton->addClickEventListener(CC_CALLBACK_0(SceneBase::onGameMenu, this));
-    this->addChild(menuButton, 4, "Menu");
+    this->addChild(menuButton, 6, "Menu");
 
     auto GameMenu = Sprite::create("GameMenu.png");
     GameMenu->setPosition(Vec2(650, 400));
@@ -651,7 +645,7 @@ void SceneBase::updateMoney(int money)
     this->removeChild(m_lable);
     std::string text = std::to_string(moneyScene); // 将数字转换为字符串
     auto lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
-    lable->setPosition(Vec2(150, 750));
+    lable->setPosition(Vec2(260, 763));
     this->m_lable = lable;
     this->addChild(m_lable, 1);
 }

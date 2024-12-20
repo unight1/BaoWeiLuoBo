@@ -1,4 +1,4 @@
-#include "SceneBase.h"
+﻿#include "SceneBase.h"
 #include "SceneMain.h"
 #include "Obstacle.h"
 #include "Monster.h"
@@ -26,15 +26,13 @@ Scene1* Scene1::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-// 鎵撳嵃鏈夌敤鐨勯敊璇秷鎭紝鑰屼笉鏄湪鏂囦欢涓嶅瓨鍦ㄦ椂娈甸敊璇��
+// 打印有用的错误消息，而不是在文件不存在时段错误。
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-
-//1涓烘櫘閫氬厰瀛愶紝2涓烘粦鏉垮厰锛�3涓洪琛屽厰
 void Scene1::initMonster(int choose)
 {
     if (choose == 1)
@@ -58,97 +56,100 @@ void Scene1::initMonster(int choose)
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
-    else if (choose == 7)
-    {
-        Boss* Monster = Boss::create();
-        Monster->setPosition(Vec2(300+50, 500+50));
-        this->addChild(Monster);
-        Monster->moveToSequence(path);
-    }
-    else if (choose == 4)
-    {
-        Grass* Obstacle1 = Grass::create();
-        Obstacle1->setPosition(Vec2(250, 500));
-        this->addChild(Obstacle1);
-    }
-    else if (choose == 5)
-    {
-        Stone* Obstacle1 = Stone::create();
-        Obstacle1->setPosition(Vec2(450, 300));
-        this->addChild(Obstacle1);
-    }
-    else if (choose == 6)
-    {
-        Treasure* Obstacle1 = Treasure::create();
-        Obstacle1->setPosition(Vec2(700, 400));
-        this->addChild(Obstacle1);
-    }
 }
 
 // on "init" you need to initialize your instance
 bool Scene1::init(int level, LevelScene* levelScene)
 {
-    // 璋冪敤浜嗙埗绫籗cene鐨刬nit()鍑芥暟杩涜鍒濆鍖栵紝濡傛灉鍒濆鍖栧け璐ワ紝鍒欒繑鍥瀎alse
-    if (!SceneBase::init(level, levelScene))
-    {
-        return false;
-    }
-    
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-1.mp3");
-    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-1.mp3", true);
+    do {
+        CC_BREAK_IF(!SceneBase::init(level, levelScene));
+        CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-1.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-1.mp3", true);
 
-    moneyScene = 500 + 100 * (levelScene->getItem1Level());
-    m_level = level;
-    m_levelScene = levelScene; // 淇濆瓨鍏冲崱閫夋嫨鍦烘櫙鐨勬寚閽�
-  
-    std::string mapName = "L1.tmx";
-    initScene(mapName);
+        moneyScene = 500 + 100 * (levelScene->getItem1Level());
+        m_level = level;
+        m_levelScene = levelScene; // 保存关卡选择场景的指针
+        // 创建 Label，并设置字体、字号和初始文本内容
 
-    path = {
-        cocos2d::Vec2(200 + 50, 200 + 50),
-        cocos2d::Vec2(500 + 50, 200 + 50),
-        cocos2d::Vec2(500 + 50, 500 + 50),
-        cocos2d::Vec2(800 + 50, 500 + 50),
-        cocos2d::Vec2(800 + 50, 300 + 50),
-        cocos2d::Vec2(700 + 50, 300 + 50),
-        cocos2d::Vec2(700 + 50, 100 + 50),
-        cocos2d::Vec2(1000 + 50, 100 + 50),
-        cocos2d::Vec2(1000 + 50, 500 + 50),
-    };
+        int number = moneyScene; // 要显示的数字
+        std::string text = std::to_string(number); // 将数字转换为字符串
+        m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
+        m_lable->setPosition(Vec2(150, 750));
+        this->addChild(m_lable, 1);
 
-    auto createRabbit = CallFunc::create([=]() {initMonster(1); });
-    auto createFastr = CallFunc::create([=]() {initMonster(2); });
-    auto createFlying = CallFunc::create([=]() {initMonster(3); });
-    auto createGrass = CallFunc::create([=]() {initMonster(4); });
-    auto createStone = CallFunc::create([=]() {initMonster(5); });
-    auto createTreasure = CallFunc::create([=]() {initMonster(6); });
-    auto createBoss = CallFunc::create([=]() {initMonster(7); });
+        std::string mapName = "L1.tmx";
+        initScene(mapName);
 
-    runAction(Sequence::create(
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFastr,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createBoss,
+        path = {
+            cocos2d::Vec2(200 + 50, 200 + 50),
+            cocos2d::Vec2(500 + 50, 200 + 50),
+            cocos2d::Vec2(500 + 50, 500 + 50),
+            cocos2d::Vec2(800 + 50, 500 + 50),
+            cocos2d::Vec2(800 + 50, 300 + 50),
+            cocos2d::Vec2(700 + 50, 300 + 50),
+            cocos2d::Vec2(700 + 50, 100 + 50),
+            cocos2d::Vec2(1000 + 50, 100 + 50),
+            cocos2d::Vec2(1000 + 50, 500 + 50),
+        };
 
-        DelayTime::create(12), createFlying,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFlying,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createRabbit,
+        auto create1 = CallFunc::create([=]() {initMonster(1); });
+        auto create2 = CallFunc::create([=]() {initMonster(2); });
+        auto create3 = CallFunc::create([=]() {initMonster(3); });
 
-        DelayTime::create(12), createRabbit,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFlying,
-        DelayTime::create(2), createRabbit,
-        DelayTime::create(2), createFlying,
-        DelayTime::create(1), createRabbit,
+        Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
+        gameProgress->setPosition(Vec2(420, 730));
+        do {
+            // 创建一个空的动画对象
+            auto animation = Animation::create();
+            // 添加动画帧
+            for (int i = 1; i <= 5; i++) {
+                char filename[100];
+                sprintf(filename, "gege%d.png", i);
+                auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
+                animation->addSpriteFrame(frame);
+            }
+
+            // 设置动画属性
+            animation->setDelayPerUnit(0.2f);
+            animation->setLoops(100000000);
+
+            // 创建动画动作对象
+            auto animate = Animate::create(animation);
+
+            // 将动画动作应用到精灵上
+            gameProgress->runAction(Spawn::create(animate, nullptr));
+
+            gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
+            this->addChild(gameProgress, 4);
+
+        } while (0);
+
+        runAction(Sequence::create(
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create2,
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create1,
+
+            DelayTime::create(12), create2,
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create2,
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create1,
+
+            DelayTime::create(12), create1,
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create2,
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create2,
+            DelayTime::create(1), create1,
 
 
-        CallFunc::create([=]() {monsterFlag=true; }),
-        nullptr));
+            CallFunc::create([=]() {monsterFlag = true; }),
+            nullptr));
 
-    return true;
+        return true;
+
+    } while (0);
 }
 
 Scene2* Scene2::createScene(int level, LevelScene* levelScene)
@@ -194,7 +195,7 @@ void Scene2::initMonster(int choose)
 
 bool Scene2::init(int level, LevelScene* levelScene)
 {
-    // 璋冪敤浜嗙埗绫籗cene鐨刬nit()鍑芥暟杩涜鍒濆鍖栵紝濡傛灉鍒濆鍖栧け璐ワ紝鍒欒繑鍥瀎alse
+    // 调用了父类Scene的init()函数进行初始化，如果初始化失败，则返回false
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -205,7 +206,15 @@ bool Scene2::init(int level, LevelScene* levelScene)
 
     moneyScene = 700 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // 淇濆瓨鍏冲崱閫夋嫨鍦烘櫙鐨勬寚閽�
+    m_levelScene = levelScene; // 保存关卡选择场景的指针
+
+    // 创建 Label，并设置字体、字号和初始文本内容
+    int number = moneyScene; // 要显示的数字
+    std::string text = std::to_string(number); // 将数字转换为字符串
+    m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
+    m_lable->setPosition(Vec2(150, 750));
+    this->addChild(m_lable, 1);
+
     std::string mapName = "L2.tmx";
     initScene(mapName);
 
@@ -225,7 +234,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
     auto create1 = CallFunc::create([=]() {initMonster(1); });
     auto create3 = CallFunc::create([=]() {initMonster(2); });
     auto create2 = CallFunc::create([=]() {initMonster(3); });
-    
+
     Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
     gameProgress->setPosition(Vec2(420, 730));
     do {
@@ -275,7 +284,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
         DelayTime::create(12), create1,
         DelayTime::create(2), create1,
         DelayTime::create(2), create2,
-        DelayTime::create(2), create3, 
+        DelayTime::create(2), create3,
         DelayTime::create(2), create2,
         DelayTime::create(1), create1,
         CallFunc::create([=]() {monsterFlag = true; }),
@@ -300,7 +309,7 @@ Scene3* Scene3::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-void Scene3::initMonster(int choose)    //1-3鍦ㄤ笂鏂瑰嚭鐢熺偣锛�4-6鍦ㄤ笅鏂瑰嚭鐢熺偣
+void Scene3::initMonster(int choose)    //1-3在上方出生点，4-6在下方出生点
 {
     if (choose == 1)
     {
@@ -336,7 +345,7 @@ void Scene3::initMonster(int choose)    //1-3鍦ㄤ笂鏂瑰嚭鐢熺偣锛�4-
 // on "init" you need to initialize your instance
 bool Scene3::init(int level, LevelScene* levelScene)
 {
-    // 璋冪敤浜嗙埗绫籗cene鐨刬nit()鍑芥暟杩涜鍒濆鍖栵紝濡傛灉鍒濆鍖栧け璐ワ紝鍒欒繑鍥瀎alse
+    // 调用了父类Scene的init()函数进行初始化，如果初始化失败，则返回false
     if (!SceneBase::init(level, levelScene))
     {
         return false;
@@ -347,14 +356,14 @@ bool Scene3::init(int level, LevelScene* levelScene)
 
     moneyScene = 1000 + 100 * (levelScene->getItem1Level());
     m_level = level;
-    m_levelScene = levelScene; // 淇濆瓨鍏冲崱閫夋嫨鍦烘櫙鐨勬寚閽�
+    m_levelScene = levelScene; // 保存关卡选择场景的指针
 
     std::string mapName = "L3.tmx";
     initScene(mapName);
 
-    // 鍒涘缓 Label锛屽苟璁剧疆瀛椾綋銆佸瓧鍙峰拰鍒濆鏂囨湰鍐呭
-    int number = moneyScene; // 瑕佹樉绀虹殑鏁板瓧
-    std::string text = std::to_string(number); // 灏嗘暟瀛楄浆鎹负瀛楃涓�
+    // 创建 Label，并设置字体、字号和初始文本内容
+    int number = moneyScene; // 要显示的数字
+    std::string text = std::to_string(number); // 将数字转换为字符串
     m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
     m_lable->setPosition(Vec2(150, 750));
     this->addChild(m_lable, 1);
