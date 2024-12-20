@@ -512,16 +512,16 @@ void SceneBase::setButton(bool flag)
 void SceneBase::setPauseButton()
 {
     // 创建按钮                 
-    auto pauseGame = cocos2d::ui::Button::create("Pause.png", "Pause.png");
-    pauseGame->setPosition(Vec2(1000, 750));    // 设置按钮位置
+    auto pauseGame = cocos2d::ui::Button::create("Pause2.png", "Pause2.png");
+    pauseGame->setPosition(Vec2(1100, 750));    // 设置按钮位置
     pauseGame->addClickEventListener(CC_CALLBACK_0(SceneBase::pauseOperate, this));
-    this->addChild(pauseGame, 6, "Pause");
+    this->addChild(pauseGame, 4, "Pause");
 
-    auto continueGame = cocos2d::ui::Button::create("Pause.png", "Pause.png");
-    continueGame->setPosition(Vec2(1000, 750));    // 设置按钮位置
+    auto continueGame = cocos2d::ui::Button::create("Pause1.png", "Pause1.png");
+    continueGame->setPosition(Vec2(1100, 750));    // 设置按钮位置
     continueGame->addClickEventListener(CC_CALLBACK_0(SceneBase::continueOperate, this));
     continueGame->setVisible(false);
-    this->addChild(continueGame, 7, "Continue");
+    this->addChild(continueGame, 5, "Continue");
 
     //Director::getInstance()->pause();           // 暂停游戏
 }
@@ -543,10 +543,10 @@ void SceneBase::continueOperate()
 void SceneBase::setMenuButton()
 {
     // 创建按钮
-    auto menuButton = cocos2d::ui::Button::create("Menu.png", "Menu.png");
-    menuButton->setPosition(Vec2(1100, 750));    // 设置按钮位置
+    auto menuButton = cocos2d::ui::Button::create("touming-hd.png", "touming-hd.png");
+    menuButton->setPosition(Vec2(1200, 750));    // 设置按钮位置
     menuButton->addClickEventListener(CC_CALLBACK_0(SceneBase::onGameMenu, this));
-    this->addChild(menuButton, 6, "Menu");
+    this->addChild(menuButton, 4, "Menu");
 
     auto GameMenu = Sprite::create("GameMenu.png");
     GameMenu->setPosition(Vec2(650, 400));
