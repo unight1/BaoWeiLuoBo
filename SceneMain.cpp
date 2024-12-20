@@ -228,7 +228,6 @@ bool Scene2::init(int level, LevelScene* levelScene)
     cocos2d::Vec2(900 + 50, 400 + 50),
     cocos2d::Vec2(900 + 50, 500 + 50),
     cocos2d::Vec2(1100 + 50, 500 + 50),
-    cocos2d::Vec2(1150 + 50, 550 + 50),
     };
 
     auto create1 = CallFunc::create([=]() {initMonster(1); });
@@ -335,7 +334,7 @@ void Scene3::initMonster(int choose)    //1-3在上方出生点，4-6在下方�
     else if (choose == 4)
     {
         Boss* Monster = Boss::create();
-        Monster->setPosition(Vec2(1000, 200 + 50));
+        Monster->setPosition(Vec2(1000, 200 + 100));
         this->addChild(Monster);
         Monster->moveToSequence(path1);
     }
@@ -380,8 +379,8 @@ bool Scene3::init(int level, LevelScene* levelScene)
     };
 
     path1 = {
-    cocos2d::Vec2(1100 + 50, 200 + 50),
-    cocos2d::Vec2(1100 + 50, 82 + 50)
+    cocos2d::Vec2(1100 + 50, 200 + 100),
+    cocos2d::Vec2(1100 + 50, 82 + 100)
     };
 
     Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
