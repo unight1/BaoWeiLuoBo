@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="13" height="8" tilewidth="100" tileheight="100" infinite="0" nextlayerid="6" nextobjectid="78">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="13" height="8" tilewidth="100" tileheight="100" infinite="0" nextlayerid="13" nextobjectid="90">
  <tileset firstgid="1" name="BG1" tilewidth="100" tileheight="100" tilecount="84" columns="12">
   <image source="BG1.png" width="1200" height="703"/>
  </tileset>
  <tileset firstgid="85" name="Background1.1" tilewidth="100" tileheight="100" tilecount="96" columns="12">
   <image source="Background1.1.png" width="1202" height="803"/>
+ </tileset>
+ <tileset firstgid="181" name="Headline" tilewidth="100" tileheight="100" tilecount="13" columns="13">
+  <image source="Headline.png" width="1300" height="118"/>
  </tileset>
  <layer id="5" name="Background" width="13" height="8">
   <data encoding="csv">
@@ -16,6 +19,18 @@
 145,146,147,148,149,150,150,151,152,153,154,155,156,
 157,158,159,160,161,162,162,163,164,165,166,167,168,
 169,170,171,172,173,174,174,175,176,177,178,179,180
+</data>
+ </layer>
+ <layer id="8" name="Headline" width="13" height="8">
+  <data encoding="csv">
+181,182,183,184,185,186,187,188,189,190,191,192,193,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="4" name="Map" width="13" height="8">
@@ -33,7 +48,6 @@
  <objectgroup id="2" name="TowerPosition">
   <object id="3" x="0" y="100" width="100" height="100"/>
   <object id="4" x="100" y="100" width="100" height="100"/>
-  <object id="5" x="68" y="992"/>
   <object id="8" x="0" y="200" width="100" height="100"/>
   <object id="11" x="0" y="200" width="100" height="100"/>
   <object id="12" x="100" y="200" width="100" height="100"/>
@@ -84,9 +98,19 @@
   <object id="71" x="1100" y="300" width="100" height="100"/>
   <object id="72" x="1100" y="100" width="100" height="100"/>
   <object id="76" x="900" y="700" width="100" height="100"/>
-  <object id="77" x="720" y="934"/>
  </objectgroup>
  <objectgroup id="3" name="Carrot">
   <object id="2" x="1000" y="200" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="12" name="Treasure">
+  <object id="88" x="300" y="200" width="200" height="200"/>
+ </objectgroup>
+ <objectgroup id="9" name="Grass">
+  <object id="78" x="300" y="400" width="100" height="100"/>
+  <object id="80" x="400" y="400" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="10" name="Stone">
+  <object id="83" x="200" y="600" width="200" height="100"/>
+  <object id="84" x="800" y="500" width="200" height="100"/>
  </objectgroup>
 </map>

@@ -1,6 +1,5 @@
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
 #include "StartScene.h"
 
 #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -19,8 +18,8 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-constexpr int SIZE_X = 1300;                        //³¤¶È
-constexpr int SIZE_Y = 800;                         //¿í¶È
+constexpr int SIZE_X = 1300;                        //Â³Â¤Â¶Ãˆ
+constexpr int SIZE_Y = 800;                         //Â¿Ã­Â¶Ãˆ
 
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(SIZE_X, SIZE_Y);
@@ -106,7 +105,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto scene = StartScene::createScene();
 
     // run
-    //²¥·ÅÒôÀÖ
+    //Â²Â¥Â·Ã…Ã’Ã´Ã€Ã–
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGMusic.mp3");
     if (UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState", true))
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGMusic.mp3", true);

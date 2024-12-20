@@ -1,4 +1,4 @@
-#include "SceneBase.h"
+ï»¿#include "SceneBase.h"
 #include "SimpleAudioEngine.h"
 #include "Obstacle.h"
 #include "Monster.h"
@@ -6,8 +6,9 @@
 #include "TowerPosition.h"
 #include "ui/CocosGUI.h"
 #include "levelScene.h"
+#include "audio/include/SimpleAudioEngine.h"
 
-USING_NS_CC; 
+USING_NS_CC;
 
 Sprite* plusIcon;
 
@@ -27,7 +28,7 @@ SceneBase* SceneBase::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-// ´òÓ¡ÓĞÓÃµÄ´íÎóÏûÏ¢£¬¶ø²»ÊÇÔÚÎÄ¼ş²»´æÔÚÊ±¶Î´íÎó¡£
+// æ‰“å°æœ‰ç”¨çš„é”™è¯¯æ¶ˆæ¯ï¼Œè€Œä¸æ˜¯åœ¨æ–‡ä»¶ä¸å­˜åœ¨æ—¶æ®µé”™è¯¯ã€‚
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -43,10 +44,10 @@ void SceneBase::update(float delta)
     if (monsterFlag)
     {
         int num = 0;
-        // ±éÀú³¡¾°ÖĞµÄËùÓĞ½Úµã
+        // éå†åœºæ™¯ä¸­çš„æ‰€æœ‰èŠ‚ç‚¹
         for (auto child : this->getChildren())
         {
-            // ÅĞ¶Ï¸Ã½ÚµãÊÇ·ñÎª Monster ÀàĞÍ
+            // åˆ¤æ–­è¯¥èŠ‚ç‚¹æ˜¯å¦ä¸º Monster ç±»å‹
             auto monster = dynamic_cast<Monster*>(child);
             if (monster != nullptr)
             {
@@ -62,68 +63,68 @@ void SceneBase::update(float delta)
 
 
 /*
-* ÏÔÊ¾²ãÊı£º
-* 0²ã£ºµØÍ¼±³¾°
-* 1²ã£ºÂÜ²·¡¢ÕÏ°­Îï¡¢ÅÚËşµÄµ××ù¡¢Ç®
-* 2²ã£º·ÅÖÃµÄÅÚËş¡¢×Óµ¯
-* 3²ã£ºÅÚËşÎ»ÖÃµÄ¼ÓºÅ¡¢¼ÓºÅÉÏÃæµÄ¿ÉÑ¡ÅÚËş°´Å¥
-* 4²ã£º½ø¶ÈÌõ
-* 5²ã£º½áÊø½çÃæ
-* 6²ã£º½áÊø½çÃæÉÏÃæµÄ°´Å¥
+* æ˜¾ç¤ºå±‚æ•°ï¼š
+* 0å±‚ï¼šåœ°å›¾èƒŒæ™¯
+* 1å±‚ï¼šèåœã€éšœç¢ç‰©ã€ç‚®å¡”çš„åº•åº§ã€é’±
+* 2å±‚ï¼šæ”¾ç½®çš„ç‚®å¡”ã€å­å¼¹
+* 3å±‚ï¼šç‚®å¡”ä½ç½®çš„åŠ å·ã€åŠ å·ä¸Šé¢çš„å¯é€‰ç‚®å¡”æŒ‰é’®
+* 4å±‚ï¼šè¿›åº¦æ¡
+* 5å±‚ï¼šç»“æŸç•Œé¢
+* 6å±‚ï¼šç»“æŸç•Œé¢ä¸Šé¢çš„æŒ‰é’®
 */
-
-void SceneBase::initScene(std::string& mapName) {
+void SceneBase::initScene(std::string& mapName)
+{
     auto map = TMXTiledMap::create(mapName);
-    this->addChild(map, 0);     // Ìí¼Óµ½³¡¾°ÖĞ£¬ÏÔÊ¾ÔÚµÚ0²ã
+    this->addChild(map, 0);     // æ·»åŠ åˆ°åœºæ™¯ä¸­ï¼Œæ˜¾ç¤ºåœ¨ç¬¬0å±‚
 
-    setPauseButton();           //·ÅÖÃÔİÍ£°´Å¥
+    setPauseButton();           //æ”¾ç½®æš‚åœæŒ‰é’®
     setMenuButton();
 
-    // »ñÈ¡ÂÜ²·¶ÔÏó²ã
+    // è·å–èåœå¯¹è±¡å±‚éœ€è¦è°ƒæ•´
     TMXObjectGroup* carrotObjects = map->getObjectGroup("Carrot");
 
-    // »ñÈ¡ÂÜ²·¶ÔÏóµÄÎ»ÖÃĞÅÏ¢
+    // è·å–èåœå¯¹è±¡çš„ä½ç½®ä¿¡æ¯
     const auto& firstCarrotObject = carrotObjects->getObjects().at(0);
     float xC = firstCarrotObject.asValueMap().at("x").asFloat() + 60;
     float yC = firstCarrotObject.asValueMap().at("y").asFloat() + 70;
 
-    // ´´½¨ÂÜ²·²¢·ÅÖÃÔÚµØÍ¼ÉÏµÄÎ»ÖÃ
+    // åˆ›å»ºèåœå¹¶æ”¾ç½®åœ¨åœ°å›¾ä¸Šçš„ä½ç½®
 
-    carrot->setCarrotPosition(Vec2(xC, yC)); //ÉèÖÃÂÜ²·Î»ÖÃ
-    carrot->putCarrot(10 + 5 * m_levelScene->getItem2Level());          //Õæ³õÊ¼»¯£¬10:ÂÜ²·ÑªÁ¿
-    this->addChild(carrot, 1);      // Ìí¼Óµ½³¡¾°ÖĞ£¬ÏÔÊ¾ÔÚµÚ1²ã£¬È·±£ÔÚµØÍ¼ÉÏ·½ÏÔÊ¾
+    carrot->setCarrotPosition(Vec2(xC, yC)); //è®¾ç½®èåœä½ç½®
+    carrot->putCarrot(10 + 5 * m_levelScene->getItem2Level());          //çœŸåˆå§‹åŒ–ï¼Œ10:èåœè¡€é‡
+    this->addChild(carrot, 1);      // æ·»åŠ åˆ°åœºæ™¯ä¸­ï¼Œæ˜¾ç¤ºåœ¨ç¬¬1å±‚ï¼Œç¡®ä¿åœ¨åœ°å›¾ä¸Šæ–¹æ˜¾ç¤º
 
     TMXObjectGroup* towerPositions = map->getObjectGroup("TowerPosition");
-    // ´¦ÀíÎ»ÖÃ¶ÔÏó
+    // å¤„ç†ä½ç½®å¯¹è±¡
     ValueVector towerPositionsVector = towerPositions->getObjects();
 
     for (const auto& towerPosition : towerPositionsVector)
     {
-        // »ñÈ¡ÅÚËşÎ»ÖÃ¶ÔÏóµÄÎ»ÖÃĞÅÏ¢
+        // è·å–ç‚®å¡”ä½ç½®å¯¹è±¡çš„ä½ç½®ä¿¡æ¯
         float xP = towerPosition.asValueMap().at("x").asFloat() + 50;
         float yP = towerPosition.asValueMap().at("y").asFloat() + 50;
 
-        // ´´½¨ÅÚËşÎ»ÖÃ²¢·ÅÖÃÔÚµØÍ¼ÉÏ
+        // åˆ›å»ºç‚®å¡”ä½ç½®å¹¶æ”¾ç½®åœ¨åœ°å›¾ä¸Š
         Vec2 position = Vec2(xP, yP);
         TowerPosition* towerPos = TowerPosition::create();
         towerPos->setPosition(position);
-        towerPos->setVisible(false);        // ³õÊ¼»¯Ê±ÉèÖÃÎªÒş²Ø×´Ì¬
-        this->addChild(towerPos, 1);        // Ìí¼Óµ½³¡¾°ÖĞ£¬ÏÔÊ¾ÔÚµÚ3²ã£¬È·±£ÔÚµØÍ¼ÉÏ·½ÏÔÊ¾
+        towerPos->setVisible(false);        // åˆå§‹åŒ–æ—¶è®¾ç½®ä¸ºéšè—çŠ¶æ€
+        this->addChild(towerPos, 3);        // æ·»åŠ åˆ°åœºæ™¯ä¸­ï¼Œæ˜¾ç¤ºåœ¨ç¬¬3å±‚ï¼Œç¡®ä¿åœ¨åœ°å›¾ä¸Šæ–¹æ˜¾ç¤º
 
     }
 
-    // Ìí¼ÓÕÏ°­Îï
-    TMXObjectGroup* GrassObjects = map->getObjectGroup("Grass"); // »ñÈ¡ÕÏ°­Îï¶ÔÏó²ã
+    // æ·»åŠ éšœç¢ç‰©
+    TMXObjectGroup* GrassObjects = map->getObjectGroup("Grass"); // è·å–éšœç¢ç‰©å¯¹è±¡å±‚
     ValueVector obstaclePositionsVector = GrassObjects->getObjects();
 
     for (const auto& obstacle : obstaclePositionsVector) {
         float xO = obstacle.asValueMap().at("x").asFloat();
         float yO = obstacle.asValueMap().at("y").asFloat();
 
-        // ´´½¨ÕÏ°­Îï²¢·ÅÖÃÔÚµØÍ¼ÉÏ
+        // åˆ›å»ºéšœç¢ç‰©å¹¶æ”¾ç½®åœ¨åœ°å›¾ä¸Š
         Grass* Grass = Grass::create();
         Grass->setPosition(Vec2(xO + 50, yO + 50));
-        this->addChild(Grass, 0); // Ìí¼Óµ½³¡¾°ÖĞ
+        this->addChild(Grass, 0); // æ·»åŠ åˆ°åœºæ™¯ä¸­
     }
 
     TMXObjectGroup* StoneObjects = map->getObjectGroup("Stone");
@@ -133,13 +134,13 @@ void SceneBase::initScene(std::string& mapName) {
         float xS = stone.asValueMap().at("x").asFloat();
         float yS = stone.asValueMap().at("y").asFloat();
 
-        // ´´½¨Ê¯Í·ÕÏ°­Îï²¢·ÅÖÃÔÚµØÍ¼ÉÏ
+        // åˆ›å»ºçŸ³å¤´éšœç¢ç‰©å¹¶æ”¾ç½®åœ¨åœ°å›¾ä¸Š
         Stone* Stone = Stone::create();
         Stone->setPosition(Vec2(xS + 100, yS + 50));
-        this->addChild(Stone, 0); // Ìí¼Óµ½³¡¾°ÖĞ
+        this->addChild(Stone, 0); // æ·»åŠ åˆ°åœºæ™¯ä¸­
     }
 
-    // ´¦Àí±¦Ïä¶ÔÏó
+    // å¤„ç†å®ç®±å¯¹è±¡
     TMXObjectGroup* TreasureObjects = map->getObjectGroup("Treasure");
     ValueVector treasurePositionsVector = TreasureObjects->getObjects();
 
@@ -147,22 +148,23 @@ void SceneBase::initScene(std::string& mapName) {
         float xT = treasure.asValueMap().at("x").asFloat();
         float yT = treasure.asValueMap().at("y").asFloat();
 
-        //´´½¨±¦Ïä²¢·ÅÖÃÔÚµØÍ¼ÉÏ
+        //åˆ›å»ºå®ç®±å¹¶æ”¾ç½®åœ¨åœ°å›¾ä¸Š
         Treasure* Treasure = Treasure::create();
         Treasure->setPosition(Vec2(xT + 100, yT + 100));
-        this->addChild(Treasure, 0); // Ìí¼Óµ½³¡¾°ÖĞ
+        this->addChild(Treasure, 0); // æ·»åŠ åˆ°åœºæ™¯ä¸­
     }
 
 
-    // Ìí¼ÓÊó±êÊÂ¼ş¼àÌıÆ÷£¬ÓÃÓÚ´¦ÀíËşÎ»ÖÃ¶ÔÏóµÄÏÔÊ¾ºÍÒş²Ø
+    // æ·»åŠ é¼ æ ‡äº‹ä»¶ç›‘å¬å™¨ï¼Œç”¨äºå¤„ç†ç‚®å¡”ä½ç½®å¯¹è±¡çš„æ˜¾ç¤ºå’Œéšè—
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     listener->onTouchBegan = [&](Touch* touch, Event* event) {
         auto children = this->getChildren();
-        for (Node* child : children) {
+        for (Node* child : children)
+        {
             TowerPosition* towerPos = dynamic_cast<TowerPosition*>(child);
-            
-            // ÒÆ³ıËùÓĞµÄÉı¼¶°´Å¥
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSelect.mp3"); //æ’­æ”¾ç‚¹å‡»éŸ³æ•ˆ
+            // ç§»é™¤æ‰€æœ‰çš„å‡çº§æŒ‰é’®
             if (towerPos && towerPos->towerofThisPosition)
             {
                 towerPos->towerofThisPosition->removeChildByName("But");
@@ -171,125 +173,150 @@ void SceneBase::initScene(std::string& mapName) {
                     towerPos->towerofThisPosition->bottom->removeAllChildren();
                 }
             }
-
-            if (towerPos) {
-                if (towerPos->getBoundingBox().containsPoint(touch->getLocation())) {
-                    // ¼ì²éÊÇ·ñ¿ÉÒÔÔÚ´ËÎ»ÖÃ·ÅÖÃËş
-                    bool canBuild = true;
-                    for (Node* child : this->getChildren()) {
-                        Obstacle* obstacle = dynamic_cast<Obstacle*>(child);
-                        if (obstacle && obstacle->getBoundingBox().intersectsRect(towerPos->getBoundingBox())) {
-                            canBuild = false; // Èç¹û´æÔÚÖØµş£¬²»ÄÜ½¨Ôì
-                            break;
-                        }
-                    }
-
-                    // µ±Ç°Î»ÖÃÃ»ÓĞÕÏ°­Îï£¬¿ÉÒÔÏÔÊ¾½¨Ôì½çÃæ
-                    if (canBuild) {
-                        // µ±Ç°Î»ÖÃÓĞËş
-                        if (towerPos->towerofThisPosition)
-                        {
-                            towerPos->setVisible(false);
-
-                            towerPos->towerofThisPosition->clicked(moneyScene);
-
-                        }
-                        // Ã»ÓĞËş£¬ÏÔÊ¾½¨Ôì½çÃæ
-                        else {
-                            towerPos->setVisible(true);
-                            // ´´½¨°´Å¥
-                            Vec2 positionButtonBottle = Vec2(40, 120);
-                            Vec2 positionButtonStar = Vec2(-40, 120);
-                            Vec2 positionButtonSunflower = Vec2(120, 120);
-                            Vec2 positionCheck = towerPos->getPosition();
-                            if (positionCheck.x == 50)      //Èç¹ûÎ»ÖÃ½ôÌù×ó±ßÔµ£¬¶Ô½¨Á¢µÄ°´Å¥Ïà¶Ô×ø±ê½øĞĞ´¦Àí£¬Ê¹°´Å¥ÏÔÊ¾ÔÚÓÒ²à
-                            {
-                                positionButtonBottle = Vec2(120, 40);
-                                positionButtonStar = Vec2(120, 120);
-                                positionButtonSunflower = Vec2(120, -40);
-                            }
-                            auto buttonBottle = cocos2d::ui::Button::create("BottleButton.png", "BottleButton.png", "BottleButtonUn.png");
-                            buttonBottle->setPosition(positionButtonBottle);
-                            buttonBottle->addClickEventListener(CC_CALLBACK_1(SceneBase::createBottle, this));  // Ìí¼Ó°´Å¥µã»÷»Øµ÷º¯Êı
-                            towerPos->addChild(buttonBottle, 3, "BottleButton");
-                            // ÉèÖÃµã»÷×´Ì¬
-                            if (this->moneyScene >= 100) {
-                                buttonBottle->setEnabled(true);
-                            }
-                            else {
-                                buttonBottle->setEnabled(false);
-                            }
-
-                            // ´´½¨°´Å¥                  
-                            auto buttonStar = cocos2d::ui::Button::create("StarButton.png", "StarButton.png", "StarButtonUn.png");
-                            buttonStar->setPosition(positionButtonStar);
-                            buttonStar->addClickEventListener(CC_CALLBACK_1(SceneBase::createStar, this));  // Ìí¼Ó°´Å¥µã»÷»Øµ÷º¯Êı
-                            towerPos->addChild(buttonStar, 3, "StarButton");
-                            // ÉèÖÃµã»÷×´Ì¬
-                            if (this->moneyScene >= 200) {
-                                buttonStar->setEnabled(true);
-                            }
-                            else {
-                                buttonStar->setEnabled(false);
-                            }
-
-                            // ´´½¨°´Å¥                 
-                            auto buttonSunflower = cocos2d::ui::Button::create("SunflowerButton.png", "SunflowerButton.png", "SunflowerButtonUn.png");
-                            buttonSunflower->setPosition(positionButtonSunflower);
-                            buttonSunflower->addClickEventListener(CC_CALLBACK_1(SceneBase::createSunflower, this));  // Ìí¼Ó°´Å¥µã»÷»Øµ÷º¯Êı
-                            towerPos->addChild(buttonSunflower, 3, "SunflowerButton");
-                            // ÉèÖÃµã»÷×´Ì¬
-                            if (this->moneyScene >= 200) {
-                                buttonSunflower->setEnabled(true);
-                            }
-                            else {
-                                buttonSunflower->setEnabled(false);
-                            }
-                        }
-                    }
-                    else {
-                        // ÌáÊ¾ÓÃ»§ÎŞ·¨ÔÚÕÏ°­ÎïÉÏ½¨Ôì
-                        CCLOG("ÎŞ·¨ÔÚÕÏ°­ÎïÉÏ½¨Ôì!");
-                    }
-                }
-                else {
+            // è¢«ç‚¹å‡»çš„æ–¹å—
+            if (towerPos && towerPos->getBoundingBox().containsPoint(touch->getLocation()))
+            {
+                // å½“å‰ä½ç½®æœ‰å¡”
+                if (towerPos->towerofThisPosition)
+                {
                     towerPos->setVisible(false);
 
-                    // ²éÕÒºÍÒÆ³ıËùÓĞµÄ½¨Ôì°´Å¥
-                    cocos2d::ui::Button* spriteBottle = static_cast<cocos2d::ui::Button*>(this->getChildByName("BottleButton"));
-                    if (spriteBottle) {
-                        // ×Ó½Úµã´æÔÚ£¬¿ÉÒÔ½øĞĞÒÆ³ı²Ù×÷
-                        this->removeChildByName("BottleButton");
+                    towerPos->towerofThisPosition->clicked(moneyScene);
+
+                }
+                // æ²¡æœ‰å¡”ï¼Œæ˜¾ç¤ºå»ºé€ ç•Œé¢
+                else {
+                    towerPos->setVisible(true);
+                    // åˆ›å»ºæŒ‰é’®
+                    Vec2 positionButtonBottle = Vec2(-100, 120);
+                    Vec2 positionButtonFire = Vec2(-20, 120);
+                    Vec2 positionButtonStar = Vec2(60, 120);
+                    Vec2 positionButtonSunflower = Vec2(140, 120);
+                    Vec2 positionButtonShit = Vec2(220, 120);
+                    Vec2 positionCheck = towerPos->getPosition();
+                    if (positionCheck.x == 50)      //å¦‚æœä½ç½®ç´§è´´å·¦è¾¹ç¼˜ï¼Œå¯¹å»ºç«‹çš„æŒ‰é’®ç›¸å¯¹åæ ‡è¿›è¡Œå¤„ç†ï¼Œä½¿æŒ‰é’®æ˜¾ç¤ºåœ¨å³ä¾§
+                    {
+                        positionButtonBottle = Vec2(120, -100);
+                        positionButtonFire = Vec2(120, -20);
+                        positionButtonStar = Vec2(120, 60);
+                        positionButtonSunflower = Vec2(120, 140);
+                        positionButtonShit = Vec2(120, 220);
+                    }
+                    // åˆ›å»ºæŒ‰é’®
+                    auto buttonBottle = cocos2d::ui::Button::create("BottleButton.png", "BottleButton.png", "BottleButtonUn.png");
+                    buttonBottle->setPosition(positionButtonBottle);
+                    buttonBottle->addClickEventListener(CC_CALLBACK_1(SceneBase::createBottle, this));  // æ·»åŠ æŒ‰é’®ç‚¹å‡»å›è°ƒå‡½æ•°
+                    towerPos->addChild(buttonBottle, 0, "BottleButton");
+                    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
+                    if (this->moneyScene >= 100) {
+                        buttonBottle->setEnabled(true);
+                    }
+                    else {
+                        buttonBottle->setEnabled(false);
+                    }
+                    // åˆ›å»ºæŒ‰é’®
+                    auto buttonFire = cocos2d::ui::Button::create("FireBottleButton.png", "FireBottleButton.png", "FireBottleButtonUn.png");
+                    buttonFire->setPosition(positionButtonFire);
+                    buttonFire->addClickEventListener(CC_CALLBACK_1(SceneBase::createFire, this));  // æ·»åŠ æŒ‰é’®ç‚¹å‡»å›è°ƒå‡½æ•°
+                    towerPos->addChild(buttonFire, 0, "FireButton");
+                    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
+                    if (this->moneyScene >= 160) {
+                        buttonFire->setEnabled(true);
+                    }
+                    else {
+                        buttonFire->setEnabled(false);
+                    }
+                    // åˆ›å»ºæŒ‰é’®                  
+                    auto buttonStar = cocos2d::ui::Button::create("StarButton.png", "StarButton.png", "StarButtonUn.png");
+                    buttonStar->setPosition(positionButtonStar);
+                    buttonStar->addClickEventListener(CC_CALLBACK_1(SceneBase::createStar, this));  // æ·»åŠ æŒ‰é’®ç‚¹å‡»å›è°ƒå‡½æ•°
+                    towerPos->addChild(buttonStar, 0, "StarButton");
+                    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
+                    if (this->moneyScene >= 200) {
+                        buttonStar->setEnabled(true);
+                    }
+                    else {
+                        buttonStar->setEnabled(false);
                     }
 
-                    cocos2d::ui::Button* spriteStar = static_cast<cocos2d::ui::Button*>(this->getChildByName("StarButton"));
-                    if (spriteStar) {
-                        // ×Ó½Úµã´æÔÚ£¬¿ÉÒÔ½øĞĞÒÆ³ı²Ù×÷
-                        this->removeChildByName("StarButton");
+                    // åˆ›å»ºæŒ‰é’®                 
+                    auto buttonSunflower = cocos2d::ui::Button::create("SunflowerButton.png", "SunflowerButton.png", "SunflowerButtonUn.png");
+                    buttonSunflower->setPosition(positionButtonSunflower);
+                    buttonSunflower->addClickEventListener(CC_CALLBACK_1(SceneBase::createSunflower, this));  // æ·»åŠ æŒ‰é’®ç‚¹å‡»å›è°ƒå‡½æ•°
+                    towerPos->addChild(buttonSunflower, 0, "SunflowerButton");
+                    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
+                    if (this->moneyScene >= 200) {
+                        buttonSunflower->setEnabled(true);
+                    }
+                    else {
+                        buttonSunflower->setEnabled(false);
                     }
 
-                    cocos2d::ui::Button* spriteSunflower = static_cast<cocos2d::ui::Button*>(this->getChildByName("SunflowerButton"));
-                    if (spriteSunflower) {
-                        // ×Ó½Úµã´æÔÚ£¬¿ÉÒÔ½øĞĞÒÆ³ı²Ù×÷
-                        this->removeChildByName("SunflowerButton");
+                    // åˆ›å»ºæŒ‰é’®                  
+                    auto buttonShit = cocos2d::ui::Button::create("ShitButton.png", "ShitButton.png", "ShitButtonUn.png");
+                    buttonShit->setPosition(positionButtonShit);
+                    buttonShit->addClickEventListener(CC_CALLBACK_1(SceneBase::createShit, this));  // æ·»åŠ æŒ‰é’®ç‚¹å‡»å›è°ƒå‡½æ•°
+                    towerPos->addChild(buttonShit, 0, "ShitButton");
+                    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
+                    if (this->moneyScene >= 120) {
+                        buttonShit->setEnabled(true);
                     }
+                    else {
+                        buttonShit->setEnabled(false);
+                    }
+                }
+            }
+            // æ²¡æœ‰è¢«ç‚¹å‡»çš„æ–¹å—
+            else if (towerPos)
+            {
+                towerPos->setVisible(false);
 
+                // æŸ¥æ‰¾å’Œç§»é™¤æ‰€æœ‰çš„å»ºé€ æŒ‰é’®
+                cocos2d::ui::Button* spriteBottle = static_cast<cocos2d::ui::Button*>(this->getChildByName("BottleButton"));
+                if (spriteBottle) {
+                    // å­èŠ‚ç‚¹å­˜åœ¨ï¼Œå¯ä»¥è¿›è¡Œç§»é™¤æ“ä½œ
+                    this->removeChildByName("BottleButton");
+                }
+
+                cocos2d::ui::Button* spriteFire = static_cast<cocos2d::ui::Button*>(this->getChildByName("FireButton"));
+                if (spriteBottle) {
+                    // å­èŠ‚ç‚¹å­˜åœ¨ï¼Œå¯ä»¥è¿›è¡Œç§»é™¤æ“ä½œ
+                    this->removeChildByName("FireButton");
+                }
+
+                cocos2d::ui::Button* spriteStar = static_cast<cocos2d::ui::Button*>(this->getChildByName("StarButton"));
+                if (spriteStar) {
+                    // å­èŠ‚ç‚¹å­˜åœ¨ï¼Œå¯ä»¥è¿›è¡Œç§»é™¤æ“ä½œ
+                    this->removeChildByName("StarButton");
+                }
+
+                cocos2d::ui::Button* spriteSunflower = static_cast<cocos2d::ui::Button*>(this->getChildByName("SunflowerButton"));
+                if (spriteSunflower) {
+                    // å­èŠ‚ç‚¹å­˜åœ¨ï¼Œå¯ä»¥è¿›è¡Œç§»é™¤æ“ä½œ
+                    this->removeChildByName("SunflowerButton");
+                }
+
+                cocos2d::ui::Button* spriteShit = static_cast<cocos2d::ui::Button*>(this->getChildByName("ShitButton"));
+                if (spriteShit) {
+                    // å­èŠ‚ç‚¹å­˜åœ¨ï¼Œå¯ä»¥è¿›è¡Œç§»é™¤æ“ä½œ
+                    this->removeChildByName("ShitButton");
                 }
             }
         }
         return true;
-    };
+        };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
 }
 
 void SceneBase::menuCloseCallback(Ref* pSender)
 {
-    //Õâ¸öº¯Êı»áÍ£Ö¹ÓÎÏ·Ñ­»·£¬²¢ÊÍ·ÅËùÓĞµÄ×ÊÔ´¡£
+    //è¿™ä¸ªå‡½æ•°ä¼šåœæ­¢æ¸¸æˆå¾ªç¯ï¼Œå¹¶é‡Šæ”¾æ‰€æœ‰çš„èµ„æºã€‚
     Director::getInstance()->end();
 
-    //Èç¹ûÏ£ÍûÔÚiOSÖĞ·µ»ØÔ­Éú½çÃæ¶ø²»ÊÇÍË³öÓ¦ÓÃ³ÌĞò£¬¿ÉÒÔ×¢ÊÍµôÕâ¸öº¯Êı£¬²¢µ÷ÓÃÏÂÃæµÄ´úÂë£¬
-    //´¥·¢Ò»¸öÃûÎª¡°game_scene_close_event¡±µÄ×Ô¶¨ÒåÊÂ¼ş£¬ÓÉRootViewController.mmÎÄ¼şÖĞµÄ´úÂë´¦Àí¡£
+    //å¦‚æœå¸Œæœ›åœ¨iOSä¸­è¿”å›åŸç”Ÿç•Œé¢è€Œä¸æ˜¯é€€å‡ºåº”ç”¨ç¨‹åºï¼Œå¯ä»¥æ³¨é‡Šæ‰è¿™ä¸ªå‡½æ•°ï¼Œå¹¶è°ƒç”¨ä¸‹é¢çš„ä»£ç ï¼Œ
+    //è§¦å‘ä¸€ä¸ªåä¸ºâ€œgame_scene_close_eventâ€çš„è‡ªå®šä¹‰äº‹ä»¶ï¼Œç”±RootViewController.mmæ–‡ä»¶ä¸­çš„ä»£ç å¤„ç†ã€‚
 
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
@@ -297,16 +324,17 @@ void SceneBase::menuCloseCallback(Ref* pSender)
 
 void SceneBase::createBottle(cocos2d::Ref* sender)
 {
-    // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+    // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //æ’­æ”¾ç‚®å¡”å»ºç«‹éŸ³æ•ˆ
     auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
     if (button)
     {
-        auto tower = BottleTower_1::create();  // ´´½¨ÅÚËş¶ÔÏó
+        auto tower = BottleTower_1::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡
         if (moneyScene >= tower->getConsumption())
         {
             auto bottom = Sprite::create("Bottom.png");
-            bottom->setPosition(button->getParent()->getPosition());// ÉèÖÃµ××ùÎ»ÖÃ
-            tower->setPosition(button->getParent()->getPosition());  // ÉèÖÃÅÚËşÎ»ÖÃ
+            bottom->setPosition(button->getParent()->getPosition());// è®¾ç½®åº•åº§ä½ç½®
+            tower->setPosition(button->getParent()->getPosition());  // è®¾ç½®ç‚®å¡”ä½ç½®
             auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
             if (thisTowerPosition)
             {
@@ -314,8 +342,36 @@ void SceneBase::createBottle(cocos2d::Ref* sender)
                 tower->thisTowerPositionIS = thisTowerPosition;//
 
             }
-            this->addChild(bottom, 1, "BottleBottom");
-            this->addChild(tower, 2);  // ½«ÅÚËşÌí¼Óµ½³¡¾°ÖĞ
+            this->addChild(bottom, 1);
+            this->addChild(tower, 2);  // å°†ç‚®å¡”æ·»åŠ åˆ°åœºæ™¯ä¸­
+            button->getParent()->setVisible(false);
+            tower->bottom = bottom;//
+            this->updateMoney(-100);
+        }
+    }
+}
+void SceneBase::createFire(Ref* sender)
+{
+    // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //æ’­æ”¾ç‚®å¡”å»ºç«‹éŸ³æ•ˆ
+    auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
+    if (button)
+    {
+        auto tower = FireTower_1::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡
+        if (moneyScene >= tower->getConsumption())
+        {
+            auto bottom = Sprite::create("Bottom.png");
+            bottom->setPosition(button->getParent()->getPosition());// è®¾ç½®åº•åº§ä½ç½®
+            tower->setPosition(button->getParent()->getPosition());  // è®¾ç½®ç‚®å¡”ä½ç½®
+            auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
+            if (thisTowerPosition)
+            {
+                thisTowerPosition->towerofThisPosition = tower;//
+                tower->thisTowerPositionIS = thisTowerPosition;//
+
+            }
+            this->addChild(bottom, 1);
+            this->addChild(tower, 2);  // å°†ç‚®å¡”æ·»åŠ åˆ°åœºæ™¯ä¸­
             button->getParent()->setVisible(false);
             tower->bottom = bottom;//
             this->updateMoney(-100);
@@ -325,24 +381,22 @@ void SceneBase::createBottle(cocos2d::Ref* sender)
 
 void SceneBase::createStar(cocos2d::Ref* sender)
 {
-    // ÔÚµ±Ç°Î»ÖÃ´´½¨ĞÇĞÇÅÚËş
+    // åœ¨å½“å‰ä½ç½®åˆ›å»ºæ˜Ÿæ˜Ÿç‚®å¡”
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //æ’­æ”¾ç‚®å¡”å»ºç«‹éŸ³æ•ˆ
     auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
     if (button)
     {
-        auto tower = StarTower_1::create();  // ´´½¨ÅÚËş¶ÔÏó
+        auto tower = StarTower_1::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡
         if (moneyScene >= tower->getConsumption())
         {
-            //auto bottom = Sprite::create("Bottom.png");
-            //bottom->setPosition(button->getParent()->getPosition());
-            tower->setPosition(button->getParent()->getPosition());  // ÉèÖÃÅÚËşÎ»ÖÃ
+            tower->setPosition(button->getParent()->getPosition());  // è®¾ç½®ç‚®å¡”ä½ç½®
             auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
             if (thisTowerPosition)
             {
                 thisTowerPosition->towerofThisPosition = tower;
                 tower->thisTowerPositionIS = thisTowerPosition;
             }
-            //this->addChild(bottom, 1);
-            this->addChild(tower, 2);  // ½«ÅÚËşÌí¼Óµ½³¡¾°ÖĞ
+            this->addChild(tower, 2);  // å°†ç‚®å¡”æ·»åŠ åˆ°åœºæ™¯ä¸­
             button->getParent()->setVisible(false);
 
             this->updateMoney(-200);
@@ -352,16 +406,17 @@ void SceneBase::createStar(cocos2d::Ref* sender)
 
 void SceneBase::createSunflower(cocos2d::Ref* sender)
 {
-    // ÔÚµ±Ç°Î»ÖÃ´´½¨Ì«Ñô»¨ÅÚËş
+    // åœ¨å½“å‰ä½ç½®åˆ›å»ºå¤ªé˜³èŠ±ç‚®å¡”
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //æ’­æ”¾ç‚®å¡”å»ºç«‹éŸ³æ•ˆ
     auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
     if (button)
     {
-        auto tower = SunflowerTower_1::create();  // ´´½¨ÅÚËş¶ÔÏó
+        auto tower = SunflowerTower_1::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡
         if (moneyScene >= tower->getConsumption())
         {
             auto bottom = Sprite::create("Bottom.png");
             bottom->setPosition(button->getParent()->getPosition());
-            tower->setPosition(button->getParent()->getPosition());  // ÉèÖÃÅÚËşÎ»ÖÃ
+            tower->setPosition(button->getParent()->getPosition());  // è®¾ç½®ç‚®å¡”ä½ç½®
             auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
             if (thisTowerPosition)
             {
@@ -369,26 +424,52 @@ void SceneBase::createSunflower(cocos2d::Ref* sender)
                 tower->thisTowerPositionIS = thisTowerPosition;
             }
             this->addChild(bottom, 1);
-            this->addChild(tower, 2);  // ½«ÅÚËşÌí¼Óµ½³¡¾°ÖĞ
+            this->addChild(tower, 2);  // å°†ç‚®å¡”æ·»åŠ åˆ°åœºæ™¯ä¸­
             button->getParent()->setVisible(false);
             tower->bottom = bottom;
-            this->updateMoney(-200);
+            this->updateMoney(-120);
         }
     }
 }
 
+void SceneBase::createShit(Ref* sender)
+{
+    // åœ¨å½“å‰ä½ç½®åˆ›å»ºå±ç‚®å¡”
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerBulid.mp3"); //æ’­æ”¾ç‚®å¡”å»ºç«‹éŸ³æ•ˆ
+    auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
+    if (button)
+    {
+        auto tower = ShitTower_1::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡
+        if (moneyScene >= tower->getConsumption())
+        {
+            tower->setPosition(button->getParent()->getPosition());  // è®¾ç½®ç‚®å¡”ä½ç½®
+            auto thisTowerPosition = dynamic_cast<TowerPosition*> (button->getParent());
+            if (thisTowerPosition)
+            {
+                thisTowerPosition->towerofThisPosition = tower;
+                tower->thisTowerPositionIS = thisTowerPosition;
+            }
+            this->addChild(tower, 2);  // å°†ç‚®å¡”æ·»åŠ åˆ°åœºæ™¯ä¸­
+            button->getParent()->setVisible(false);
+
+            this->updateMoney(-120);
+        }
+    }
+}
+
+
 // on "init" you need to initialize your instance
 bool SceneBase::init(int level, LevelScene* levelScene)
 {
-    // µ÷ÓÃÁË¸¸ÀàSceneµÄinit()º¯Êı½øĞĞ³õÊ¼»¯£¬Èç¹û³õÊ¼»¯Ê§°Ü£¬Ôò·µ»Øfalse
+    // è°ƒç”¨äº†çˆ¶ç±»Sceneçš„init()å‡½æ•°è¿›è¡Œåˆå§‹åŒ–ï¼Œå¦‚æœåˆå§‹åŒ–å¤±è´¥ï¼Œåˆ™è¿”å›false
     if (!Scene::init())
     {
         return false;
     }
-    
+
 
     m_levelScene = levelScene;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂ¹ÖÎï×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°æ€ªç‰©çŠ¶æ€
     scheduleUpdate();
     return true;
 }
@@ -407,9 +488,9 @@ void SceneBase::setButton(bool flag)
             "ContinueGame.png",
             CC_CALLBACK_0(SceneBase::onGameWin, this));
         auto menuContinue = Menu::create(continueGame, nullptr);
-        menuContinue->setPosition(Vec2(650, 265));    // ÉèÖÃ°´Å¥Î»ÖÃ
+        menuContinue->setPosition(Vec2(650, 265));    // è®¾ç½®æŒ‰é’®ä½ç½®
         this->addChild(menuContinue, 6, "ContinueGame");
-        //Director::getInstance()->pause();           // ÔİÍ£ÓÎÏ·
+        //Director::getInstance()->pause();           // æš‚åœæ¸¸æˆ
     }
     else
     {
@@ -422,48 +503,48 @@ void SceneBase::setButton(bool flag)
             "GoBack.png",
             CC_CALLBACK_0(SceneBase::onGameFail, this));
         auto menuBack = Menu::create(goBack, nullptr);
-        menuBack->setPosition(Vec2(650, 265));      // ÉèÖÃ°´Å¥Î»ÖÃ
+        menuBack->setPosition(Vec2(650, 265));      // è®¾ç½®æŒ‰é’®ä½ç½®
         this->addChild(menuBack, 6, "GoBack");
-        Director::getInstance()->pause();           // ÔİÍ£ÓÎÏ·
+        Director::getInstance()->pause();           // æš‚åœæ¸¸æˆ
     }
 }
 
 void SceneBase::setPauseButton()
 {
-    // ´´½¨°´Å¥                 
+    // åˆ›å»ºæŒ‰é’®                 
     auto pauseGame = cocos2d::ui::Button::create("Pause2.png", "Pause2.png");
-    pauseGame->setPosition(Vec2(1100, 750));    // ÉèÖÃ°´Å¥Î»ÖÃ
+    pauseGame->setPosition(Vec2(1100, 750));    // è®¾ç½®æŒ‰é’®ä½ç½®
     pauseGame->addClickEventListener(CC_CALLBACK_0(SceneBase::pauseOperate, this));
     this->addChild(pauseGame, 4, "Pause");
 
     auto continueGame = cocos2d::ui::Button::create("Pause1.png", "Pause1.png");
-    continueGame->setPosition(Vec2(1100, 750));    // ÉèÖÃ°´Å¥Î»ÖÃ
+    continueGame->setPosition(Vec2(1100, 750));    // è®¾ç½®æŒ‰é’®ä½ç½®
     continueGame->addClickEventListener(CC_CALLBACK_0(SceneBase::continueOperate, this));
     continueGame->setVisible(false);
     this->addChild(continueGame, 5, "Continue");
 
-    //Director::getInstance()->pause();           // ÔİÍ£ÓÎÏ·
+    //Director::getInstance()->pause();           // æš‚åœæ¸¸æˆ
 }
 
 void SceneBase::pauseOperate()
 {
     auto Continue = dynamic_cast<cocos2d::ui::Button*>(this->getChildByName("Continue"));
     Continue->setVisible(true);
-    Director::getInstance()->pause();           // ÔİÍ£ÓÎÏ·
+    Director::getInstance()->pause();           // æš‚åœæ¸¸æˆ
 }
 
 void SceneBase::continueOperate()
 {
-    Director::getInstance()->resume();          // »Ö¸´ÓÎÏ·
+    Director::getInstance()->resume();          // æ¢å¤æ¸¸æˆ
     auto Continue = dynamic_cast<cocos2d::ui::Button*>(this->getChildByName("Continue"));
     Continue->setVisible(false);
 }
 
 void SceneBase::setMenuButton()
 {
-    // ´´½¨°´Å¥
+    // åˆ›å»ºæŒ‰é’®
     auto menuButton = cocos2d::ui::Button::create("touming-hd.png", "touming-hd.png");
-    menuButton->setPosition(Vec2(1200, 750));    // ÉèÖÃ°´Å¥Î»ÖÃ
+    menuButton->setPosition(Vec2(1200, 750));    // è®¾ç½®æŒ‰é’®ä½ç½®
     menuButton->addClickEventListener(CC_CALLBACK_0(SceneBase::onGameMenu, this));
     this->addChild(menuButton, 4, "Menu");
 
@@ -472,12 +553,12 @@ void SceneBase::setMenuButton()
     this->addChild(GameMenu, 5, "GameMenu");
 
     auto continueGame = cocos2d::ui::Button::create("ContinueGame.png", "ContinueGame.png");
-    continueGame->setPosition(Vec2(650, 365));    // ÉèÖÃ°´Å¥Î»ÖÃ
+    continueGame->setPosition(Vec2(650, 365));    // è®¾ç½®æŒ‰é’®ä½ç½®
     continueGame->addClickEventListener(CC_CALLBACK_0(SceneBase::continueGame, this));
     this->addChild(continueGame, 6, "ContinueGame");
 
     auto goBack = cocos2d::ui::Button::create("GoBack.png", "GoBack.png");
-    goBack->setPosition(Vec2(650, 265));    // ÉèÖÃ°´Å¥Î»ÖÃ
+    goBack->setPosition(Vec2(650, 265));    // è®¾ç½®æŒ‰é’®ä½ç½®
     goBack->addClickEventListener(CC_CALLBACK_0(SceneBase::goBack, this));
     this->addChild(goBack, 6, "GoBack");
 
@@ -494,12 +575,12 @@ void SceneBase::onGameMenu()
     GameMenu->setVisible(true);
     continueGame->setVisible(true);
     menuGoBack->setVisible(true);
-    Director::getInstance()->pause();             // ÔİÍ£ÓÎÏ·
+    Director::getInstance()->pause();             // æš‚åœæ¸¸æˆ
 }
 
 void SceneBase::continueGame()
 {
-    Director::getInstance()->resume();            // »Ö¸´ÓÎÏ·
+    Director::getInstance()->resume();            // æ¢å¤æ¸¸æˆ
     auto GameMenu = dynamic_cast<cocos2d::Sprite*>(this->getChildByName("GameMenu"));
     auto continueGame = dynamic_cast<cocos2d::ui::Button*>(this->getChildByName("ContinueGame"));
     auto menuGoBack = dynamic_cast<cocos2d::ui::Button*>(this->getChildByName("GoBack"));
@@ -510,46 +591,46 @@ void SceneBase::continueGame()
 
 void SceneBase::goBack()
 {
-    // ÓÎÏ·Íê³ÉÊ±µ÷ÓÃ´Ëº¯Êı
+    // æ¸¸æˆå®Œæˆæ—¶è°ƒç”¨æ­¤å‡½æ•°
     if (m_levelScene)
     {
-        //Í£ÏÂÒôÀÖ
+        //åœä¸‹éŸ³ä¹
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("main.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", true);
-        Director::getInstance()->resume();          // »Ö¸´ÓÎÏ·
-        Director::getInstance()->popScene();        // ·µ»Øµ½ÉÏÒ»¸ö³¡¾°
+        Director::getInstance()->resume();          // æ¢å¤æ¸¸æˆ
+        Director::getInstance()->popScene();        // è¿”å›åˆ°ä¸Šä¸€ä¸ªåœºæ™¯
     }
 }
 
 void SceneBase::onGameWin()
 {
-    // ÓÎÏ·Íê³ÉÊ±µ÷ÓÃ´Ëº¯Êı
+    // æ¸¸æˆå®Œæˆæ—¶è°ƒç”¨æ­¤å‡½æ•°
     if (m_levelScene)
     {
-        //Í£ÏÂÒôÀÖ
+        //åœä¸‹éŸ³ä¹
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("main.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", true);
         int nextLevel = m_level + 1;
         m_levelScene->consumeMoney(-100);
-        m_levelScene->unlockLevel(nextLevel);       // ½âËøÏÂÒ»¹Ø
-        Director::getInstance()->popScene();        // ·µ»Øµ½ÉÏÒ»¸ö³¡¾°
+        m_levelScene->unlockLevel(nextLevel);       // è§£é”ä¸‹ä¸€å…³
+        Director::getInstance()->popScene();        // è¿”å›åˆ°ä¸Šä¸€ä¸ªåœºæ™¯
     }
 }
 
 void SceneBase::onGameFail()
 {
-    // ÓÎÏ·Íê³ÉÊ±µ÷ÓÃ´Ëº¯Êı
+    // æ¸¸æˆå®Œæˆæ—¶è°ƒç”¨æ­¤å‡½æ•°
     if (m_levelScene)
     {
-        //Í£ÏÂÒôÀÖ
+        //åœä¸‹éŸ³ä¹
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("main.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", true);
-        Director::getInstance()->resume();          // »Ö¸´ÓÎÏ·
-        Director::getInstance()->popScene();        // ·µ»Øµ½ÉÏÒ»¸ö³¡¾°
+        Director::getInstance()->resume();          // æ¢å¤æ¸¸æˆ
+        Director::getInstance()->popScene();        // è¿”å›åˆ°ä¸Šä¸€ä¸ªåœºæ™¯
     }
 }
 
@@ -562,7 +643,7 @@ void SceneBase::updateMoney(int money)
 {
     moneyScene += money;
     this->removeChild(m_lable);
-    std::string text = std::to_string(moneyScene); // ½«Êı×Ö×ª»»Îª×Ö·û´®
+    std::string text = std::to_string(moneyScene); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
     auto lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
     lable->setPosition(Vec2(150, 750));
     this->m_lable = lable;
