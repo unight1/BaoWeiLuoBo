@@ -7,7 +7,7 @@
 
 class BottleTower_1 : public BottleTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
     CREATE_FUNC(BottleTower_1);
 
@@ -16,7 +16,7 @@ public:
 
 class BottleTower_2 : public BottleTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
     CREATE_FUNC(BottleTower_2);
 
@@ -25,7 +25,7 @@ public:
 
 class BottleTower_3 : public BottleTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
     CREATE_FUNC(BottleTower_3);
 
@@ -34,7 +34,7 @@ public:
 
 class SunflowerTower_1 : public SunflowerTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     bool init() override;
     CREATE_FUNC(SunflowerTower_1);
 
@@ -43,7 +43,7 @@ public:
 
 class SunflowerTower_2 : public SunflowerTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     bool init() override;
     CREATE_FUNC(SunflowerTower_2);
 
@@ -52,7 +52,7 @@ public:
 
 class SunflowerTower_3 : public SunflowerTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     bool init() override;
     CREATE_FUNC(SunflowerTower_3);
 
@@ -61,7 +61,7 @@ public:
 
 class StarTower_1 : public StarTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     bool init() override;
     CREATE_FUNC(StarTower_1);
 
@@ -70,7 +70,7 @@ public:
 
 class StarTower_2 : public StarTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     bool init() override;
     CREATE_FUNC(StarTower_2);
 
@@ -79,9 +79,65 @@ public:
 
 class StarTower_3 : public StarTower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     bool init() override;
     CREATE_FUNC(StarTower_3);
+
+    virtual void clicked(int& moneyScene)override;
+};
+class FireTower_1 : public FireTower {
+public:
+    // åˆå§‹åŒ–å‡½æ•°
+    virtual bool init() override;
+    CREATE_FUNC(FireTower_1);
+
+    virtual void clicked(int& moneyScene)override;
+    void attackTarget()override;
+};
+
+class FireTower_2 : public FireTower {
+public:
+    // åˆå§‹åŒ–å‡½æ•°
+    virtual bool init() override;
+    CREATE_FUNC(FireTower_2);
+
+    virtual void clicked(int& moneyScene)override;
+    void attackTarget();
+};
+
+class FireTower_3 : public FireTower {
+public:
+    // åˆå§‹åŒ–å‡½æ•°
+    virtual bool init() override;
+    CREATE_FUNC(FireTower_3);
+
+    virtual void clicked(int& moneyScene)override;
+    void attackTarget();
+};
+
+class ShitTower_1 : public ShitTower {
+public:
+    // åˆå§‹åŒ–å‡½æ•°
+    virtual bool init() override;
+    CREATE_FUNC(ShitTower_1);
+
+    virtual void clicked(int& moneyScene)override;
+};
+
+class ShitTower_2 : public ShitTower {
+public:
+    // åˆå§‹åŒ–å‡½æ•°
+    virtual bool init() override;
+    CREATE_FUNC(ShitTower_2);
+
+    virtual void clicked(int& moneyScene)override;
+};
+
+class ShitTower_3 : public ShitTower {
+public:
+    // åˆå§‹åŒ–å‡½æ•°
+    virtual bool init() override;
+    CREATE_FUNC(ShitTower_3);
 
     virtual void clicked(int& moneyScene)override;
 };

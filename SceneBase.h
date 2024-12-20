@@ -43,9 +43,13 @@ public:
 
     void createBottle(Ref* sender);     //·ÅÖÃÆ¿×ÓÅÚËş
 
+    void createFire(Ref* sender);  //·ÅÖÃ»ğÑæÃëÉ±ÅÚËş
+
     void createStar(Ref* sender);       //·ÅÖÃĞÇĞÇÅÚËş
 
     void createSunflower(Ref* sender);  //·ÅÖÃÌ«Ñô»¨ÅÚËş
+
+    void createShit(Ref* sender);  //·ÅÖÃÊºËş
 
     void onGameWin();
 
