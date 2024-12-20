@@ -11,35 +11,35 @@ class TowerPosition;
 
 class Tower : public cocos2d::Sprite {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
-    // ½¨Ôì»¨·Ñ
+    // å»ºé€ èŠ±è´¹
     int getConsumption() const;
-    // Éä³Ì
+    // å°„ç¨‹
     float getRange() const;
-    // ĞŞ¸ÄÉä³Ì
+    // ä¿®æ”¹å°„ç¨‹
     void setRange(float range);
-    // ¹¥»÷Á¦
+    // æ”»å‡»åŠ›
     int getDamage() const;
-    // ĞŞ¸Ä¹¥»÷Á¦
+    // ä¿®æ”¹æ”»å‡»åŠ›
     void setDamage(int damage);
-    // Ä¿±ê
+    // ç›®æ ‡
     Target* getTarget() const;
-    // ĞŞ¸ÄÄ¿±ê
+    // ä¿®æ”¹ç›®æ ‡
     void setTarget(Target* target);
-    // ÅÚËş¹¥»÷¶¯»­µÄÊ±³¤
+    // ç‚®å¡”æ”»å‡»åŠ¨ç”»çš„æ—¶é•¿
     float getAttackDuration();
-    // ¹¥»÷¼ä¸ô
+    // æ”»å‡»é—´éš”
     float getAttackInterval() const;
-    // ĞŞ¸Ä¹¥»÷¼ä¸ô
+    // ä¿®æ”¹æ”»å‡»é—´éš”
     void setAttackInterval(float attackInterval);
 
-    // ²¥·ÅÅÚËşµÄ¹¥»÷¶¯»­
+    // æ’­æ”¾ç‚®å¡”çš„æ”»å‡»åŠ¨ç”»
     virtual void playAttackAnimation() = 0;
-    // Ö´ĞĞ¹¥»÷Âß¼­
+    // æ‰§è¡Œæ”»å‡»é€»è¾‘
     virtual void attack() = 0;
 
-    // µã»÷Âß¼­
+    // ç‚¹å‡»é€»è¾‘
     virtual void clicked(int &sceneMoney) = 0;
 
     Sprite* bottom = nullptr;
@@ -48,131 +48,131 @@ public:
 
 
 protected:
-    // ½¨Ôì»¨·Ñ
+    // å»ºé€ èŠ±è´¹
     int consumption;
-    // Éä³Ì
+    // å°„ç¨‹
     float range;
-    // ¹¥»÷Á¦
+    // æ”»å‡»åŠ›
     int damage;
-    // Ä¿±ê
+    // ç›®æ ‡
     Target* target;
-    // ÅÚËş¹¥»÷¶¯»­µÄÊ±³¤
+    // ç‚®å¡”æ”»å‡»åŠ¨ç”»çš„æ—¶é•¿
     float attackDuration;
-    // ¹¥»÷¼ä¸ô
+    // æ”»å‡»é—´éš”
     float attackInterval;
-    // ÀäÈ´¼ÆÊ±Æ÷
+    // å†·å´è®¡æ—¶å™¨
     float cooldownTimer;
 };
 
-// Æ¿×ÓËş
+// ç“¶å­å¡”
 class BottleTower : public Tower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
   //  CREATE_FUNC(BottleTower);
-    // ÔÚÖ÷Ñ­»·ÔËĞĞµÄ¸üĞÂº¯Êı
+    // åœ¨ä¸»å¾ªç¯è¿è¡Œçš„æ›´æ–°å‡½æ•°
     void update(float delta);
 
-    // ²¥·ÅÅÚËşµÄ¹¥»÷¶¯»­
+    // æ’­æ”¾ç‚®å¡”çš„æ”»å‡»åŠ¨ç”»
     void playAttackAnimation() override;
-    // Ö´ĞĞ¹¥»÷Âß¼­
+    // æ‰§è¡Œæ”»å‡»é€»è¾‘
     void attack() override;
-    // ·¢Éä×Óµ¯
+    // å‘å°„å­å¼¹
     void attackTarget();
 protected:
-    // Ğı×ªËÙ¶È
+    // æ—‹è½¬é€Ÿåº¦
     float rotateSpeed;
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     std::string Bullet;
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     std::string Explosion;
 };
 
-// Ì«ÑôËş
+// å¤ªé˜³å¡”
 class SunflowerTower : public Tower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
   //  CREATE_FUNC(SunflowerTower);
-    // ÔÚÖ÷Ñ­»·ÔËĞĞµÄ¸üĞÂº¯Êı
+    // åœ¨ä¸»å¾ªç¯è¿è¡Œçš„æ›´æ–°å‡½æ•°
     void update(float delta);
 
-    // ²¥·ÅÅÚËşµÄ¹¥»÷¶¯»­
+    // æ’­æ”¾ç‚®å¡”çš„æ”»å‡»åŠ¨ç”»
     void playAttackAnimation() override;
-    // Ö´ĞĞ¹¥»÷Âß¼­
+    // æ‰§è¡Œæ”»å‡»é€»è¾‘
     void attack() override;
-    // ·¢Éä×Óµ¯
+    // å‘å°„å­å¼¹
     void attackTarget();
 protected:
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     std::string Bullet;
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     std::string Explosion;
 };
 
-// ĞÇĞÇËş
+// æ˜Ÿæ˜Ÿå¡”
 class StarTower : public Tower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
    // CREATE_FUNC(StarTower);
-    // ÔÚÖ÷Ñ­»·ÔËĞĞµÄ¸üĞÂº¯Êı
+    // åœ¨ä¸»å¾ªç¯è¿è¡Œçš„æ›´æ–°å‡½æ•°
     void update(float delta);
 
-    // ²¥·ÅÅÚËşµÄ¹¥»÷¶¯»­
+    // æ’­æ”¾ç‚®å¡”çš„æ”»å‡»åŠ¨ç”»
     void playAttackAnimation() override;
-    // Ö´ĞĞ¹¥»÷Âß¼­
+    // æ‰§è¡Œæ”»å‡»é€»è¾‘
     void attack() override;
-    // ·¢Éä×Óµ¯
+    // å‘å°„å­å¼¹
     void attackTarget();
 protected:
-    // ±¬Õ¨·¶Î§
+    // çˆ†ç‚¸èŒƒå›´
     float bulletRange;
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     std::string Bullet;
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     std::string Explosion;
 };
-// »ğÑæÃëÉ±Ëş
+// ç«ç„°ç§’æ€å¡”
 class FireTower : public Tower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
     //  CREATE_FUNC(FireTower);
-      // ÔÚÖ÷Ñ­»·ÔËĞĞµÄ¸üĞÂº¯Êı
+      // åœ¨ä¸»å¾ªç¯è¿è¡Œçš„æ›´æ–°å‡½æ•°
     void update(float delta);
 
-    // ²¥·ÅÅÚËşµÄ¹¥»÷¶¯»­
+    // æ’­æ”¾ç‚®å¡”çš„æ”»å‡»åŠ¨ç”»
     void playAttackAnimation() override;
-    // Ö´ĞĞ¹¥»÷Âß¼­
+    // æ‰§è¡Œæ”»å‡»é€»è¾‘
     void attack() override;
-    // ·¢Éä×Óµ¯
+    // å‘å°„å­å¼¹
     virtual void attackTarget()=0;
 protected:
-    // Ğı×ªËÙ¶È
+    // æ—‹è½¬é€Ÿåº¦
     float rotateSpeed;
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     std::string Bullet;
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     std::string Explosion;
 };
-// ÊºËş
+// å±å¡”
 class ShitTower : public Tower {
 public:
-    // ³õÊ¼»¯º¯Êı
+    // åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
     //  CREATE_FUNC(BottleTower);
-      // ÔÚÖ÷Ñ­»·ÔËĞĞµÄ¸üĞÂº¯Êı
+      // åœ¨ä¸»å¾ªç¯è¿è¡Œçš„æ›´æ–°å‡½æ•°
     void update(float delta);
 
-    // ²¥·ÅÅÚËşµÄ¹¥»÷¶¯»­
+    // æ’­æ”¾ç‚®å¡”çš„æ”»å‡»åŠ¨ç”»
     void playAttackAnimation() override;
-    // Ö´ĞĞ¹¥»÷Âß¼­
+    // æ‰§è¡Œæ”»å‡»é€»è¾‘
     void attack() override;
-    // ·¢Éä×Óµ¯
+    // å‘å°„å­å¼¹
     void attackTarget();
 protected:
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     std::string Bullet;
 
 };

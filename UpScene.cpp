@@ -27,7 +27,7 @@ bool UpScene::init(LevelScene* levelScene)
     m_levelScene = levelScene;
 
     // ±³¾°
-    auto background = Sprite::create("shengji.png");
+    auto background = Sprite::create("shengji-2.png");
     background->setPosition(Vec2(650, 400));
     this->addChild(background);
 

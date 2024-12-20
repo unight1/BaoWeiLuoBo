@@ -1,9 +1,6 @@
 #include "Tower.h"
-#include "Tower.h"
-#include "Tower.h"
-#include "Tower.h"
-#include "Tower.h"
 #include "audio/include/SimpleAudioEngine.h"
+
 USING_NS_CC;
 
 bool BottleTower_1::init() {
@@ -11,13 +8,13 @@ bool BottleTower_1::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("BottleLevel1.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "BottleBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 200;
     damage = 10;
     attackInterval = 1.0f;
@@ -27,7 +24,7 @@ bool BottleTower_1::init() {
     cooldownTimer = 1.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -37,7 +34,7 @@ void BottleTower_1::clicked(int& moneyScene) {
     Vec2 positionUp = Vec2(40, 120);
     Vec2 positionDelete = Vec2(40, -40);
    
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("BottleUpgrade1.png", "BottleUpgrade1.png", "BottleUpgradeUn1.png");
     towerUp->setPosition(positionUp);
     this->bottom->addChild(towerUp, 4, "But");
@@ -45,17 +42,17 @@ void BottleTower_1::clicked(int& moneyScene) {
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if(!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = BottleTower_2::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = BottleTower_2::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
 
                 auto bot = Sprite::create("Bottom.png");
                 bot->setPosition(bottom->getPosition());
@@ -80,7 +77,7 @@ void BottleTower_1::clicked(int& moneyScene) {
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 150)
     {
         towerUp->setEnabled(true);
@@ -90,7 +87,7 @@ void BottleTower_1::clicked(int& moneyScene) {
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove1.png", "BottleRemove1.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 4, "But");
@@ -98,7 +95,7 @@ void BottleTower_1::clicked(int& moneyScene) {
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -120,13 +117,13 @@ bool BottleTower_2::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("BottleLevel2.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "BottleBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 250;
     damage = 15;
     attackInterval = 1.0f;
@@ -136,7 +133,7 @@ bool BottleTower_2::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -148,7 +145,7 @@ void BottleTower_2::clicked(int& moneyScene)
     Vec2 positionUp = Vec2(40, 120);
     Vec2 positionDelete = Vec2(40, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("BottleUpgrade2.png", "BottleUpgrade2.png", "BottleUpgradeUn2.png");
     towerUp->setPosition(positionUp);
     this->bottom->addChild(towerUp, 4, "But");
@@ -156,17 +153,17 @@ void BottleTower_2::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = BottleTower_3::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = BottleTower_3::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
                 
 
                 auto bot = Sprite::create("Bottom.png");
@@ -191,7 +188,7 @@ void BottleTower_2::clicked(int& moneyScene)
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 250)
     {
         towerUp->setEnabled(true);
@@ -201,7 +198,7 @@ void BottleTower_2::clicked(int& moneyScene)
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove2.png", "BottleRemove2.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 4, "But");
@@ -209,7 +206,7 @@ void BottleTower_2::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -232,13 +229,13 @@ bool BottleTower_3::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("BottleLevel3.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "BottleBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 300;
     damage = 20;
     attackInterval = 1.0f;
@@ -248,7 +245,7 @@ bool BottleTower_3::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -260,7 +257,7 @@ void BottleTower_3::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove3.png", "BottleRemove3.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 4, "But");
@@ -268,7 +265,7 @@ void BottleTower_3::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -291,13 +288,13 @@ bool FireTower_1::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("FireBottleLevel1.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "BottleBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 200;
     damage = 1000;
     attackInterval = 1.0f;
@@ -307,7 +304,7 @@ bool FireTower_1::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -317,7 +314,7 @@ void FireTower_1::clicked(int& moneyScene) {
     Vec2 positionUp = Vec2(40, 120);
     Vec2 positionDelete = Vec2(40, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("BottleUpgrade1.png", "BottleUpgrade1.png", "BottleUpgradeUn1.png");
     towerUp->setPosition(positionUp);
     this->bottom->addChild(towerUp, 4, "But");
@@ -325,17 +322,17 @@ void FireTower_1::clicked(int& moneyScene) {
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = FireTower_2::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = FireTower_2::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
 
                 auto bot = Sprite::create("Bottom.png");
                 bot->setPosition(bottom->getPosition());
@@ -360,7 +357,7 @@ void FireTower_1::clicked(int& moneyScene) {
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 150)
     {
         towerUp->setEnabled(true);
@@ -370,7 +367,7 @@ void FireTower_1::clicked(int& moneyScene) {
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove1.png", "BottleRemove1.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 4, "But");
@@ -378,7 +375,7 @@ void FireTower_1::clicked(int& moneyScene) {
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -397,17 +394,17 @@ void FireTower_1::clicked(int& moneyScene) {
 
 void FireTower_1::attackTarget()
 {
-    // »ñÈ¡Ä¿±êÎ»ÖÃ
+    // è·å–ç›®æ ‡ä½ç½®
     Target* thisTarget = this->target;
 
-    // »ñÈ¡ÅÚËşµ±Ç°Î»ÖÃ
+    // è·å–ç‚®å¡”å½“å‰ä½ç½®
     cocos2d::Vec2 towerPosition = getPosition();
-    // ´´½¨Ëæ»úÊıÉú³ÉÆ÷
-    std::random_device rd;  // »ñÈ¡Ëæ»úÊıÖÖ×Ó
-    std::mt19937 gen(rd()); // Ê¹ÓÃÃ·É­Ğı×ªËã·¨Éú³ÉËæ»úÊı
-    std::uniform_int_distribution<> dis(0, 100); // ¶¨Òå·¶Î§
+    // åˆ›å»ºéšæœºæ•°ç”Ÿæˆå™¨
+    std::random_device rd;  // è·å–éšæœºæ•°ç§å­
+    std::mt19937 gen(rd()); // ä½¿ç”¨æ¢…æ£®æ—‹è½¬ç®—æ³•ç”Ÿæˆéšæœºæ•°
+    std::uniform_int_distribution<> dis(0, 100); // å®šä¹‰èŒƒå›´
 
-    // Éú³ÉËæ»úÊı
+    // ç”Ÿæˆéšæœºæ•°
     int randomNumber = dis(gen);
     int Damage;
     if (randomNumber < 10) {
@@ -416,55 +413,55 @@ void FireTower_1::attackTarget()
     else {
         Damage = 1;
     }
-    // ´´½¨ÅÚµ¯¾«Áé
+    // åˆ›å»ºç‚®å¼¹ç²¾çµ
     auto bullet = Sprite::create(Bullet);
     bullet->setPosition(towerPosition);
     this->getParent()->addChild(bullet, 2);
     bullet->setVisible(false);
 
-    // ×Óµ¯¶¯×÷
+    // å­å¼¹åŠ¨ä½œ
     auto bulletAction = CallFunc::create([=]() {
         cocos2d::Vec2 targetPosition = thisTarget->getPosition();
-        // ´´½¨×Óµ¯Ğı×ª¶¯×÷
-        // ¼ÆËãÄ¿±ê·½ÏòÏòÁ¿
+        // åˆ›å»ºå­å¼¹æ—‹è½¬åŠ¨ä½œ
+        // è®¡ç®—ç›®æ ‡æ–¹å‘å‘é‡
         cocos2d::Vec2 direction = this->target->getPosition() - towerPosition;
-        // ¼ÆËãÄ¿±ê½Ç¶È
+        // è®¡ç®—ç›®æ ‡è§’åº¦
         float targetAngle = -CC_RADIANS_TO_DEGREES(direction.getAngle()) + 90;
-        // Ğı×ª¶¯×÷
+        // æ—‹è½¬åŠ¨ä½œ
         auto rotateAction = RotateTo::create(0, targetAngle);
-        // ´´½¨Ò»¸öÏòÄ¿±êÒÆ¶¯µÄ¶¯×÷
+        // åˆ›å»ºä¸€ä¸ªå‘ç›®æ ‡ç§»åŠ¨çš„åŠ¨ä½œ
         float distance = targetPosition.distance(towerPosition);
-        float duration = distance / 2000; //×Óµ¯µÄËÙ¶È
+        float duration = distance / 2000; //å­å¼¹çš„é€Ÿåº¦
         auto moveAction = MoveTo::create(duration, targetPosition);
-        // Ö´ĞĞ¶¯×÷
+        // æ‰§è¡ŒåŠ¨ä½œ
         bullet->setVisible(true);
         bullet->runAction(
             Sequence::create(
                 rotateAction,
                 moveAction,
-                // ´´½¨Ò»¸ö»Øµ÷¶¯×÷£¬ÔÚÄ¿±êÎ»ÖÃ´¥·¢ÅÚµ¯±¬Õ¨Ğ§¹û     
+                // åˆ›å»ºä¸€ä¸ªå›è°ƒåŠ¨ä½œï¼Œåœ¨ç›®æ ‡ä½ç½®è§¦å‘ç‚®å¼¹çˆ†ç‚¸æ•ˆæœ     
                 CallFunc::create([=]() {
                     if (thisTarget && thisTarget->isAlive()) {
-                        // ÔÚÄ¿±êÎ»ÖÃ´´½¨±¬Õ¨Ğ§¹û
+                        // åœ¨ç›®æ ‡ä½ç½®åˆ›å»ºçˆ†ç‚¸æ•ˆæœ
                         auto explosion = Sprite::create(Explosion);
                         explosion->setPosition(targetPosition);
                         thisTarget->getParent()->addChild(explosion);
                         explosion->runAction(Sequence::create(
                             DelayTime::create(0.1f),
-                            FadeOut::create(0.1f),// µ­³ö
+                            FadeOut::create(0.1f),// æ·¡å‡º
                             RemoveSelf::create(),
                             nullptr
                         ));
-                        // ²úÉúÉËº¦
+                        // äº§ç”Ÿä¼¤å®³
                         thisTarget->takeDamage(Damage);
                     }
-                    // ÒÆ³ıÅÚµ¯¾«Áé
+                    // ç§»é™¤ç‚®å¼¹ç²¾çµ
                     this->getParent()->removeChild(bullet, true);
                     }),
                 nullptr));
         });
 
-    // ÔËĞĞ¶¯×÷
+    // è¿è¡ŒåŠ¨ä½œ
     bullet->runAction(
         Sequence::create(
             DelayTime::create(attackDuration),
@@ -478,13 +475,13 @@ bool FireTower_2::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("FireBottleLevel2.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "BottleBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 250;
     damage = 1000;
     attackInterval = 1.0f;
@@ -494,7 +491,7 @@ bool FireTower_2::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -506,7 +503,7 @@ void FireTower_2::clicked(int& moneyScene)
     Vec2 positionUp = Vec2(40, 120);
     Vec2 positionDelete = Vec2(40, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("BottleUpgrade2.png", "BottleUpgrade2.png", "BottleUpgradeUn2.png");
     towerUp->setPosition(positionUp);
     this->bottom->addChild(towerUp, 4, "But");
@@ -514,17 +511,17 @@ void FireTower_2::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = FireTower_3::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = FireTower_3::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
 
 
                 auto bot = Sprite::create("Bottom.png");
@@ -549,7 +546,7 @@ void FireTower_2::clicked(int& moneyScene)
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 250)
     {
         towerUp->setEnabled(true);
@@ -559,7 +556,7 @@ void FireTower_2::clicked(int& moneyScene)
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove2.png", "BottleRemove2.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 4, "But");
@@ -567,7 +564,7 @@ void FireTower_2::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -587,17 +584,17 @@ void FireTower_2::clicked(int& moneyScene)
 
 void FireTower_2::attackTarget()
 {
-    // »ñÈ¡Ä¿±êÎ»ÖÃ
+    // è·å–ç›®æ ‡ä½ç½®
     Target* thisTarget = this->target;
 
-    // »ñÈ¡ÅÚËşµ±Ç°Î»ÖÃ
+    // è·å–ç‚®å¡”å½“å‰ä½ç½®
     cocos2d::Vec2 towerPosition = getPosition();
-    // ´´½¨Ëæ»úÊıÉú³ÉÆ÷
-    std::random_device rd;  // »ñÈ¡Ëæ»úÊıÖÖ×Ó
-    std::mt19937 gen(rd()); // Ê¹ÓÃÃ·É­Ğı×ªËã·¨Éú³ÉËæ»úÊı
-    std::uniform_int_distribution<> dis(0, 100); // ¶¨Òå·¶Î§
+    // åˆ›å»ºéšæœºæ•°ç”Ÿæˆå™¨
+    std::random_device rd;  // è·å–éšæœºæ•°ç§å­
+    std::mt19937 gen(rd()); // ä½¿ç”¨æ¢…æ£®æ—‹è½¬ç®—æ³•ç”Ÿæˆéšæœºæ•°
+    std::uniform_int_distribution<> dis(0, 100); // å®šä¹‰èŒƒå›´
 
-    // Éú³ÉËæ»úÊı
+    // ç”Ÿæˆéšæœºæ•°
     int randomNumber = dis(gen);
 
     int Damage;
@@ -607,55 +604,55 @@ void FireTower_2::attackTarget()
     else {
         Damage = 1;
     }
-    // ´´½¨ÅÚµ¯¾«Áé
+    // åˆ›å»ºç‚®å¼¹ç²¾çµ
     auto bullet = Sprite::create(Bullet);
     bullet->setPosition(towerPosition);
     this->getParent()->addChild(bullet, 2);
     bullet->setVisible(false);
 
-    // ×Óµ¯¶¯×÷
+    // å­å¼¹åŠ¨ä½œ
     auto bulletAction = CallFunc::create([=]() {
         cocos2d::Vec2 targetPosition = thisTarget->getPosition();
-        // ´´½¨×Óµ¯Ğı×ª¶¯×÷
-        // ¼ÆËãÄ¿±ê·½ÏòÏòÁ¿
+        // åˆ›å»ºå­å¼¹æ—‹è½¬åŠ¨ä½œ
+        // è®¡ç®—ç›®æ ‡æ–¹å‘å‘é‡
         cocos2d::Vec2 direction = this->target->getPosition() - towerPosition;
-        // ¼ÆËãÄ¿±ê½Ç¶È
+        // è®¡ç®—ç›®æ ‡è§’åº¦
         float targetAngle = -CC_RADIANS_TO_DEGREES(direction.getAngle()) + 90;
-        // Ğı×ª¶¯×÷
+        // æ—‹è½¬åŠ¨ä½œ
         auto rotateAction = RotateTo::create(0, targetAngle);
-        // ´´½¨Ò»¸öÏòÄ¿±êÒÆ¶¯µÄ¶¯×÷
+        // åˆ›å»ºä¸€ä¸ªå‘ç›®æ ‡ç§»åŠ¨çš„åŠ¨ä½œ
         float distance = targetPosition.distance(towerPosition);
-        float duration = distance / 2000; //×Óµ¯µÄËÙ¶È
+        float duration = distance / 2000; //å­å¼¹çš„é€Ÿåº¦
         auto moveAction = MoveTo::create(duration, targetPosition);
-        // Ö´ĞĞ¶¯×÷
+        // æ‰§è¡ŒåŠ¨ä½œ
         bullet->setVisible(true);
         bullet->runAction(
             Sequence::create(
                 rotateAction,
                 moveAction,
-                // ´´½¨Ò»¸ö»Øµ÷¶¯×÷£¬ÔÚÄ¿±êÎ»ÖÃ´¥·¢ÅÚµ¯±¬Õ¨Ğ§¹û     
+                // åˆ›å»ºä¸€ä¸ªå›è°ƒåŠ¨ä½œï¼Œåœ¨ç›®æ ‡ä½ç½®è§¦å‘ç‚®å¼¹çˆ†ç‚¸æ•ˆæœ     
                 CallFunc::create([=]() {
                     if (thisTarget && thisTarget->isAlive()) {
-                        // ÔÚÄ¿±êÎ»ÖÃ´´½¨±¬Õ¨Ğ§¹û
+                        // åœ¨ç›®æ ‡ä½ç½®åˆ›å»ºçˆ†ç‚¸æ•ˆæœ
                         auto explosion = Sprite::create(Explosion);
                         explosion->setPosition(targetPosition);
                         thisTarget->getParent()->addChild(explosion);
                         explosion->runAction(Sequence::create(
                             DelayTime::create(0.1f),
-                            FadeOut::create(0.1f),// µ­³ö
+                            FadeOut::create(0.1f),// æ·¡å‡º
                             RemoveSelf::create(),
                             nullptr
                         ));
-                        // ²úÉúÉËº¦
+                        // äº§ç”Ÿä¼¤å®³
                         thisTarget->takeDamage(Damage);
                     }
-                    // ÒÆ³ıÅÚµ¯¾«Áé
+                    // ç§»é™¤ç‚®å¼¹ç²¾çµ
                     this->getParent()->removeChild(bullet, true);
                     }),
                 nullptr));
         });
 
-    // ÔËĞĞ¶¯×÷
+    // è¿è¡ŒåŠ¨ä½œ
     bullet->runAction(
         Sequence::create(
             DelayTime::create(attackDuration),
@@ -669,13 +666,13 @@ bool FireTower_3::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("FireBottleLevel3.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "BottleBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 300;
     damage = 1000;
     attackInterval = 1.0f;
@@ -685,7 +682,7 @@ bool FireTower_3::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -697,7 +694,7 @@ void FireTower_3::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove3.png", "BottleRemove3.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 4, "But");
@@ -705,7 +702,7 @@ void FireTower_3::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -725,17 +722,17 @@ void FireTower_3::clicked(int& moneyScene)
 
 void FireTower_3::attackTarget()
 {
-    // »ñÈ¡Ä¿±êÎ»ÖÃ
+    // è·å–ç›®æ ‡ä½ç½®
     Target* thisTarget = this->target;
 
-    // »ñÈ¡ÅÚËşµ±Ç°Î»ÖÃ
+    // è·å–ç‚®å¡”å½“å‰ä½ç½®
     cocos2d::Vec2 towerPosition = getPosition();
-    // ´´½¨Ëæ»úÊıÉú³ÉÆ÷
-    std::random_device rd;  // »ñÈ¡Ëæ»úÊıÖÖ×Ó
-    std::mt19937 gen(rd()); // Ê¹ÓÃÃ·É­Ğı×ªËã·¨Éú³ÉËæ»úÊı
-    std::uniform_int_distribution<> dis(0, 100); // ¶¨Òå·¶Î§
+    // åˆ›å»ºéšæœºæ•°ç”Ÿæˆå™¨
+    std::random_device rd;  // è·å–éšæœºæ•°ç§å­
+    std::mt19937 gen(rd()); // ä½¿ç”¨æ¢…æ£®æ—‹è½¬ç®—æ³•ç”Ÿæˆéšæœºæ•°
+    std::uniform_int_distribution<> dis(0, 100); // å®šä¹‰èŒƒå›´
 
-    // Éú³ÉËæ»úÊı
+    // ç”Ÿæˆéšæœºæ•°
     int randomNumber = dis(gen);
 
     int Damage;
@@ -745,55 +742,55 @@ void FireTower_3::attackTarget()
     else {
         Damage = 1;
     }
-    // ´´½¨ÅÚµ¯¾«Áé
+    // åˆ›å»ºç‚®å¼¹ç²¾çµ
     auto bullet = Sprite::create(Bullet);
     bullet->setPosition(towerPosition);
     this->getParent()->addChild(bullet, 2);
     bullet->setVisible(false);
 
-    // ×Óµ¯¶¯×÷
+    // å­å¼¹åŠ¨ä½œ
     auto bulletAction = CallFunc::create([=]() {
         cocos2d::Vec2 targetPosition = thisTarget->getPosition();
-        // ´´½¨×Óµ¯Ğı×ª¶¯×÷
-        // ¼ÆËãÄ¿±ê·½ÏòÏòÁ¿
+        // åˆ›å»ºå­å¼¹æ—‹è½¬åŠ¨ä½œ
+        // è®¡ç®—ç›®æ ‡æ–¹å‘å‘é‡
         cocos2d::Vec2 direction = this->target->getPosition() - towerPosition;
-        // ¼ÆËãÄ¿±ê½Ç¶È
+        // è®¡ç®—ç›®æ ‡è§’åº¦
         float targetAngle = -CC_RADIANS_TO_DEGREES(direction.getAngle()) + 90;
-        // Ğı×ª¶¯×÷
+        // æ—‹è½¬åŠ¨ä½œ
         auto rotateAction = RotateTo::create(0, targetAngle);
-        // ´´½¨Ò»¸öÏòÄ¿±êÒÆ¶¯µÄ¶¯×÷
+        // åˆ›å»ºä¸€ä¸ªå‘ç›®æ ‡ç§»åŠ¨çš„åŠ¨ä½œ
         float distance = targetPosition.distance(towerPosition);
-        float duration = distance / 2000; //×Óµ¯µÄËÙ¶È
+        float duration = distance / 2000; //å­å¼¹çš„é€Ÿåº¦
         auto moveAction = MoveTo::create(duration, targetPosition);
-        // Ö´ĞĞ¶¯×÷
+        // æ‰§è¡ŒåŠ¨ä½œ
         bullet->setVisible(true);
         bullet->runAction(
             Sequence::create(
                 rotateAction,
                 moveAction,
-                // ´´½¨Ò»¸ö»Øµ÷¶¯×÷£¬ÔÚÄ¿±êÎ»ÖÃ´¥·¢ÅÚµ¯±¬Õ¨Ğ§¹û     
+                // åˆ›å»ºä¸€ä¸ªå›è°ƒåŠ¨ä½œï¼Œåœ¨ç›®æ ‡ä½ç½®è§¦å‘ç‚®å¼¹çˆ†ç‚¸æ•ˆæœ     
                 CallFunc::create([=]() {
                     if (thisTarget && thisTarget->isAlive()) {
-                        // ÔÚÄ¿±êÎ»ÖÃ´´½¨±¬Õ¨Ğ§¹û
+                        // åœ¨ç›®æ ‡ä½ç½®åˆ›å»ºçˆ†ç‚¸æ•ˆæœ
                         auto explosion = Sprite::create(Explosion);
                         explosion->setPosition(targetPosition);
                         thisTarget->getParent()->addChild(explosion);
                         explosion->runAction(Sequence::create(
                             DelayTime::create(0.1f),
-                            FadeOut::create(0.1f),// µ­³ö
+                            FadeOut::create(0.1f),// æ·¡å‡º
                             RemoveSelf::create(),
                             nullptr
                         ));
-                        // ²úÉúÉËº¦
+                        // äº§ç”Ÿä¼¤å®³
                         thisTarget->takeDamage(Damage);
                     }
-                    // ÒÆ³ıÅÚµ¯¾«Áé
+                    // ç§»é™¤ç‚®å¼¹ç²¾çµ
                     this->getParent()->removeChild(bullet, true);
                     }),
                 nullptr));
         });
 
-    // ÔËĞĞ¶¯×÷
+    // è¿è¡ŒåŠ¨ä½œ
     bullet->runAction(
         Sequence::create(
             DelayTime::create(attackDuration),
@@ -807,13 +804,13 @@ bool SunflowerTower_1::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("SunflowerLevel1.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "SunflowerBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 250;
     damage = 10;
     attackInterval = 1.0f;
@@ -822,7 +819,7 @@ bool SunflowerTower_1::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -832,7 +829,7 @@ void SunflowerTower_1::clicked(int& moneyScene) {
     Vec2 positionUp = Vec2(40, 120);
     Vec2 positionDelete = Vec2(40, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("StarUpgrade1.png", "StarUpgrade1.png", "StarUpgradeUn1.png");
     towerUp->setPosition(positionUp);
     this->bottom->addChild(towerUp, 3, "But");
@@ -840,17 +837,17 @@ void SunflowerTower_1::clicked(int& moneyScene) {
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = SunflowerTower_2::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = SunflowerTower_2::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
                 
 
                 auto bot = Sprite::create("Bottom.png");
@@ -874,7 +871,7 @@ void SunflowerTower_1::clicked(int& moneyScene) {
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 300)
     {
         towerUp->setEnabled(true);
@@ -884,7 +881,7 @@ void SunflowerTower_1::clicked(int& moneyScene) {
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove2.png", "BottleRemove2.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 3, "But");
@@ -892,7 +889,7 @@ void SunflowerTower_1::clicked(int& moneyScene) {
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -915,13 +912,13 @@ bool SunflowerTower_2::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("SunflowerLevel2.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "SunflowerBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 250;
     damage = 15;
     attackInterval = 1.0f;
@@ -930,7 +927,7 @@ bool SunflowerTower_2::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -941,7 +938,7 @@ void SunflowerTower_2::clicked(int& moneyScene)
     Vec2 positionUp = Vec2(40, 120);
     Vec2 positionDelete = Vec2(40, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("StarUpgrade2.png", "StarUpgrade2.png", "StarUpgradeUn2.png");
     towerUp->setPosition(positionUp);
     this->bottom->addChild(towerUp, 3, "But");
@@ -949,17 +946,17 @@ void SunflowerTower_2::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = SunflowerTower_3::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = SunflowerTower_3::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
                 
 
                 auto bot = Sprite::create("Bottom.png");
@@ -983,7 +980,7 @@ void SunflowerTower_2::clicked(int& moneyScene)
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 400)
     {
         towerUp->setEnabled(true);
@@ -993,7 +990,7 @@ void SunflowerTower_2::clicked(int& moneyScene)
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove3.png", "BottleRemove3.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 3, "But");
@@ -1001,7 +998,7 @@ void SunflowerTower_2::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -1024,13 +1021,13 @@ bool SunflowerTower_3::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("SunflowerLevel3.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "SunflowerBullet.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "BottleBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 250;
     damage = 25;
     attackInterval = 1.0f;
@@ -1039,7 +1036,7 @@ bool SunflowerTower_3::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -1051,7 +1048,7 @@ void SunflowerTower_3::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("StarRemove3.png", "StarRemove3.png");
     towerDelete->setPosition(positionDelete);
     this->bottom->addChild(towerDelete, 3, "But");
@@ -1059,7 +1056,7 @@ void SunflowerTower_3::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -1082,13 +1079,13 @@ bool StarTower_1::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("StarLevel1.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "StarBulletLevel1.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "StarBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 200;
     damage = 15;
     attackInterval = 1.0f;
@@ -1098,7 +1095,7 @@ bool StarTower_1::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -1109,7 +1106,7 @@ void StarTower_1::clicked(int& moneyScene)
     Vec2 positionUp = Vec2(40, 120);
     Vec2 positionDelete = Vec2(40, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("StarUpgrade1.png", "StarUpgrade1.png", "StarUpgradeUn1.png");
     towerUp->setPosition(positionUp);
     auto oldTower = this;
@@ -1117,17 +1114,17 @@ void StarTower_1::clicked(int& moneyScene)
     oldTower->addChild(towerUp, 3, "But");
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = StarTower_2::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = StarTower_2::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
 
                 tower->bottom = nullptr;//
                 tower->thisTowerPositionIS = oldTower->thisTowerPositionIS;//
@@ -1146,7 +1143,7 @@ void StarTower_1::clicked(int& moneyScene)
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 300)
     {
         towerUp->setEnabled(true);
@@ -1156,7 +1153,7 @@ void StarTower_1::clicked(int& moneyScene)
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove2.png", "BottleRemove2.png");
     towerDelete->setPosition(positionDelete);
     oldTower->addChild(towerDelete, 3, "But");
@@ -1164,7 +1161,7 @@ void StarTower_1::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -1187,13 +1184,13 @@ bool StarTower_2::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("StarLevel2.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "StarBulletLevel2.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "StarBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 250;
     damage = 20;
     attackInterval = 1.0f;
@@ -1203,7 +1200,7 @@ bool StarTower_2::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -1214,7 +1211,7 @@ void StarTower_2::clicked(int& moneyScene)
     Vec2 positionUp = Vec2(45, 120);
     Vec2 positionDelete = Vec2(45, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("StarUpgrade2.png", "StarUpgrade2.png", "StarUpgradeUn2.png");
     towerUp->setPosition(positionUp);
     auto oldTower = this;
@@ -1222,17 +1219,17 @@ void StarTower_2::clicked(int& moneyScene)
     oldTower->addChild(towerUp, 3, "But");
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = StarTower_3::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = StarTower_3::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
                 
 
                 tower->bottom = nullptr;//
@@ -1252,7 +1249,7 @@ void StarTower_2::clicked(int& moneyScene)
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 400)
     {
         towerUp->setEnabled(true);
@@ -1262,7 +1259,7 @@ void StarTower_2::clicked(int& moneyScene)
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove3.png", "BottleRemove3.png");
     towerDelete->setPosition(positionDelete);
     oldTower->addChild(towerDelete, 3, "But");
@@ -1270,7 +1267,7 @@ void StarTower_2::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -1292,13 +1289,13 @@ bool StarTower_3::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("StarLevel3.png");
-    // ×Óµ¯µÄÍ¼Æ¬
+    // å­å¼¹çš„å›¾ç‰‡
     Bullet = "StarBulletLevel3.png";
-    // ±¬Õ¨Ğ§¹û
+    // çˆ†ç‚¸æ•ˆæœ
     Explosion = "StarBoom.png";
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 300;
     damage = 25;
     attackInterval = 1.0f;
@@ -1308,7 +1305,7 @@ bool StarTower_3::init() {
     cooldownTimer = 0.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -1320,7 +1317,7 @@ void StarTower_3::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("StarRemove3.png", "StarRemove3.png");
     towerDelete->setPosition(positionDelete);
     oldTower->addChild(towerDelete, 3, "But");
@@ -1328,7 +1325,7 @@ void StarTower_3::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -1347,19 +1344,14 @@ void StarTower_3::clicked(int& moneyScene)
 
 
 
-
-
-
-
-
 bool ShitTower_1::init() {
     if (!Sprite::init()) {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("ShitTowerlevel1.png");
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 0;
     damage = 14;
     attackInterval = 1.0f;
@@ -1368,7 +1360,7 @@ bool ShitTower_1::init() {
     cooldownTimer = 3.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -1379,7 +1371,7 @@ void ShitTower_1::clicked(int& moneyScene)
     Vec2 positionUp = Vec2(25, 120);
     Vec2 positionDelete = Vec2(25, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("BottleUpgrade1.png", "BottleUpgrade1.png", "BottleUpgradeUn1.png");
     towerUp->setPosition(positionUp);
     auto oldTower = this;
@@ -1387,17 +1379,17 @@ void ShitTower_1::clicked(int& moneyScene)
     oldTower->addChild(towerUp, 3, "But");
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = ShitTower_2::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = ShitTower_2::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
 
                 tower->bottom = nullptr;//
                 tower->thisTowerPositionIS = oldTower->thisTowerPositionIS;//
@@ -1416,7 +1408,7 @@ void ShitTower_1::clicked(int& moneyScene)
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 150)
     {
         towerUp->setEnabled(true);
@@ -1426,7 +1418,7 @@ void ShitTower_1::clicked(int& moneyScene)
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove1.png", "BottleRemove1.png");
     towerDelete->setPosition(positionDelete);
     oldTower->addChild(towerDelete, 3, "But");
@@ -1434,7 +1426,7 @@ void ShitTower_1::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -1457,10 +1449,10 @@ bool ShitTower_2::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("ShitTowerlevel2.png");
 
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 0;
     damage = 50;
     attackInterval = 1.0f;
@@ -1469,7 +1461,7 @@ bool ShitTower_2::init() {
     cooldownTimer = 3.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -1480,7 +1472,7 @@ void ShitTower_2::clicked(int& moneyScene)
     Vec2 positionUp = Vec2(30, 120);
     Vec2 positionDelete = Vec2(30, -40);
 
-    // Éı¼¶°´Å¥
+    // å‡çº§æŒ‰é’®
     auto towerUp = cocos2d::ui::Button::create("BottleUpgrade2.png", "BottleUpgrade2.png", "BottleUpgradeUn2.png");
     towerUp->setPosition(positionUp);
     auto oldTower = this;
@@ -1488,17 +1480,17 @@ void ShitTower_2::clicked(int& moneyScene)
     oldTower->addChild(towerUp, 3, "But");
     Vec2 pos = oldTower->getPosition();
 
-    // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
+    // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     towerUp->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //²¥·ÅÅÚËşÉı¼¶ÒôĞ§
-            // ÔÚµ±Ç°Î»ÖÃ´´½¨ÅÚËş
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerUpdata.mp3"); //æ’­æ”¾ç‚®å¡”å‡çº§éŸ³æ•ˆ
+            // åœ¨å½“å‰ä½ç½®åˆ›å»ºç‚®å¡”
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
-                auto tower = ShitTower_3::create();  // ´´½¨ÅÚËş¶ÔÏó                     
-                tower->setPosition(pos);  // ÉèÖÃÅÚËşÎ»ÖÃ
+                auto tower = ShitTower_3::create();  // åˆ›å»ºç‚®å¡”å¯¹è±¡                     
+                tower->setPosition(pos);  // è®¾ç½®ç‚®å¡”ä½ç½®
 
 
                 tower->bottom = nullptr;//
@@ -1518,7 +1510,7 @@ void ShitTower_2::clicked(int& moneyScene)
         }
         });
 
-    // ÉèÖÃµã»÷×´Ì¬
+    // è®¾ç½®ç‚¹å‡»çŠ¶æ€
     if (moneyScene >= 250)
     {
         towerUp->setEnabled(true);
@@ -1528,7 +1520,7 @@ void ShitTower_2::clicked(int& moneyScene)
         towerUp->setEnabled(false);
     }
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove2.png", "BottleRemove2.png");
     towerDelete->setPosition(positionDelete);
     oldTower->addChild(towerDelete, 3, "But");
@@ -1536,7 +1528,7 @@ void ShitTower_2::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
@@ -1558,9 +1550,9 @@ bool ShitTower_3::init() {
         return false;
     }
 
-    //ÅÚËşµÄÍ¼Æ¬
+    //ç‚®å¡”çš„å›¾ç‰‡
     this->initWithFile("ShitTowerlevel3.png");
-    // ÉèÖÃÉä³Ì¡¢¹¥»÷Á¦ºÍ¹¥»÷¼ä¸ô
+    // è®¾ç½®å°„ç¨‹ã€æ”»å‡»åŠ›å’Œæ”»å‡»é—´éš”
     range = 0;
     damage = 75;
     attackInterval = 1.0f;
@@ -1569,7 +1561,7 @@ bool ShitTower_3::init() {
     cooldownTimer = 3.0f;
     attackDuration = 0.0f;
     target = nullptr;
-    // ´´½¨¶¨Ê±Æ÷£¬¶¨Ê±¸üĞÂÅÚËş×´Ì¬
+    // åˆ›å»ºå®šæ—¶å™¨ï¼Œå®šæ—¶æ›´æ–°ç‚®å¡”çŠ¶æ€
     scheduleUpdate();
 
     return true;
@@ -1581,7 +1573,7 @@ void ShitTower_3::clicked(int& moneyScene)
     auto oldTower = this;
     Vec2 pos = oldTower->getPosition();
 
-    // É¾³ı°´Å¥
+    // åˆ é™¤æŒ‰é’®
     auto towerDelete = cocos2d::ui::Button::create("BottleRemove3.png", "BottleRemove3.png");
     towerDelete->setPosition(positionDelete);
     oldTower->addChild(towerDelete, 3, "But");
@@ -1589,7 +1581,7 @@ void ShitTower_3::clicked(int& moneyScene)
     towerDelete->addClickEventListener([=](Ref* sender) {
         if (!oldTower->getTarget())
         {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //²¥·ÅÅÚËşÊÛÂôÒôĞ§
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("TowerSell.mp3"); //æ’­æ”¾ç‚®å¡”å”®å–éŸ³æ•ˆ
             auto button = dynamic_cast<cocos2d::ui::Button*>(sender);
             if (button)
             {
