@@ -29,8 +29,6 @@ void Target::takeDamage(int damage) {
         jinbi->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height));//精灵在怪物头顶
         addChild(jinbi);
 
-        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("monsterhurt.mp3"); //播放受击音效
-
         this->runAction(Sequence::create(
             FadeOut::create(0.25f),// 淡出
             RemoveSelf::create(),

@@ -30,13 +30,4 @@ public:
     virtual bool init() override;
 
 };
-
-class Boss : public Monster {
-public:
-    CREATE_FUNC(Boss);
-
-    virtual void moveToSequence(const std::vector<Vec2>& positions) override;
-    virtual bool init() override;
-
-};
 #endif // __MONSTER_H__

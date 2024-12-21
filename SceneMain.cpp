@@ -1,10 +1,11 @@
-ï»¿#include "SceneBase.h"
+#include "SceneBase.h"
 #include "SceneMain.h"
 #include "Obstacle.h"
 #include "Monster.h"
 #include "Tower.h"
 #include "Carrot.h"
 #include "TowerPosition.h"
+#include "LevelScene.h"
 #include "ui/CocosGUI.h"
 #include "audio/include/SimpleAudioEngine.h"
 
@@ -26,13 +27,14 @@ Scene1* Scene1::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-// æ‰“å°æœ‰ç”¨çš„é”™è¯¯æ¶ˆæ¯ï¼Œè€Œä¸æ˜¯åœ¨æ–‡ä»¶ä¸å­˜åœ¨æ—¶æ®µé”™è¯¯ã€‚
+// ´òÓ¡ÓÐÓÃµÄ´íÎóÏûÏ¢£¬¶ø²»ÊÇÔÚÎÄ¼þ²»´æÔÚÊ±¶Î´íÎó¡£
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
+//1ÎªÆÕÍ¨ÍÃ×Ó£¬2Îª»¬°åÍÃ£¬3Îª·ÉÐÐÍÃ
 void Scene1::initMonster(int choose)
 {
     if (choose == 1)
@@ -66,13 +68,13 @@ bool Scene1::init(int level, LevelScene* levelScene)
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-1.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-1.mp3", true);
 
-        moneyScene = player.getStartmoney();
+        moneyScene = 500 + 100 * (levelScene->getItem1Level());
         m_level = level;
-        m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
-        // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
+        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
+        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
 
-        int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
-        std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
+        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
@@ -92,60 +94,38 @@ bool Scene1::init(int level, LevelScene* levelScene)
             cocos2d::Vec2(1000 + 50, 500 + 50),
         };
 
-        auto create1 = CallFunc::create([=]() {initMonster(1); });
-        auto create2 = CallFunc::create([=]() {initMonster(2); });
-        auto create3 = CallFunc::create([=]() {initMonster(3); });
+        auto createRabbit = CallFunc::create([=]() {initMonster(1); });
+        auto createFastr = CallFunc::create([=]() {initMonster(2); });
+        auto createFlying = CallFunc::create([=]() {initMonster(3); });
 
-        Sprite* gameProgress = Sprite::create("gege1.png");    //åˆ›å»ºè¿›åº¦æ¡
-        gameProgress->setPosition(Vec2(420, 730));
-        do {
-            // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
-            auto animation = Animation::create();
-            // æ·»åŠ åŠ¨ç”»å¸§
-            for (int i = 1; i <= 5; i++) {
-                char filename[100];
-                sprintf(filename, "gege%d.png", i);
-                auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
-                animation->addSpriteFrame(frame);
-            }
-
-            // è®¾ç½®åŠ¨ç”»å±žæ€§
-            animation->setDelayPerUnit(0.2f);
-            animation->setLoops(100000000);
-
-            // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
-            auto animate = Animate::create(animation);
-
-            // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°ç²¾çµä¸Š
-            gameProgress->runAction(Spawn::create(animate, nullptr));
-
-            gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
-            this->addChild(gameProgress, 4);
-
-        } while (0);
+        Sprite* gameProgress = Sprite::create("Rabbit.png");    //´´½¨½ø¶ÈÌõ
+        gameProgress->setPosition(Vec2(420, 750));
+        gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
+        this->addChild(gameProgress, 4);
 
         runAction(Sequence::create(
-            DelayTime::create(2), create1,
-            DelayTime::create(2), create2,
-            DelayTime::create(2), create1,
-            DelayTime::create(2), create1,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
 
-            DelayTime::create(12), create2,
-            DelayTime::create(2), create1,
-            DelayTime::create(2), create2,
-            DelayTime::create(2), create1,
-            DelayTime::create(2), create1,
+            DelayTime::create(12), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
 
-            DelayTime::create(12), create1,
-            DelayTime::create(2), create1,
-            DelayTime::create(2), create2,
-            DelayTime::create(2), create1,
-            DelayTime::create(2), create2,
-            DelayTime::create(1), create1,
+            DelayTime::create(12), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(1), createRabbit,
 
 
             CallFunc::create([=]() {monsterFlag = true; }),
             nullptr));
+
 
         return true;
 
@@ -195,102 +175,77 @@ void Scene2::initMonster(int choose)
 
 bool Scene2::init(int level, LevelScene* levelScene)
 {
-    // è°ƒç”¨äº†çˆ¶ç±»Sceneçš„init()å‡½æ•°è¿›è¡Œåˆå§‹åŒ–ï¼Œå¦‚æžœåˆå§‹åŒ–å¤±è´¥ï¼Œåˆ™è¿”å›žfalse
-    if (!SceneBase::init(level, levelScene))
-    {
-        return false;
-    }
-
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-2.mp3");
-    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-2.mp3", true);
-
-    moneyScene = player.getStartmoney();
-    m_level = level;
-    m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
-
-    // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
-    int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
-    std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
-    m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
-    m_lable->setPosition(Vec2(150, 750));
-    this->addChild(m_lable, 1);
-
-    std::string mapName = "L2.tmx";
-    initScene(mapName);
-
-    path = {
-    cocos2d::Vec2(300 + 50, 300 + 50),
-    cocos2d::Vec2(300 + 50, 200 + 50),
-    cocos2d::Vec2(600 + 50, 200 + 50),
-    cocos2d::Vec2(600 + 50, 100 + 50),
-    cocos2d::Vec2(800 + 50, 100 + 50),
-    cocos2d::Vec2(800 + 50, 400 + 50),
-    cocos2d::Vec2(900 + 50, 400 + 50),
-    cocos2d::Vec2(900 + 50, 500 + 50),
-    cocos2d::Vec2(1100 + 50, 500 + 50),
-    cocos2d::Vec2(1150 + 50, 550 + 50),
-    };
-
-    auto create1 = CallFunc::create([=]() {initMonster(1); });
-    auto create3 = CallFunc::create([=]() {initMonster(2); });
-    auto create2 = CallFunc::create([=]() {initMonster(3); });
-
-    Sprite* gameProgress = Sprite::create("gege1.png");    //åˆ›å»ºè¿›åº¦æ¡
-    gameProgress->setPosition(Vec2(420, 730));
     do {
-        // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
-        auto animation = Animation::create();
-        // æ·»åŠ åŠ¨ç”»å¸§
-        for (int i = 1; i <= 5; i++) {
-            char filename[100];
-            sprintf(filename, "gege%d.png", i);
-            auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
-            animation->addSpriteFrame(frame);
-        }
+        CC_BREAK_IF(!SceneBase::init(level, levelScene));
+        CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-2.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-2.mp3", true);
 
-        // è®¾ç½®åŠ¨ç”»å±žæ€§
-        animation->setDelayPerUnit(0.2f);
-        animation->setLoops(100000000);
+        moneyScene = 700 + 100 * (levelScene->getItem1Level());
+        m_level = level;
+        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
 
-        // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
-        auto animate = Animate::create(animation);
+        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
+        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
+        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
+        m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
+        m_lable->setPosition(Vec2(150, 750));
+        this->addChild(m_lable, 1);
 
-        // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°ç²¾çµä¸Š
-        gameProgress->runAction(Spawn::create(animate, nullptr));
+        std::string mapName = "L2.tmx";
+        initScene(mapName);
 
+        path = {
+        cocos2d::Vec2(300 + 50, 300 + 50),
+        cocos2d::Vec2(300 + 50, 200 + 50),
+        cocos2d::Vec2(600 + 50, 200 + 50),
+        cocos2d::Vec2(600 + 50, 100 + 50),
+        cocos2d::Vec2(800 + 50, 100 + 50),
+        cocos2d::Vec2(800 + 50, 400 + 50),
+        cocos2d::Vec2(900 + 50, 400 + 50),
+        cocos2d::Vec2(900 + 50, 500 + 50),
+        cocos2d::Vec2(1100 + 50, 500 + 50),
+        cocos2d::Vec2(1150 + 50, 550 + 50),
+        };
+
+        Sprite* gameProgress = Sprite::create("Rabbit.png");    //´´½¨½ø¶ÈÌõ
+        gameProgress->setPosition(Vec2(420, 750));
         gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
         this->addChild(gameProgress, 4);
 
+        auto createRabbit = CallFunc::create([=]() {initMonster(1); });
+        auto createFastr = CallFunc::create([=]() {initMonster(2); });
+        auto createFlying = CallFunc::create([=]() {initMonster(3); });
+
+        runAction(Sequence::create(
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+
+            DelayTime::create(12), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+
+            DelayTime::create(12), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+
+            DelayTime::create(12), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(2), createFastr,
+            DelayTime::create(2), createFlying,
+            DelayTime::create(1), createRabbit,
+            CallFunc::create([=]() {monsterFlag = true; }),
+            nullptr));
+
+        return true;
+
     } while (0);
-
-    runAction(Sequence::create(
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create3,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create1,
-
-        DelayTime::create(12), create2,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create1,
-
-        DelayTime::create(12), create1,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-
-        DelayTime::create(12), create1,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-        DelayTime::create(2), create3,
-        DelayTime::create(2), create2,
-        DelayTime::create(1), create1,
-        CallFunc::create([=]() {monsterFlag = true; }),
-        nullptr));
-
-    return true;
 }
 
 Scene3* Scene3::createScene(int level, LevelScene* levelScene)
@@ -309,7 +264,7 @@ Scene3* Scene3::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-void Scene3::initMonster(int choose)    //1-3åœ¨ä¸Šæ–¹å‡ºç”Ÿç‚¹ï¼Œ4-6åœ¨ä¸‹æ–¹å‡ºç”Ÿç‚¹
+void Scene3::initMonster(int choose)    //1-3ÔÚÉÏ·½³öÉúµã
 {
     if (choose == 1)
     {
@@ -334,108 +289,80 @@ void Scene3::initMonster(int choose)    //1-3åœ¨ä¸Šæ–¹å‡ºç”Ÿç‚¹ï¼Œ4-6åœ¨ä¸‹æ–¹å‡
     }
     else if (choose == 4)
     {
-        Boss* Monster = Boss::create();
+        Sheep* Monster = Sheep::create();
         Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
         Monster->moveToSequence(path1);
     }
-
 }
 
-// on "init" you need to initialize your instance
 bool Scene3::init(int level, LevelScene* levelScene)
 {
-    // è°ƒç”¨äº†çˆ¶ç±»Sceneçš„init()å‡½æ•°è¿›è¡Œåˆå§‹åŒ–ï¼Œå¦‚æžœåˆå§‹åŒ–å¤±è´¥ï¼Œåˆ™è¿”å›žfalse
-    if (!SceneBase::init(level, levelScene))
-    {
-        return false;
-    }
-
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-3.mp3");
-    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-3.mp3", true);
-
-    moneyScene = player.getStartmoney();
-    m_level = level;
-    m_levelScene = levelScene; // ä¿å­˜å…³å¡é€‰æ‹©åœºæ™¯çš„æŒ‡é’ˆ
-
-    std::string mapName = "L3.tmx";
-    initScene(mapName);
-
-    // åˆ›å»º Labelï¼Œå¹¶è®¾ç½®å­—ä½“ã€å­—å·å’Œåˆå§‹æ–‡æœ¬å†…å®¹
-    int number = moneyScene; // è¦æ˜¾ç¤ºçš„æ•°å­—
-    std::string text = std::to_string(number); // å°†æ•°å­—è½¬æ¢ä¸ºå­—ç¬¦ä¸²
-    m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
-    m_lable->setPosition(Vec2(150, 750));
-    this->addChild(m_lable, 1);
-
-    path = {
-    cocos2d::Vec2(400 + 50, 200 + 50),
-    cocos2d::Vec2(400 + 50, 400 + 75),
-    cocos2d::Vec2(200 + 50, 400 + 75),
-    cocos2d::Vec2(200 + 50, 500 + 75),
-    cocos2d::Vec2(900 + 50, 500 + 75),
-    cocos2d::Vec2(900 + 50, 400 + 75),
-    cocos2d::Vec2(1100 + 50, 400 + 75),
-    cocos2d::Vec2(1100 + 50, 82 + 50)
-    };
-
-    path1 = {
-    cocos2d::Vec2(1100 + 50, 200 + 50),
-    cocos2d::Vec2(1100 + 50, 82 + 50)
-    };
-
-    Sprite* gameProgress = Sprite::create("gege1.png");    //åˆ›å»ºè¿›åº¦æ¡
-    gameProgress->setPosition(Vec2(420, 730));
     do {
-        // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
-        auto animation = Animation::create();
-        // æ·»åŠ åŠ¨ç”»å¸§
-        for (int i = 1; i <= 5; i++) {
-            char filename[100];
-            sprintf(filename, "gege%d.png", i);
-            auto frame = SpriteFrame::create(filename, Rect(0, 0, 120, 120));
-            animation->addSpriteFrame(frame);
-        }
+        CC_BREAK_IF(!SceneBase::init(level, levelScene));
+        CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-3.mp3");
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-3.mp3", true);
 
-        // è®¾ç½®åŠ¨ç”»å±žæ€§
-        animation->setDelayPerUnit(0.2f);
-        animation->setLoops(100000000);
+        moneyScene = 1000 + 100 * (levelScene->getItem1Level());
+        m_level = level;
+        m_levelScene = levelScene; // ±£´æ¹Ø¿¨Ñ¡Ôñ³¡¾°µÄÖ¸Õë
 
-        // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
-        auto animate = Animate::create(animation);
+        std::string mapName = "L3.tmx";
+        initScene(mapName);
 
-        // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°ç²¾çµä¸Š
-        gameProgress->runAction(Spawn::create(animate, nullptr));
+        // ´´½¨ Label£¬²¢ÉèÖÃ×ÖÌå¡¢×ÖºÅºÍ³õÊ¼ÎÄ±¾ÄÚÈÝ
+        int number = moneyScene; // ÒªÏÔÊ¾µÄÊý×Ö
+        std::string text = std::to_string(number); // ½«Êý×Ö×ª»»Îª×Ö·û´®
+        m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
+        m_lable->setPosition(Vec2(150, 750));
+        this->addChild(m_lable, 1);
 
-        gameProgress->runAction(cocos2d::MoveBy::create(70, Vec2(400, 0)));
+        path = {
+        cocos2d::Vec2(400 + 50, 200 + 50),
+        cocos2d::Vec2(400 + 50, 400 + 75),
+        cocos2d::Vec2(200 + 50, 400 + 75),
+        cocos2d::Vec2(200 + 50, 500 + 75),
+        cocos2d::Vec2(900 + 50, 500 + 75),
+        cocos2d::Vec2(900 + 50, 400 + 75),
+        cocos2d::Vec2(1100 + 50, 400 + 75),
+        cocos2d::Vec2(1100 + 50, 82 + 50)
+        };
+
+        path1 = {
+        cocos2d::Vec2(1100 + 50, 200 + 50),
+        cocos2d::Vec2(1100 + 50, 82 + 50)
+        };
+
+        Sprite* gameProgress = Sprite::create("Rabbit.png");
+        gameProgress->setPosition(Vec2(420, 750));
+        gameProgress->runAction(cocos2d::MoveBy::create(95, Vec2(400, 0)));
         this->addChild(gameProgress, 4);
 
+        auto createRabbit = CallFunc::create([=]() {initMonster(1); });
+        auto createFastr = CallFunc::create([=]() {initMonster(2); });
+        auto createFlying = CallFunc::create([=]() {initMonster(3); });
+        auto createBoss = CallFunc::create([=]() {initMonster(4); });
+        runAction(Sequence::create(
+            DelayTime::create(2), createBoss,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createRabbit,
+            DelayTime::create(2), createFastr,
+
+            CallFunc::create([=]() {monsterFlag = true; }),
+            nullptr));
+        return true;
+
     } while (0);
-
-    auto create1 = CallFunc::create([=]() {initMonster(1); });
-    auto create2 = CallFunc::create([=]() {initMonster(2); });
-    auto create3 = CallFunc::create([=]() {initMonster(3); });
-    auto createBoss = CallFunc::create([=]() {initMonster(4); });
-
-    runAction(Sequence::create(
-        DelayTime::create(2), createBoss,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create1,
-
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
-
-        CallFunc::create([=]() {monsterFlag = true; }),
-        nullptr));
-    return true;
 }

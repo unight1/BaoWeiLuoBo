@@ -1,4 +1,4 @@
-ï»¿#include "Monster.h"
+#include "Monster.h"
 #include "SceneBase.h"
 
 
@@ -9,26 +9,26 @@ bool Sheep::init() {
         return false;
     }
 
-    //åœ¨æ€ªç‰©èº«ä¸Šæ·»åŠ ä¸€ä¸ªä¸å¯è§æŒ‰é’®ï¼Œç”¨äºå®ç°é›†ç«
+    //ÔÚ¹ÖÎïÉíÉÏÌí¼ÓÒ»¸ö²»¿É¼û°´Å¥£¬ÓÃÓÚÊµÏÖ¼¯»ğ
     ui::Button* BUTTON = ui::Button::create("botton.png");
     BUTTON->setOpacity(0);
-    BUTTON->setContentSize(Size(this->getContentSize()));
+    BUTTON->setContentSize(Size(this->getContentSize().width , this->getContentSize().height ));
     BUTTON->addClickEventListener([this](Ref* sender) {
-        // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
+        // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
         setAllTarget();
         });
-    BUTTON->setPosition(Vec2(50, 50));
+    BUTTON->setPosition(Vec2(this->getContentSize().width + 50, this->getContentSize().height + 50));
     addChild(BUTTON);
 
-    // åˆå§‹åŒ–HP
+    // ³õÊ¼»¯HP
     maxHP = HP = 100;
-    // åˆå§‹åŒ–å‡»æ€å¥–åŠ±
+    // ³õÊ¼»¯»÷É±½±Àø
     value = 50;
-    // åˆå§‹åŒ–é€Ÿåº¦
+    // ³õÊ¼»¯ËÙ¶È
     speed = 30;
-    // åˆå§‹åŒ–åŠå¾„
+    // ³õÊ¼»¯°ë¾¶
     radius = 10;
-    //åˆå§‹åŒ–ä¼¤å®³
+    //³õÊ¼»¯ÉËº¦
     hurt = 1;
 
     return true;
@@ -36,32 +36,32 @@ bool Sheep::init() {
 
 void Sheep::moveToSequence(const std::vector<Vec2>& positions)
 {
-    this->stopAllActions(); // åœæ­¢å½“å‰è¿›è¡Œä¸­çš„åŠ¨ä½œ
+    this->stopAllActions(); // Í£Ö¹µ±Ç°½øĞĞÖĞµÄ¶¯×÷
 
-    Vector<FiniteTimeAction*> actions; // åˆ›å»ºä¸€ä¸ªåŠ¨ä½œæ•°ç»„
+    Vector<FiniteTimeAction*> actions; // ´´½¨Ò»¸ö¶¯×÷Êı×é
     Vec2 thisPosition = this->getPosition();
     for (Vec2 position : positions)
     {
-        auto distance = position - thisPosition; // è®¡ç®—ç§»åŠ¨è·ç¦»
+        auto distance = position - thisPosition; // ¼ÆËãÒÆ¶¯¾àÀë
         thisPosition = position;
-        auto duration = distance.length() / speed; // è®¡ç®—ç§»åŠ¨æ—¶é—´
-        auto move = MoveTo::create(duration, position); // åˆ›å»ºç§»åŠ¨åŠ¨ä½œ
-        actions.pushBack(move); // å°†ç§»åŠ¨åŠ¨ä½œæ·»åŠ åˆ°æ•°ç»„ä¸­
+        auto duration = distance.length() / speed; // ¼ÆËãÒÆ¶¯Ê±¼ä
+        auto move = MoveTo::create(duration, position); // ´´½¨ÒÆ¶¯¶¯×÷
+        actions.pushBack(move); // ½«ÒÆ¶¯¶¯×÷Ìí¼Óµ½Êı×éÖĞ
     }
 
     auto attacked = CallFunc::create([=]() {
         auto target = this->getParent();
         auto Scene = dynamic_cast<SceneBase*>(target);
-        Scene->getCarrot()->takeDamage(hurt);//æ ¹æ®æ€ªç‰©çš„ä¼¤å®³å¯¹èåœé€ æˆä¼¤å®³
-        this->setHP(0);//æ”»å‡»åæ€ªç‰©æ­»äº¡
+        Scene->getCarrot()->takeDamage(hurt);//¸ù¾İ¹ÖÎïµÄÉËº¦¶ÔÂÜ²·Ôì³ÉÉËº¦
+        this->setHP(0);//¹¥»÷ºó¹ÖÎïËÀÍö
 
         });
-    auto sequenceAction = Sequence::create(actions); // åˆ›å»ºåºåˆ—åŠ¨ä½œ
+    auto sequenceAction = Sequence::create(actions); // ´´½¨ĞòÁĞ¶¯×÷
     auto sequence = Sequence::create(sequenceAction, attacked, nullptr);
 
-    // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
+    // ´´½¨Ò»¸ö¿ÕµÄ¶¯»­¶ÔÏó
     auto animation = Animation::create();
-    // æ·»åŠ åŠ¨ç”»å¸§
+    // Ìí¼Ó¶¯»­Ö¡
     for (int i = 1; i <= 2; i++) {
         char filename[100];
         sprintf(filename, "Sheep%d.png", i);
@@ -69,15 +69,15 @@ void Sheep::moveToSequence(const std::vector<Vec2>& positions)
         animation->addSpriteFrame(frame);
     }
 
-    // è®¾ç½®åŠ¨ç”»å±æ€§
-    animation->setDelayPerUnit(0.1f);//nf=æ¯éš”nç§’æ’­æ”¾ä¸€å¸§
-    animation->setLoops(-1);//è®©åŠ¨ç”»ä¸€ç›´å¾ªåæ’­æ”¾
+    // ÉèÖÃ¶¯»­ÊôĞÔ
+    animation->setDelayPerUnit(0.1f);//nf=Ã¿¸ônÃë²¥·ÅÒ»Ö¡
+    animation->setLoops(-1);//ÈÃ¶¯»­Ò»Ö±Ñ­»µ²¥·Å
 
-    // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
+    // ´´½¨¶¯»­¶¯×÷¶ÔÏó
     auto animate = Animate::create(animation);
 
-    // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°ç²¾çµå¯¹è±¡ä¸Š
-    this->runAction(Spawn::create(animate,sequence,nullptr)); // æ‰§è¡Œåºåˆ—åŠ¨ä½œ
+    // ½«¶¯»­¶¯×÷Ó¦ÓÃµ½¾«Áé¶ÔÏóÉÏ
+    this->runAction(Spawn::create(animate,sequence,nullptr)); // Ö´ĞĞĞòÁĞ¶¯×÷
 }
 
 bool Bird::init() {
@@ -85,27 +85,27 @@ bool Bird::init() {
         return false;
     }
 
-    // åˆå§‹åŒ–æ€ªç‰©çš„å¤–è§‚å’Œå±æ€§
-    // åˆå§‹åŒ–HP
+    // ³õÊ¼»¯¹ÖÎïµÄÍâ¹ÛºÍÊôĞÔ
+    // ³õÊ¼»¯HP
     maxHP = HP = 80;
-    // åˆå§‹åŒ–å‡»æ€å¥–åŠ±
+    // ³õÊ¼»¯»÷É±½±Àø
     value = 50;
-    // åˆå§‹åŒ–é€Ÿåº¦
+    // ³õÊ¼»¯ËÙ¶È
     speed = 60;
-    // åˆå§‹åŒ–åŠå¾„
+    // ³õÊ¼»¯°ë¾¶
     radius = 10;
-    //åˆå§‹åŒ–ä¼¤å®³
+    //³õÊ¼»¯ÉËº¦
     hurt = 1;
 
-    //åœ¨æ€ªç‰©èº«ä¸Šæ·»åŠ ä¸€ä¸ªä¸å¯è§æŒ‰é’®ï¼Œç”¨äºå®ç°é›†ç«
+    //ÔÚ¹ÖÎïÉíÉÏÌí¼ÓÒ»¸ö²»¿É¼û°´Å¥£¬ÓÃÓÚÊµÏÖ¼¯»ğ
     ui::Button* BUTTON = ui::Button::create("botton.png");
     BUTTON->setOpacity(0);
     BUTTON->setContentSize(Size(20, 20));
     BUTTON->addClickEventListener([this](Ref* sender) {
-        // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
+        // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
         setAllTarget();
         });
-    BUTTON->setPosition(Vec2(50, 50));
+    BUTTON->setPosition(Vec2(this->getContentSize().width +50, this->getContentSize().height +50));
     addChild(BUTTON);
 
     return true;
@@ -113,32 +113,32 @@ bool Bird::init() {
 
 void Bird::moveToSequence(const std::vector<Vec2>& positions)
 {
-    this->stopAllActions(); // åœæ­¢å½“å‰è¿›è¡Œä¸­çš„åŠ¨ä½œ
+    this->stopAllActions(); // Í£Ö¹µ±Ç°½øĞĞÖĞµÄ¶¯×÷
 
-    Vector<FiniteTimeAction*> actions; // åˆ›å»ºä¸€ä¸ªåŠ¨ä½œæ•°ç»„
+    Vector<FiniteTimeAction*> actions; // ´´½¨Ò»¸ö¶¯×÷Êı×é
     Vec2 thisPosition = this->getPosition();
     for (Vec2 position : positions)
     {
-        auto distance = position - thisPosition; // è®¡ç®—ç§»åŠ¨è·ç¦»
+        auto distance = position - thisPosition; // ¼ÆËãÒÆ¶¯¾àÀë
         thisPosition = position;
-        auto duration = distance.length() / speed; // è®¡ç®—ç§»åŠ¨æ—¶é—´
-        auto move = MoveTo::create(duration, position); // åˆ›å»ºç§»åŠ¨åŠ¨ä½œ
-        actions.pushBack(move); // å°†ç§»åŠ¨åŠ¨ä½œæ·»åŠ åˆ°æ•°ç»„ä¸­
+        auto duration = distance.length() / speed; // ¼ÆËãÒÆ¶¯Ê±¼ä
+        auto move = MoveTo::create(duration, position); // ´´½¨ÒÆ¶¯¶¯×÷
+        actions.pushBack(move); // ½«ÒÆ¶¯¶¯×÷Ìí¼Óµ½Êı×éÖĞ
     }
 
     auto attacked = CallFunc::create([=]() {
         auto target = this->getParent();
         auto Scene = dynamic_cast<SceneBase*>(target);
-        Scene->getCarrot()->takeDamage(hurt);//æ ¹æ®æ€ªç‰©çš„ä¼¤å®³å¯¹èåœé€ æˆä¼¤å®³
-        this->setHP(0);//æ”»å‡»åæ€ªç‰©æ­»äº¡
+        Scene->getCarrot()->takeDamage(hurt);//¸ù¾İ¹ÖÎïµÄÉËº¦¶ÔÂÜ²·Ôì³ÉÉËº¦
+        this->setHP(0);//¹¥»÷ºó¹ÖÎïËÀÍö
 
         });
-    auto sequenceAction = Sequence::create(actions); // åˆ›å»ºåºåˆ—åŠ¨ä½œ
+    auto sequenceAction = Sequence::create(actions); // ´´½¨ĞòÁĞ¶¯×÷
     auto sequence = Sequence::create(sequenceAction, attacked, nullptr);
 
-    // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
+    // ´´½¨Ò»¸ö¿ÕµÄ¶¯»­¶ÔÏó
     auto animation = Animation::create();
-    // æ·»åŠ åŠ¨ç”»å¸§
+    // Ìí¼Ó¶¯»­Ö¡
     for (int i = 1; i <= 2; i++) {
         char filename[100];
         sprintf(filename, "Bird%d.png", i);
@@ -146,15 +146,15 @@ void Bird::moveToSequence(const std::vector<Vec2>& positions)
         animation->addSpriteFrame(frame);
     }
 
-    // è®¾ç½®åŠ¨ç”»å±æ€§
+    // ÉèÖÃ¶¯»­ÊôĞÔ
     animation->setDelayPerUnit(0.1f);
     animation->setLoops(-1);
 
-    // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
+    // ´´½¨¶¯»­¶¯×÷¶ÔÏó
     auto animate = Animate::create(animation);
 
-    // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°ç²¾çµå¯¹è±¡ä¸Š
-    this->runAction(Spawn::create(animate, sequence, nullptr)); // æ‰§è¡Œåºåˆ—åŠ¨ä½œ
+    // ½«¶¯»­¶¯×÷Ó¦ÓÃµ½¾«Áé¶ÔÏóÉÏ
+    this->runAction(Spawn::create(animate, sequence, nullptr)); // Ö´ĞĞĞòÁĞ¶¯×÷
 }
 
 bool Star::init() {
@@ -162,27 +162,27 @@ bool Star::init() {
         return false;
     }
 
-    // åˆå§‹åŒ–æ€ªç‰©çš„å¤–è§‚å’Œå±æ€§
-    // åˆå§‹åŒ–HP
+    // ³õÊ¼»¯¹ÖÎïµÄÍâ¹ÛºÍÊôĞÔ
+    // ³õÊ¼»¯HP
     maxHP = HP = 200;
-    // åˆå§‹åŒ–å‡»æ€å¥–åŠ±
+    // ³õÊ¼»¯»÷É±½±Àø
     value = 75;
-    // åˆå§‹åŒ–é€Ÿåº¦
+    // ³õÊ¼»¯ËÙ¶È
     speed = 50;
-    // åˆå§‹åŒ–åŠå¾„
+    // ³õÊ¼»¯°ë¾¶
     radius = 10;
-    //åˆå§‹åŒ–ä¼¤å®³
+    //³õÊ¼»¯ÉËº¦
     hurt = 2;
 
-    //åœ¨æ€ªç‰©èº«ä¸Šæ·»åŠ ä¸€ä¸ªä¸å¯è§æŒ‰é’®ï¼Œç”¨äºå®ç°é›†ç«
+    //ÔÚ¹ÖÎïÉíÉÏÌí¼ÓÒ»¸ö²»¿É¼û°´Å¥£¬ÓÃÓÚÊµÏÖ¼¯»ğ
     ui::Button* BUTTON = ui::Button::create("botton.png");
     BUTTON->setOpacity(0);
     BUTTON->setContentSize(Size(this->getContentSize().width, this->getContentSize().height));
     BUTTON->addClickEventListener([this](Ref* sender) {
-        // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
+        // ´¦Àí°´Å¥µã»÷ÊÂ¼ş
         setAllTarget();
         });
-    BUTTON->setPosition(Vec2(50,50));
+    BUTTON->setPosition(Vec2(this->getContentSize().width + 50, this->getContentSize().height + 50));
     addChild(BUTTON);
 
     return true;
@@ -190,31 +190,31 @@ bool Star::init() {
 
 void Star::moveToSequence(const std::vector<Vec2>& positions)
 {
-    this->stopAllActions(); // åœæ­¢å½“å‰è¿›è¡Œä¸­çš„åŠ¨ä½œ
+    this->stopAllActions(); // Í£Ö¹µ±Ç°½øĞĞÖĞµÄ¶¯×÷
 
-    Vector<FiniteTimeAction*> actions; // åˆ›å»ºä¸€ä¸ªåŠ¨ä½œæ•°ç»„
+    Vector<FiniteTimeAction*> actions; // ´´½¨Ò»¸ö¶¯×÷Êı×é
     Vec2 thisPosition = this->getPosition();
     for (Vec2 position : positions)
     {
-        auto distance = position - thisPosition; // è®¡ç®—ç§»åŠ¨è·ç¦»
+        auto distance = position - thisPosition; // ¼ÆËãÒÆ¶¯¾àÀë
         thisPosition = position;
-        auto duration = distance.length() / speed; // è®¡ç®—ç§»åŠ¨æ—¶é—´
-        auto move = MoveTo::create(duration, position); // åˆ›å»ºç§»åŠ¨åŠ¨ä½œ
-        actions.pushBack(move); // å°†ç§»åŠ¨åŠ¨ä½œæ·»åŠ åˆ°æ•°ç»„ä¸­
+        auto duration = distance.length() / speed; // ¼ÆËãÒÆ¶¯Ê±¼ä
+        auto move = MoveTo::create(duration, position); // ´´½¨ÒÆ¶¯¶¯×÷
+        actions.pushBack(move); // ½«ÒÆ¶¯¶¯×÷Ìí¼Óµ½Êı×éÖĞ
     }
 
     auto attacked = CallFunc::create([=]() {
         auto target = this->getParent();
         auto Scene = dynamic_cast<SceneBase*>(target);
-        Scene->getCarrot()->takeDamage(hurt);//æ ¹æ®æ€ªç‰©çš„ä¼¤å®³å¯¹èåœé€ æˆä¼¤å®³
-        this->setHP(0);//æ”»å‡»åæ€ªç‰©æ­»äº¡
+        Scene->getCarrot()->takeDamage(hurt);//¸ù¾İ¹ÖÎïµÄÉËº¦¶ÔÂÜ²·Ôì³ÉÉËº¦
+        this->setHP(0);//¹¥»÷ºó¹ÖÎïËÀÍö
         });
-    auto sequenceAction = Sequence::create(actions); // åˆ›å»ºåºåˆ—åŠ¨ä½œ
+    auto sequenceAction = Sequence::create(actions); // ´´½¨ĞòÁĞ¶¯×÷
     auto sequence = Sequence::create(sequenceAction, attacked, nullptr);
 
-    // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
+    // ´´½¨Ò»¸ö¿ÕµÄ¶¯»­¶ÔÏó
     auto animation = Animation::create();
-    // æ·»åŠ åŠ¨ç”»å¸§
+    // Ìí¼Ó¶¯»­Ö¡
     for (int i = 1; i <= 2; i++) {
         char filename[100];
         sprintf(filename, "Star%d.png", i);
@@ -222,89 +222,13 @@ void Star::moveToSequence(const std::vector<Vec2>& positions)
         animation->addSpriteFrame(frame);
     }
 
-    // è®¾ç½®åŠ¨ç”»å±æ€§
+    // ÉèÖÃ¶¯»­ÊôĞÔ
     animation->setDelayPerUnit(0.1f);
     animation->setLoops(-1);
 
-    // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
+    // ´´½¨¶¯»­¶¯×÷¶ÔÏó
     auto animate = Animate::create(animation);
 
-    // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°ç²¾çµå¯¹è±¡ä¸Š
-    this->runAction(Spawn::create(animate, sequence, nullptr)); // æ‰§è¡Œåºåˆ—åŠ¨ä½œ
-}
-
-bool Boss::init() {
-    if (!Sprite::init()) {
-        return false;
-    }
-
-    //åœ¨æ€ªç‰©èº«ä¸Šæ·»åŠ ä¸€ä¸ªä¸å¯è§æŒ‰é’®ï¼Œç”¨äºå®ç°é›†ç«
-    ui::Button* BUTTON = ui::Button::create("botton.png");
-    BUTTON->setOpacity(0);
-    BUTTON->setContentSize(Size(this->getContentSize().width, this->getContentSize().height));
-    BUTTON->addClickEventListener([this](Ref* sender) {
-        // å¤„ç†æŒ‰é’®ç‚¹å‡»äº‹ä»¶
-        setAllTarget();
-        });
-    BUTTON->setPosition(Vec2(50, 50));
-    addChild(BUTTON);
-
-    // åˆå§‹åŒ–HP
-    maxHP = HP = 1000;
-    // åˆå§‹åŒ–å‡»æ€å¥–åŠ±
-    value = 50;
-    // åˆå§‹åŒ–é€Ÿåº¦
-    speed = 100;
-    // åˆå§‹åŒ–åŠå¾„
-    radius = 100;
-    //åˆå§‹åŒ–ä¼¤å®³
-    hurt = 10;
-
-    return true;
-}
-
-void Boss::moveToSequence(const std::vector<Vec2>& positions)
-{
-    this->stopAllActions(); // åœæ­¢å½“å‰è¿›è¡Œä¸­çš„åŠ¨ä½œ
-
-    Vector<FiniteTimeAction*> actions; // åˆ›å»ºä¸€ä¸ªåŠ¨ä½œæ•°ç»„
-    Vec2 thisPosition = this->getPosition();
-    for (Vec2 position : positions)
-    {
-        auto distance = position - thisPosition; // è®¡ç®—ç§»åŠ¨è·ç¦»
-        thisPosition = position;
-        auto duration = distance.length() / speed; // è®¡ç®—ç§»åŠ¨æ—¶é—´
-        auto move = MoveTo::create(duration, position); // åˆ›å»ºç§»åŠ¨åŠ¨ä½œ
-        actions.pushBack(move); // å°†ç§»åŠ¨åŠ¨ä½œæ·»åŠ åˆ°æ•°ç»„ä¸­
-    }
-
-    auto attacked = CallFunc::create([=]() {
-        auto target = this->getParent();
-        auto Scene = dynamic_cast<SceneBase*>(target);
-        Scene->getCarrot()->takeDamage(hurt);//æ ¹æ®æ€ªç‰©çš„ä¼¤å®³å¯¹èåœé€ æˆä¼¤å®³
-        this->setHP(0);//æ”»å‡»åæ€ªç‰©æ­»äº¡
-
-        });
-    auto sequenceAction = Sequence::create(actions); // åˆ›å»ºåºåˆ—åŠ¨ä½œ
-    auto sequence = Sequence::create(sequenceAction, attacked, nullptr);
-
-    // åˆ›å»ºä¸€ä¸ªç©ºçš„åŠ¨ç”»å¯¹è±¡
-    auto animation = Animation::create();
-    // æ·»åŠ åŠ¨ç”»å¸§
-    for (int i = 1; i <= 2; i++) {
-        char filename[100];
-        sprintf(filename, "Boss%d.png", i);
-        auto frame = SpriteFrame::create(filename, Rect(0, 0, 200, 200));
-        animation->addSpriteFrame(frame);
-    }
-
-    // è®¾ç½®åŠ¨ç”»å±æ€§
-    animation->setDelayPerUnit(0.1f);//nf=æ¯éš”nç§’æ’­æ”¾ä¸€å¸§
-    animation->setLoops(-1);//è®©åŠ¨ç”»ä¸€ç›´å¾ªåæ’­æ”¾
-
-    // åˆ›å»ºåŠ¨ç”»åŠ¨ä½œå¯¹è±¡
-    auto animate = Animate::create(animation);
-
-    // å°†åŠ¨ç”»åŠ¨ä½œåº”ç”¨åˆ°ç²¾çµå¯¹è±¡ä¸Š
-    this->runAction(Spawn::create(animate, sequence, nullptr)); // æ‰§è¡Œåºåˆ—åŠ¨ä½œ
+    // ½«¶¯»­¶¯×÷Ó¦ÓÃµ½¾«Áé¶ÔÏóÉÏ
+    this->runAction(Spawn::create(animate, sequence, nullptr)); // Ö´ĞĞĞòÁĞ¶¯×÷
 }
