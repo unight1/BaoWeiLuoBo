@@ -5,7 +5,7 @@
 
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
-
+#include "PlayerInf.h"
 
 class SettingScene : public cocos2d::Scene
 {

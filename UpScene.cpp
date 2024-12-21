@@ -37,17 +37,17 @@ bool UpScene::init(LevelScene* levelScene)
     this->addChild(background1);
 
     // 显示 money 数量的 Label
-    m_moneyLabel = Label::createWithTTF("      " + std::to_string(m_levelScene->getMoney()), "fonts/Marker Felt.ttf", 32);
+    m_moneyLabel = Label::createWithTTF("      " + std::to_string(player.getMoney()), "fonts/Marker Felt.ttf", 32);
     m_moneyLabel->setPosition(Vec2(100, 650));
     this->addChild(m_moneyLabel);
 
-    m_item1LevelLabel = Label::createWithTTF("             startmoney:Level " + std::to_string(m_levelScene->getItem1Level()), "fonts/Marker Felt.ttf", 32);
-    m_item1LevelLabel->setPosition(Vec2(1000, 630));
-    this->addChild(m_item1LevelLabel);
+    startmoneyLabel = Label::createWithTTF("             startmoney: " + std::to_string(player.getStartmoney()), "fonts/Marker Felt.ttf", 32);
+    startmoneyLabel->setPosition(Vec2(1000, 630));
+    this->addChild(startmoneyLabel);
 
-    m_item2LevelLabel = Label::createWithTTF("       startHP:Level " + std::to_string(m_levelScene->getItem2Level()), "fonts/Marker Felt.ttf", 32);
-    m_item2LevelLabel->setPosition(Vec2(1000, 430));
-    this->addChild(m_item2LevelLabel);
+    startHPLabel = Label::createWithTTF("       startHP: " + std::to_string(player.getStartHP()), "fonts/Marker Felt.ttf", 32);
+    startHPLabel->setPosition(Vec2(1000, 430));
+    this->addChild(startHPLabel);
 
     // 第一项物品升级按钮
     auto item1Button = MenuItemImage::create("skill1.png", "skill1.png", CC_CALLBACK_1(UpScene::onItem1Button, this));
@@ -70,34 +70,34 @@ bool UpScene::init(LevelScene* levelScene)
 
 void UpScene::onItem1Button(Ref* sender)
 {
-    int money = m_levelScene->getMoney();
-    if (m_levelScene->getItem1Level() < 3) {
+    int money = player.getMoney();
+    if (player.getStartmoney() < 800) {
         if (money >= 100)
         {
-            m_levelScene->consumeMoney(100);
-            m_moneyLabel->setString("       " + std::to_string(m_levelScene->getMoney()));
+            player.consumeMoney(100);
+            m_moneyLabel->setString("       " + std::to_string(player.getMoney()));
 
             // 升级第一项物品
-            m_levelScene->upgradeItem1();
-            int item1Level = m_levelScene->getItem1Level();
-            m_item1LevelLabel->setString("             startmoney:Level " + std::to_string(item1Level));
+            player.upgradeStartmoney();
+            int item1Level = player.getStartmoney();
+            startmoneyLabel->setString("             startmoney: " + std::to_string(item1Level));
         }      
     }
 }
 
 void UpScene::onItem2Button(Ref* sender)
 {
-    int money = m_levelScene->getMoney();
-    if (m_levelScene->getItem2Level() < 3) {
+    int money = player.getMoney();
+    if (player.getStartHP() < 20) {
         if (money >= 100)
         {
-            m_levelScene->consumeMoney(100);
-            m_moneyLabel->setString("       " + std::to_string(m_levelScene->getMoney()));
+            player.consumeMoney(100);
+            m_moneyLabel->setString("       " + std::to_string(player.getMoney()));
 
             // 升级第二项物品
-            m_levelScene->upgradeItem2();
-            int item2Level = m_levelScene->getItem2Level();
-            m_item2LevelLabel->setString("       startHP:Level " + std::to_string(item2Level));
+            player.upgradeStartHP();
+            int item2Level = player.getStartHP();
+            startHPLabel->setString("       startHP: " + std::to_string(item2Level));
         }
 
     }
