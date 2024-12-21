@@ -1,4 +1,4 @@
-#ifndef __TARGET_H__
+ï»¿#ifndef __TARGET_H__
 #define __TARGET_H__
 
 #include "cocos2d.h"
@@ -7,28 +7,30 @@
 USING_NS_CC;
 class Target : public Sprite {
 public:
-    // ĞéÎö¹¹
+    // è™šææ„
     virtual ~Target() {};
-    // Ôì³ÉÉËº¦
+    // é€ æˆä¼¤å®³
     virtual void takeDamage(int damage);
-    // ÅĞ¶ÏÊÇ·ñ´æ»î
+    // åˆ¤æ–­æ˜¯å¦å­˜æ´»
     bool isAlive() const;
-    // ÉèÖÃÑªÁ¿
+    // è®¾ç½®è¡€é‡
     void setHP(int HP);
-    // »ñÈ¡°ë¾¶
+    // è·å–åŠå¾„
     int getRadius();
-    //ÉèÖÃ¼¯»ğÄ¿±ê
+    //è®¾ç½®é›†ç«ç›®æ ‡
     void setAllTarget();
+    //æ²»ç–—
+    virtual void cure();
 
 
 protected:
-    int HP;  // ÑªÁ¿
-    int maxHP; // ×î´óÑªÁ¿
-    int value;// »÷É±½±Àø
-    int radius;// °ë¾¶
-    ProgressTimer* Health = nullptr;// ±£´æÌõµÄÖ¸Õë
-    Sprite* choose=nullptr;//Ñ¡ÖĞ¾«Áé
-    Target() {};// ÊÜ±£»¤µÄ¹¹Ôìº¯Êı
+    int HP;  // è¡€é‡
+    int maxHP; // æœ€å¤§è¡€é‡
+    int value;// å‡»æ€å¥–åŠ±
+    int radius;// åŠå¾„
+    ProgressTimer* Health = nullptr;// è¡€æ¡çš„æŒ‡é’ˆ
+    Sprite* choose;//é€‰ä¸­ç²¾çµ
+    Target() {};// å—ä¿æŠ¤çš„æ„é€ å‡½æ•°
 };
 
 #endif // __TARGET_H__
