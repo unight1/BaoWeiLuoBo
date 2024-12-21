@@ -3,6 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "LevelScene.h"
 
+
 USING_NS_CC;
 
 
@@ -55,8 +56,8 @@ bool SettingScene::init()
     volumeCheckBox->setPosition(Vec2(580,450)); // 设置复选框位置
     volumeCheckBox->addEventListener(CC_CALLBACK_2(SettingScene::checkBoxEvent, this)); // 添加事件监听
     this->addChild(volumeCheckBox);
-    const bool isChecked = UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState",true); // 默认值为 true
-    volumeCheckBox->setSelected(isChecked); // 设置复选框状态
+    
+    volumeCheckBox->setSelected(player.getMusic()); // 设置复选框状态
 
     
 
@@ -68,19 +69,9 @@ bool SettingScene::init()
 //开关音量
 void SettingScene::checkBoxEvent(Ref* sender, ui::CheckBox::EventType type) 
 {
-    
-    if (UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState", true))
-    {
-        CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-        UserDefault::getInstance()->setBoolForKey("VolumeCheckBoxState", false);
-    }
-    else
-    {
-        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGMusic.mp3", true);
-        UserDefault::getInstance()->setBoolForKey("VolumeCheckBoxState", true);
-    }
+    player.changeMusic();
+    player.save();
 }
-
 
 
 //返回标题界面
