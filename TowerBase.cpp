@@ -1,6 +1,8 @@
-ï»¿#include "TowerBase.h"
-
-// Towerå‡½æ•°å®ç°
+#include "TowerBase.h"
+#include<random>
+#include <windows.h>
+#include "audio/include/SimpleAudioEngine.h"
+// Towerº¯ÊıÊµÏÖ
 bool Tower::init() {
     if (!Sprite::init()) {
         return false;
@@ -51,7 +53,7 @@ void Tower::setAttackInterval(float attackInterval) {
 }
 
 
-// bottleTowerå‡½æ•°å®ç°
+// bottleTowerº¯ÊıÊµÏÖ
 bool BottleTower::init() {
     if (!Sprite::init()) {
         return false;
@@ -61,29 +63,29 @@ bool BottleTower::init() {
 }
 
 void BottleTower::update(float delta) {
-    // æ›´æ–°å†·å´è®¡æ—¶å™¨
+    // ¸üĞÂÀäÈ´¼ÆÊ±Æ÷
     cooldownTimer -= delta;
 
     if (cooldownTimer <= 0) {
-        // å†·å´ç»“æŸï¼Œè¿›è¡Œæ”»å‡»
+        // ÀäÈ´½áÊø£¬½øĞĞ¹¥»÷
         cooldownTimer = 0.0f;
         attack();
     }
 }
 
 void BottleTower::attack() {
-    // åˆ¤æ–­æ˜¯å¦åœ¨å°„ç¨‹å†…
+    // ÅĞ¶ÏÊÇ·ñÔÚÉä³ÌÄÚ
     float thisdistance = 0;
     if (target && target->isAlive()) {
         thisdistance = getPosition().distance(target->getPosition());
     }
 
     if (target && target->isAlive() && thisdistance + target->getRadius() <= getRange()) {
-        // ç»§ç»­æ”»å‡»æ­¤ç›®æ ‡
+        // ¼ÌĞø¹¥»÷´ËÄ¿±ê
     }
     else {
-        // æ›´æ¢æ•Œäºº
-        // é€‰æ‹©å°„ç¨‹å†…è·ç¦»ç‚®å¡”æœ€è¿‘çš„æ•Œäºº
+        // ¸ü»»µĞÈË
+        // Ñ¡ÔñÉä³ÌÄÚ¾àÀëÅÚËş×î½üµÄµĞÈË
         Vector<Node*> enemies = getScene()->getChildren();
         Target* nearestEnemy = nullptr;
         float minDistance = 999999;
@@ -97,7 +99,7 @@ void BottleTower::attack() {
                 }
             }
         }
-        // å¦‚æœæœ‰æ•Œäººåœ¨å°„ç¨‹ï¼Œé‡æ–°è®¾ç½®ç›®æ ‡
+        // Èç¹ûÓĞµĞÈËÔÚÉä³Ì£¬ÖØĞÂÉèÖÃÄ¿±ê
         if (nearestEnemy) {
             setTarget(nearestEnemy);
         }
@@ -106,16 +108,16 @@ void BottleTower::attack() {
         }
     }
 
-    // å¦‚æœæœ‰æ­£ç¡®çš„ç›®æ ‡ï¼Œæ”»å‡»
+    // Èç¹ûÓĞÕıÈ·µÄÄ¿±ê£¬¹¥»÷
     if (target && target->isAlive()) {
         auto seq = Sequence::create(
             CallFunc::create([this]() {
                 if (target && target->isAlive()) {
-                    // ä¸€æ¬¡åªèƒ½æ‰§è¡Œä¸€ä¸ªæ”»å‡»åŠ¨ä½œ
+                    // Ò»´ÎÖ»ÄÜÖ´ĞĞÒ»¸ö¹¥»÷¶¯×÷
                     cooldownTimer = 99999;
-                    // æ’­æ”¾æ”»å‡»åŠ¨ç”»
+                    // ²¥·Å¹¥»÷¶¯»­
                     playAttackAnimation();
-                    // æ”»å‡»æ•Œäºº
+                    // ¹¥»÷µĞÈË
                     attackTarget();
                 }
                 }),
@@ -126,15 +128,15 @@ void BottleTower::attack() {
 }
 
 void BottleTower::playAttackAnimation() {
-    // åˆ›å»ºç‚®å¡”æ—‹è½¬åŠ¨ä½œ
-    // è·å–ç‚®å¡”å½“å‰ä½ç½®å’Œæ–¹å‘
+    // ´´½¨ÅÚËşĞı×ª¶¯×÷
+    // »ñÈ¡ÅÚËşµ±Ç°Î»ÖÃºÍ·½Ïò
     cocos2d::Vec2 towerPosition = getPosition();
     float towerAngle = this->getRotation();
-    // è®¡ç®—ç›®æ ‡æ–¹å‘å‘é‡
+    // ¼ÆËãÄ¿±ê·½ÏòÏòÁ¿
     cocos2d::Vec2 direction = this->target->getPosition() - towerPosition;
-    // è®¡ç®—ç›®æ ‡è§’åº¦
+    // ¼ÆËãÄ¿±ê½Ç¶È
     float targetAngle = -CC_RADIANS_TO_DEGREES(direction.getAngle()) + 90;
-    // è®¡ç®—æ—‹è½¬æ—¶é—´
+    // ¼ÆËãĞı×ªÊ±¼ä
     float rotate = targetAngle - towerAngle;
     while (rotate > 180) {
         rotate -= 360;
@@ -144,86 +146,87 @@ void BottleTower::playAttackAnimation() {
     }
     float rotateTime = abs(rotate / rotateSpeed);
 
-    // è®¾ç½®å¼€ç«æ—¶é—´
+    // ÉèÖÃ¿ª»ğÊ±¼ä
     attackDuration = rotateTime + 0.075f;
 
-    // åˆ›å»ºä¸€ä¸ª RotateTo åŠ¨ä½œï¼Œå°†ç‚®å¡”æ—‹è½¬åˆ°ç›®æ ‡è§’åº¦
+    // ´´½¨Ò»¸ö RotateTo ¶¯×÷£¬½«ÅÚËşĞı×ªµ½Ä¿±ê½Ç¶È
     auto rotateAction = RotateTo::create(rotateTime, targetAngle);
 
-    // ç”¨ç¼©æ”¾æ¨¡æ‹Ÿå¼€ç«åŠ¨ç”»
-    // åˆ›å»ºä¸€ä¸ª ScaleTo åŠ¨ä½œï¼Œå°†ç²¾çµåœ¨ 0.1 ç§’å†…åœ¨ X æ–¹å‘ä¸Šç¼©æ”¾åˆ° 0.8 å€
+    // ÓÃËõ·ÅÄ£Äâ¿ª»ğ¶¯»­
+    // ´´½¨Ò»¸ö ScaleTo ¶¯×÷£¬½«¾«ÁéÔÚ 0.1 ÃëÄÚÔÚ X ·½ÏòÉÏËõ·Åµ½ 0.8 ±¶
     auto scaleXOut = ScaleTo::create(0.1f, 1.0f, 0.8f);
-    // åˆ›å»ºä¸€ä¸ª ScaleTo åŠ¨ä½œï¼Œå°†ç²¾çµåœ¨ 0.1 ç§’å†…åœ¨ X æ–¹å‘ä¸Šæ¢å¤åˆ°åŸå§‹å¤§å°
+    // ´´½¨Ò»¸ö ScaleTo ¶¯×÷£¬½«¾«ÁéÔÚ 0.1 ÃëÄÚÔÚ X ·½ÏòÉÏ»Ö¸´µ½Ô­Ê¼´óĞ¡
     auto scaleXIn = ScaleTo::create(0.1f, 1.0f, 1.0f);
 
-    // é‡ç½®å†·å´è®¡æ—¶å™¨
+    // ÖØÖÃÀäÈ´¼ÆÊ±Æ÷
     auto callbackAction = CallFunc::create([=]() {
         cooldownTimer = attackInterval;
         });
 
-    // åœ¨æ”»å‡»åŠ¨ç”»ä¸­è¿è¡Œæ—‹è½¬åŠ¨ä½œå’Œå¼€ç«åŠ¨ç”»
+    // ÔÚ¹¥»÷¶¯»­ÖĞÔËĞĞĞı×ª¶¯×÷ºÍ¿ª»ğ¶¯»­
     auto sequenceAction = Sequence::create(rotateAction, scaleXOut, scaleXIn, callbackAction, nullptr);
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Bottle.mp3"); //²¥·ÅÅÚËş¹¥»÷ÒôĞ§
     runAction(sequenceAction);
 
 }
 
 void BottleTower::attackTarget() {
 
-    // è·å–ç›®æ ‡ä½ç½®
+    // »ñÈ¡Ä¿±êÎ»ÖÃ
     Target* thisTarget = this->target;
-    cocos2d::Vec2 targetPosition = thisTarget->getPosition();
-    // è·å–ç‚®å¡”å½“å‰ä½ç½®
+   
+    // »ñÈ¡ÅÚËşµ±Ç°Î»ÖÃ
     cocos2d::Vec2 towerPosition = getPosition();
     int Damage = getDamage();
-    // åˆ›å»ºç‚®å¼¹ç²¾çµ
+    // ´´½¨ÅÚµ¯¾«Áé
     auto bullet = Sprite::create(Bullet);
     bullet->setPosition(towerPosition);
     this->getParent()->addChild(bullet, 2);
     bullet->setVisible(false);
 
-    // å­å¼¹åŠ¨ä½œ
+    // ×Óµ¯¶¯×÷
     auto bulletAction = CallFunc::create([=]() {
-       
-        // åˆ›å»ºå­å¼¹æ—‹è½¬åŠ¨ä½œ
-        // è®¡ç®—ç›®æ ‡æ–¹å‘å‘é‡
-        cocos2d::Vec2 direction = targetPosition - towerPosition;
-        // è®¡ç®—ç›®æ ‡è§’åº¦
+        cocos2d::Vec2 targetPosition = thisTarget->getPosition();
+        // ´´½¨×Óµ¯Ğı×ª¶¯×÷
+        // ¼ÆËãÄ¿±ê·½ÏòÏòÁ¿
+        cocos2d::Vec2 direction = this->target->getPosition() - towerPosition;
+        // ¼ÆËãÄ¿±ê½Ç¶È
         float targetAngle = -CC_RADIANS_TO_DEGREES(direction.getAngle()) + 90;
-        // æ—‹è½¬åŠ¨ä½œ
+        // Ğı×ª¶¯×÷
         auto rotateAction = RotateTo::create(0, targetAngle);
-        // åˆ›å»ºä¸€ä¸ªå‘ç›®æ ‡ç§»åŠ¨çš„åŠ¨ä½œ
+        // ´´½¨Ò»¸öÏòÄ¿±êÒÆ¶¯µÄ¶¯×÷
         float distance = targetPosition.distance(towerPosition);
-        float duration = distance / 2000; //å­å¼¹çš„é€Ÿåº¦
+        float duration = distance / 2000; //×Óµ¯µÄËÙ¶È
         auto moveAction = MoveTo::create(duration, targetPosition);
-        // æ‰§è¡ŒåŠ¨ä½œ
+        // Ö´ĞĞ¶¯×÷
         bullet->setVisible(true);
         bullet->runAction(
             Sequence::create(
                 rotateAction,
                 moveAction,
-                // åˆ›å»ºä¸€ä¸ªå›è°ƒåŠ¨ä½œï¼Œåœ¨ç›®æ ‡ä½ç½®è§¦å‘ç‚®å¼¹çˆ†ç‚¸æ•ˆæœ     
+                // ´´½¨Ò»¸ö»Øµ÷¶¯×÷£¬ÔÚÄ¿±êÎ»ÖÃ´¥·¢ÅÚµ¯±¬Õ¨Ğ§¹û     
                 CallFunc::create([=]() {
                     if (thisTarget && thisTarget->isAlive()) {
-                        // åœ¨ç›®æ ‡ä½ç½®åˆ›å»ºçˆ†ç‚¸æ•ˆæœ
+                        // ÔÚÄ¿±êÎ»ÖÃ´´½¨±¬Õ¨Ğ§¹û
                         auto explosion = Sprite::create(Explosion);
                         explosion->setPosition(targetPosition);
                         thisTarget->getParent()->addChild(explosion);
                         explosion->runAction(Sequence::create(
                             DelayTime::create(0.1f),
-                            FadeOut::create(0.1f),// æ·¡å‡º
+                            FadeOut::create(0.1f),// µ­³ö
                             RemoveSelf::create(),
                             nullptr
                         ));
-                        // äº§ç”Ÿä¼¤å®³
+                        // ²úÉúÉËº¦
                         thisTarget->takeDamage(Damage);
                     }
-                    // ç§»é™¤ç‚®å¼¹ç²¾çµ
+                    // ÒÆ³ıÅÚµ¯¾«Áé
                     this->getParent()->removeChild(bullet, true);
                     }),
                 nullptr));
         });
 
-    // è¿è¡ŒåŠ¨ä½œ
+    // ÔËĞĞ¶¯×÷
     bullet->runAction(
         Sequence::create(
             DelayTime::create(attackDuration),
@@ -234,8 +237,13 @@ void BottleTower::attackTarget() {
 
 
 
-// sunTowerå‡½æ•°å®ç°
-bool SunflowerTower::init() {
+   
+
+
+
+
+// FireTowerº¯ÊıÊµÏÖ
+bool FireTower::init() {
     if (!Sprite::init()) {
         return false;
     }
@@ -243,30 +251,30 @@ bool SunflowerTower::init() {
     return true;
 }
 
-void SunflowerTower::update(float delta) {
-    // æ›´æ–°å†·å´è®¡æ—¶å™¨
+void FireTower::update(float delta) {
+    // ¸üĞÂÀäÈ´¼ÆÊ±Æ÷
     cooldownTimer -= delta;
 
     if (cooldownTimer <= 0) {
-        // å†·å´ç»“æŸï¼Œè¿›è¡Œæ”»å‡»
+        // ÀäÈ´½áÊø£¬½øĞĞ¹¥»÷
         cooldownTimer = 0.0f;
         attack();
     }
 }
 
-void SunflowerTower::attack() {
-    // åˆ¤æ–­æ˜¯å¦åœ¨å°„ç¨‹å†…
+void FireTower::attack() {
+    // ÅĞ¶ÏÊÇ·ñÔÚÉä³ÌÄÚ
     float thisdistance = 0;
     if (target && target->isAlive()) {
         thisdistance = getPosition().distance(target->getPosition());
     }
 
     if (target && target->isAlive() && thisdistance + target->getRadius() <= getRange()) {
-        // ç»§ç»­æ”»å‡»æ­¤ç›®æ ‡
+        // ¼ÌĞø¹¥»÷´ËÄ¿±ê
     }
     else {
-        // æ›´æ¢æ•Œäºº
-        // é€‰æ‹©å°„ç¨‹å†…è·ç¦»ç‚®å¡”æœ€è¿‘çš„æ•Œäºº
+        // ¸ü»»µĞÈË
+        // Ñ¡ÔñÉä³ÌÄÚ¾àÀëÅÚËş×î½üµÄµĞÈË
         Vector<Node*> enemies = getScene()->getChildren();
         Target* nearestEnemy = nullptr;
         float minDistance = 999999;
@@ -280,7 +288,7 @@ void SunflowerTower::attack() {
                 }
             }
         }
-        // å¦‚æœæœ‰æ•Œäººåœ¨å°„ç¨‹ï¼Œé‡æ–°è®¾ç½®ç›®æ ‡
+        // Èç¹ûÓĞµĞÈËÔÚÉä³Ì£¬ÖØĞÂÉèÖÃÄ¿±ê
         if (nearestEnemy) {
             setTarget(nearestEnemy);
         }
@@ -289,16 +297,133 @@ void SunflowerTower::attack() {
         }
     }
 
-    // å¦‚æœæœ‰æ­£ç¡®çš„ç›®æ ‡ï¼Œæ”»å‡»
+    // Èç¹ûÓĞÕıÈ·µÄÄ¿±ê£¬¹¥»÷
+    if (target && target->isAlive()) {
+        auto seq = Sequence::create(
+            CallFunc::create([this]() {
+                if (target && target->isAlive()) {
+                    // Ò»´ÎÖ»ÄÜÖ´ĞĞÒ»¸ö¹¥»÷¶¯×÷
+                    cooldownTimer = 99999;
+                    // ²¥·Å¹¥»÷¶¯»­
+                    playAttackAnimation();
+                    // ¹¥»÷µĞÈË
+                    attackTarget();
+                }
+                }),
+            nullptr
+        );
+        this->runAction(seq);
+    }
+}
+
+void FireTower::playAttackAnimation() {
+    // ´´½¨ÅÚËşĞı×ª¶¯×÷
+    // »ñÈ¡ÅÚËşµ±Ç°Î»ÖÃºÍ·½Ïò
+    cocos2d::Vec2 towerPosition = getPosition();
+    float towerAngle = this->getRotation();
+    // ¼ÆËãÄ¿±ê·½ÏòÏòÁ¿
+    cocos2d::Vec2 direction = this->target->getPosition() - towerPosition;
+    // ¼ÆËãÄ¿±ê½Ç¶È
+    float targetAngle = -CC_RADIANS_TO_DEGREES(direction.getAngle()) + 90;
+    // ¼ÆËãĞı×ªÊ±¼ä
+    float rotate = targetAngle - towerAngle;
+    while (rotate > 180) {
+        rotate -= 360;
+    }
+    while (rotate < -180) {
+        rotate += 360;
+    }
+    float rotateTime = abs(rotate / rotateSpeed);
+
+    // ÉèÖÃ¿ª»ğÊ±¼ä
+    attackDuration = rotateTime + 0.075f;
+
+    // ´´½¨Ò»¸ö RotateTo ¶¯×÷£¬½«ÅÚËşĞı×ªµ½Ä¿±ê½Ç¶È
+    auto rotateAction = RotateTo::create(rotateTime, targetAngle);
+
+    // ÓÃËõ·ÅÄ£Äâ¿ª»ğ¶¯»­
+    // ´´½¨Ò»¸ö ScaleTo ¶¯×÷£¬½«¾«ÁéÔÚ 0.1 ÃëÄÚÔÚ X ·½ÏòÉÏËõ·Åµ½ 0.8 ±¶
+    auto scaleXOut = ScaleTo::create(0.1f, 1.0f, 0.8f);
+    // ´´½¨Ò»¸ö ScaleTo ¶¯×÷£¬½«¾«ÁéÔÚ 0.1 ÃëÄÚÔÚ X ·½ÏòÉÏ»Ö¸´µ½Ô­Ê¼´óĞ¡
+    auto scaleXIn = ScaleTo::create(0.1f, 1.0f, 1.0f);
+
+    // ÖØÖÃÀäÈ´¼ÆÊ±Æ÷
+    auto callbackAction = CallFunc::create([=]() {
+        cooldownTimer = attackInterval;
+        });
+
+    // ÔÚ¹¥»÷¶¯»­ÖĞÔËĞĞĞı×ª¶¯×÷ºÍ¿ª»ğ¶¯»­
+    auto sequenceAction = Sequence::create(rotateAction, scaleXOut, scaleXIn, callbackAction, nullptr);
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Bottle.mp3"); //²¥·ÅÅÚËş¹¥»÷ÒôĞ§
+    runAction(sequenceAction);
+
+}
+
+// sunTowerº¯ÊıÊµÏÖ
+bool SunflowerTower::init() {
+    if (!Sprite::init()) {
+        return false;
+    }
+
+    return true;
+}
+
+void SunflowerTower::update(float delta) {
+    // ¸üĞÂÀäÈ´¼ÆÊ±Æ÷
+    cooldownTimer -= delta;
+
+    if (cooldownTimer <= 0) {
+        // ÀäÈ´½áÊø£¬½øĞĞ¹¥»÷
+        cooldownTimer = 0.0f;
+        attack();
+    }
+}
+
+void SunflowerTower::attack() {
+    // ÅĞ¶ÏÊÇ·ñÔÚÉä³ÌÄÚ
+    float thisdistance = 0;
+    if (target && target->isAlive()) {
+        thisdistance = getPosition().distance(target->getPosition());
+    }
+
+    if (target && target->isAlive() && thisdistance + target->getRadius() <= getRange()) {
+        // ¼ÌĞø¹¥»÷´ËÄ¿±ê
+    }
+    else {
+        // ¸ü»»µĞÈË
+        // Ñ¡ÔñÉä³ÌÄÚ¾àÀëÅÚËş×î½üµÄµĞÈË
+        Vector<Node*> enemies = getScene()->getChildren();
+        Target* nearestEnemy = nullptr;
+        float minDistance = 999999;
+        for (auto node : enemies) {
+            auto enemy = dynamic_cast<Monster*>(node);
+            if (enemy && enemy->isAlive()) {
+                float distance = getPosition().distance(enemy->getPosition());
+                if (enemy->isAlive() && distance + enemy->getRadius() <= getRange() && distance < minDistance) {
+                    nearestEnemy = enemy;
+                    minDistance = distance;
+                }
+            }
+        }
+        // Èç¹ûÓĞµĞÈËÔÚÉä³Ì£¬ÖØĞÂÉèÖÃÄ¿±ê
+        if (nearestEnemy) {
+            setTarget(nearestEnemy);
+        }
+        else {
+            setTarget(nullptr);
+        }
+    }
+
+    // Èç¹ûÓĞÕıÈ·µÄÄ¿±ê£¬¹¥»÷
     if (target && target->isAlive()) {
         auto seq = Sequence::create(
             CallFunc::create([this]() {
                 if (getTarget()) {
-                    // ä¸€æ¬¡åªèƒ½æ‰§è¡Œä¸€ä¸ªæ”»å‡»åŠ¨ä½œ
+                    // Ò»´ÎÖ»ÄÜÖ´ĞĞÒ»¸ö¹¥»÷¶¯×÷
                     cooldownTimer = 99999;
-                    // æ’­æ”¾æ”»å‡»åŠ¨ç”»
+                    // ²¥·Å¹¥»÷¶¯»­
                     playAttackAnimation();
-                    // æ”»å‡»æ•Œäºº
+                    // ¹¥»÷µĞÈË
                     attackTarget();
                 }
                 }),
@@ -309,24 +434,25 @@ void SunflowerTower::attack() {
 }
 
 void SunflowerTower::playAttackAnimation() {
-    // åˆ›å»ºç‚®å¼¹ç²¾çµ
+    // ´´½¨ÅÚµ¯¾«Áé
     auto bullet = Sprite::create(Bullet);
     bullet->setPosition(this->getPosition());
     this->getParent()->addChild(bullet);
     auto setCooldownTimer = CallFunc::create([=]() { cooldownTimer = attackInterval; });
-    // å¤ªé˜³ç‰¹æ•ˆ
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Sun.mp3"); //²¥·ÅÅÚËş¹¥»÷ÒôĞ§
+    // Ì«ÑôÌØĞ§
     bullet->runAction(
         Sequence::create(
-            ScaleTo::create(0.15f, 3.0f, 3.0f),// æ‰©å¤§
-            FadeOut::create(0.05f),// æ·¡å‡º
-            RemoveSelf::create(),// ç§»é™¤ç‚®å¼¹ç²¾çµ
+            ScaleTo::create(0.15f, 3.0f, 3.0f),// À©´ó
+            FadeOut::create(0.05f),// µ­³ö
+            RemoveSelf::create(),// ÒÆ³ıÅÚµ¯¾«Áé
             setCooldownTimer,
             nullptr)
     );
 }
 
 void SunflowerTower::attackTarget() {
-    // æ”»å‡»å°„ç¨‹å†…æ‰€æœ‰çš„ç›®æ ‡
+    // ¹¥»÷Éä³ÌÄÚËùÓĞµÄÄ¿±ê
     Vector<Node*> enemies = getScene()->getChildren();
     for (auto node : enemies) {
         auto enemy = dynamic_cast<Target*>(node);
@@ -334,13 +460,13 @@ void SunflowerTower::attackTarget() {
             float distance = getPosition().distance(enemy->getPosition());
             if (distance + enemy->getRadius() <= getRange()) {
                 enemy->takeDamage(getDamage());
-                // åœ¨ç›®æ ‡ä½ç½®åˆ›å»ºçˆ†ç‚¸æ•ˆæœ
+                // ÔÚÄ¿±êÎ»ÖÃ´´½¨±¬Õ¨Ğ§¹û
                 auto explosion = Sprite::create(Explosion);
                 explosion->setPosition(enemy->getPosition());
                 this->getParent()->addChild(explosion);
                 explosion->runAction(Sequence::create(
                     DelayTime::create(0.1f),
-                    FadeOut::create(0.1f),// æ·¡å‡º
+                    FadeOut::create(0.1f),// µ­³ö
                     RemoveSelf::create(),
                     nullptr
                 ));
@@ -349,9 +475,7 @@ void SunflowerTower::attackTarget() {
     }
 }
 
-
-
-// starTowerå‡½æ•°å®ç°
+// starTowerº¯ÊıÊµÏÖ
 bool StarTower::init() {
     if (!Sprite::init()) {
         return false;
@@ -361,29 +485,29 @@ bool StarTower::init() {
 }
 
 void StarTower::update(float delta) {
-    // æ›´æ–°å†·å´è®¡æ—¶å™¨
+    // ¸üĞÂÀäÈ´¼ÆÊ±Æ÷
     cooldownTimer -= delta;
 
     if (cooldownTimer <= 0) {
-        // å†·å´ç»“æŸï¼Œè¿›è¡Œæ”»å‡»
+        // ÀäÈ´½áÊø£¬½øĞĞ¹¥»÷
         cooldownTimer = 0.0f;
         attack();
     }
 }
 
 void StarTower::attack() {
-    // åˆ¤æ–­æ˜¯å¦åœ¨å°„ç¨‹å†…
+    // ÅĞ¶ÏÊÇ·ñÔÚÉä³ÌÄÚ
     float thisdistance = 0;
     if (target && target->isAlive()) {
         thisdistance = getPosition().distance(target->getPosition());
     }
 
     if (target && target->isAlive() && thisdistance + target->getRadius() <= getRange()) {
-        // ç»§ç»­æ”»å‡»æ­¤ç›®æ ‡
+        // ¼ÌĞø¹¥»÷´ËÄ¿±ê
     }
     else {
-        // æ›´æ¢æ•Œäºº
-        // é€‰æ‹©å°„ç¨‹å†…è·ç¦»ç‚®å¡”æœ€è¿‘çš„æ•Œäºº
+        // ¸ü»»µĞÈË
+        // Ñ¡ÔñÉä³ÌÄÚ¾àÀëÅÚËş×î½üµÄµĞÈË
         Vector<Node*> enemies = getScene()->getChildren();
         Target* nearestEnemy = nullptr;
         float minDistance = 999999;
@@ -397,7 +521,7 @@ void StarTower::attack() {
                 }
             }
         }
-        // å¦‚æœæœ‰æ•Œäººåœ¨å°„ç¨‹ï¼Œé‡æ–°è®¾ç½®ç›®æ ‡
+        // Èç¹ûÓĞµĞÈËÔÚÉä³Ì£¬ÖØĞÂÉèÖÃÄ¿±ê
         if (nearestEnemy) {
             setTarget(nearestEnemy);
         }
@@ -406,16 +530,16 @@ void StarTower::attack() {
         }
     }
 
-    // å¦‚æœæœ‰æ­£ç¡®çš„ç›®æ ‡ï¼Œæ”»å‡»
+    // Èç¹ûÓĞÕıÈ·µÄÄ¿±ê£¬¹¥»÷
     if (target && target->isAlive()) {
         auto seq = Sequence::create(
             CallFunc::create([this]() {
                 if (getTarget()) {
-                    // ä¸€æ¬¡åªèƒ½æ‰§è¡Œä¸€ä¸ªæ”»å‡»åŠ¨ä½œ
+                    // Ò»´ÎÖ»ÄÜÖ´ĞĞÒ»¸ö¹¥»÷¶¯×÷
                     cooldownTimer = 99999;
-                    // æ’­æ”¾æ”»å‡»åŠ¨ç”»
+                    // ²¥·Å¹¥»÷¶¯»­
                     playAttackAnimation();
-                    // æ”»å‡»æ•Œäºº
+                    // ¹¥»÷µĞÈË
                     attackTarget();
                 }
                 }),
@@ -426,50 +550,51 @@ void StarTower::attack() {
 }
 
 void StarTower::playAttackAnimation() {
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Star.mp3"); //²¥·ÅÅÚËş¹¥»÷ÒôĞ§
     cooldownTimer = attackInterval;
-    // æ²¡æœ‰å¼€ç«åŠ¨ç”»
+    // Ã»ÓĞ¿ª»ğ¶¯»­
 }
 
 void StarTower::attackTarget() {
-    // è·å–ç›®æ ‡ä½ç½®
+    // »ñÈ¡Ä¿±êÎ»ÖÃ
     Target* thisTarget = this->target;
     cocos2d::Vec2 targetPosition = thisTarget->getPosition();
-    // è·å–ç‚®å¡”å½“å‰ä½ç½®å’Œæ–¹å‘
+    // »ñÈ¡ÅÚËşµ±Ç°Î»ÖÃºÍ·½Ïò
     cocos2d::Vec2 towerPosition = getPosition();
     int Damage = getDamage();
-    // åˆ›å»ºç‚®å¼¹ç²¾çµ
+    // ´´½¨ÅÚµ¯¾«Áé
     auto bullet = Sprite::create(Bullet);
     bullet->setPosition(towerPosition);
     this->getParent()->addChild(bullet, 2);
     bullet->setVisible(false);
 
-    // å­å¼¹åŠ¨ä½œ
+    // ×Óµ¯¶¯×÷
     auto bulletAction = CallFunc::create([=]() {
-        // åˆ›å»ºä¸€ä¸ªå‘ç›®æ ‡ç§»åŠ¨çš„åŠ¨ä½œ
+        // ´´½¨Ò»¸öÏòÄ¿±êÒÆ¶¯µÄ¶¯×÷
         float distance = targetPosition.distance(towerPosition);
-        float duration = distance / 1000; //å­å¼¹çš„é€Ÿåº¦
+        float duration = distance / 1000; //×Óµ¯µÄËÙ¶È
         auto moveAction = MoveTo::create(duration, targetPosition);
-        // æ‰§è¡ŒåŠ¨ä½œ
+        // Ö´ĞĞ¶¯×÷
         bullet->setVisible(true);
         bullet->runAction(
             Sequence::create(
                 moveAction,
-                // åˆ›å»ºä¸€ä¸ªå›è°ƒåŠ¨ä½œï¼Œåœ¨ç›®æ ‡ä½ç½®è§¦å‘ç‚®å¼¹çˆ†ç‚¸æ•ˆæœ
+                // ´´½¨Ò»¸ö»Øµ÷¶¯×÷£¬ÔÚÄ¿±êÎ»ÖÃ´¥·¢ÅÚµ¯±¬Õ¨Ğ§¹û
                 CallFunc::create([=]() {
                     if (thisTarget && thisTarget->isAlive()) {
-                        // åœ¨ç›®æ ‡ä½ç½®åˆ›å»ºçˆ†ç‚¸æ•ˆæœ
+                        // ÔÚÄ¿±êÎ»ÖÃ´´½¨±¬Õ¨Ğ§¹û
                         auto explosion = Sprite::create(Explosion);
                         explosion->setPosition(thisTarget->getPosition());
                         this->getParent()->addChild(explosion);
                         explosion->runAction(Sequence::create(
-                            ScaleTo::create(0.1f, 1.5f, 1.5f),// æ‰©å¤§
-                            FadeOut::create(0.05f),// æ·¡å‡º
-                            RemoveSelf::create(),// ç§»é™¤ç‚®å¼¹ç²¾çµ
+                            ScaleTo::create(0.1f, 1.5f, 1.5f),// À©´ó
+                            FadeOut::create(0.05f),// µ­³ö
+                            RemoveSelf::create(),// ÒÆ³ıÅÚµ¯¾«Áé
                             nullptr
                         ));
-                        // å¯¹ç›®æ ‡äº§ç”Ÿä¼¤å®³
+                        // ¶ÔÄ¿±ê²úÉúÉËº¦
                         thisTarget->takeDamage(Damage * 0.5);
-                        // æº…å°„ä¼¤å®³
+                        // ½¦ÉäÉËº¦
                         Vector<Node*> enemies = getScene()->getChildren();
                         for (auto node : enemies) {
                             auto enemy = dynamic_cast<Target*>(node);
@@ -481,136 +606,20 @@ void StarTower::attackTarget() {
                             }
                         }
                     }
-                    // ç§»é™¤ç‚®å¼¹ç²¾çµ
+                    // ÒÆ³ıÅÚµ¯¾«Áé
                     this->getParent()->removeChild(bullet, true);
                     }),
                 nullptr));
         });
-
-    // è¿è¡ŒåŠ¨ä½œ
+    // ÔËĞĞ¶¯×÷
     bullet->runAction(
         Sequence::create(
             bulletAction,
             nullptr)
     );
 }
-// FireTowerå‡½æ•°å®ç°
-bool FireTower::init() {
-    if (!Sprite::init()) {
-        return false;
-    }
 
-    return true;
-}
-
-void FireTower::update(float delta) {
-    // æ›´æ–°å†·å´è®¡æ—¶å™¨
-    cooldownTimer -= delta;
-
-    if (cooldownTimer <= 0) {
-        // å†·å´ç»“æŸï¼Œè¿›è¡Œæ”»å‡»
-        cooldownTimer = 0.0f;
-        attack();
-    }
-}
-
-void FireTower::attack() {
-    // åˆ¤æ–­æ˜¯å¦åœ¨å°„ç¨‹å†…
-    float thisdistance = 0;
-    if (target && target->isAlive()) {
-        thisdistance = getPosition().distance(target->getPosition());
-    }
-
-    if (target && target->isAlive() && thisdistance + target->getRadius() <= getRange()) {
-        // ç»§ç»­æ”»å‡»æ­¤ç›®æ ‡
-    }
-    else {
-        // æ›´æ¢æ•Œäºº
-        // é€‰æ‹©å°„ç¨‹å†…è·ç¦»ç‚®å¡”æœ€è¿‘çš„æ•Œäºº
-        Vector<Node*> enemies = getScene()->getChildren();
-        Target* nearestEnemy = nullptr;
-        float minDistance = 999999;
-        for (auto node : enemies) {
-            auto enemy = dynamic_cast<Monster*>(node);
-            if (enemy && enemy->isAlive()) {
-                float distance = getPosition().distance(enemy->getPosition());
-                if (enemy->isAlive() && distance + enemy->getRadius() <= getRange() && distance < minDistance) {
-                    nearestEnemy = enemy;
-                    minDistance = distance;
-                }
-            }
-        }
-        // å¦‚æœæœ‰æ•Œäººåœ¨å°„ç¨‹ï¼Œé‡æ–°è®¾ç½®ç›®æ ‡
-        if (nearestEnemy) {
-            setTarget(nearestEnemy);
-        }
-        else {
-            setTarget(nullptr);
-        }
-    }
-
-    // å¦‚æœæœ‰æ­£ç¡®çš„ç›®æ ‡ï¼Œæ”»å‡»
-    if (target && target->isAlive()) {
-        auto seq = Sequence::create(
-            CallFunc::create([this]() {
-                if (target && target->isAlive()) {
-                    // ä¸€æ¬¡åªèƒ½æ‰§è¡Œä¸€ä¸ªæ”»å‡»åŠ¨ä½œ
-                    cooldownTimer = 99999;
-                    // æ’­æ”¾æ”»å‡»åŠ¨ç”»
-                    playAttackAnimation();
-                    // æ”»å‡»æ•Œäºº
-                    attackTarget();
-                }
-                }),
-            nullptr
-        );
-        this->runAction(seq);
-    }
-}
-
-void FireTower::playAttackAnimation() {
-    // åˆ›å»ºç‚®å¡”æ—‹è½¬åŠ¨ä½œ
-    // è·å–ç‚®å¡”å½“å‰ä½ç½®å’Œæ–¹å‘
-    cocos2d::Vec2 towerPosition = getPosition();
-    float towerAngle = this->getRotation();
-    // è®¡ç®—ç›®æ ‡æ–¹å‘å‘é‡
-    cocos2d::Vec2 direction = this->target->getPosition() - towerPosition;
-    // è®¡ç®—ç›®æ ‡è§’åº¦
-    float targetAngle = -CC_RADIANS_TO_DEGREES(direction.getAngle()) + 90;
-    // è®¡ç®—æ—‹è½¬æ—¶é—´
-    float rotate = targetAngle - towerAngle;
-    while (rotate > 180) {
-        rotate -= 360;
-    }
-    while (rotate < -180) {
-        rotate += 360;
-    }
-    float rotateTime = abs(rotate / rotateSpeed);
-
-    // è®¾ç½®å¼€ç«æ—¶é—´
-    attackDuration = rotateTime + 0.075f;
-
-    // åˆ›å»ºä¸€ä¸ª RotateTo åŠ¨ä½œï¼Œå°†ç‚®å¡”æ—‹è½¬åˆ°ç›®æ ‡è§’åº¦
-    auto rotateAction = RotateTo::create(rotateTime, targetAngle);
-
-    // ç”¨ç¼©æ”¾æ¨¡æ‹Ÿå¼€ç«åŠ¨ç”»
-    // åˆ›å»ºä¸€ä¸ª ScaleTo åŠ¨ä½œï¼Œå°†ç²¾çµåœ¨ 0.1 ç§’å†…åœ¨ X æ–¹å‘ä¸Šç¼©æ”¾åˆ° 0.8 å€
-    auto scaleXOut = ScaleTo::create(0.1f, 1.0f, 0.8f);
-    // åˆ›å»ºä¸€ä¸ª ScaleTo åŠ¨ä½œï¼Œå°†ç²¾çµåœ¨ 0.1 ç§’å†…åœ¨ X æ–¹å‘ä¸Šæ¢å¤åˆ°åŸå§‹å¤§å°
-    auto scaleXIn = ScaleTo::create(0.1f, 1.0f, 1.0f);
-
-    // é‡ç½®å†·å´è®¡æ—¶å™¨
-    auto callbackAction = CallFunc::create([=]() {
-        cooldownTimer = attackInterval;
-        });
-
-    // åœ¨æ”»å‡»åŠ¨ç”»ä¸­è¿è¡Œæ—‹è½¬åŠ¨ä½œå’Œå¼€ç«åŠ¨ç”»
-    auto sequenceAction = Sequence::create(rotateAction, scaleXOut, scaleXIn, callbackAction, nullptr);
-    runAction(sequenceAction);
-
-}
-
-// ShitTowerå‡½æ•°å®ç°
+// ShitTowerº¯ÊıÊµÏÖ
 bool ShitTower::init() {
     if (!Sprite::init()) {
         return false;
@@ -620,11 +629,11 @@ bool ShitTower::init() {
 }
 
 void ShitTower::update(float delta) {
-    // æ›´æ–°å†·å´è®¡æ—¶å™¨
+    // ¸üĞÂÀäÈ´¼ÆÊ±Æ÷
     cooldownTimer -= delta;
 
     if (cooldownTimer <= 0) {
-        // å†·å´ç»“æŸï¼Œè¿›è¡Œæ”»å‡»
+        // ÀäÈ´½áÊø£¬½øĞĞ¹¥»÷
         cooldownTimer = 5.0f;
         attack();
     }
@@ -636,15 +645,15 @@ void ShitTower::attack() {
 }
 
 void ShitTower::playAttackAnimation() {
-    //æ·»åŠ +é‡‘å¸å›¾åƒ
+    //Ìí¼Ó+½ğ±ÒÍ¼Ïñ
     auto bullet = Sprite::create(Bullet);
     bullet->setPosition(this->getPosition());
     this->getParent()->addChild(bullet,3);
-    
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Shit.mp3"); //²¥·ÅÅÚËş¹¥»÷ÒôĞ§
     bullet->runAction(
         Sequence::create(
-            FadeOut::create(0.1f),// æ·¡å‡º
-            RemoveSelf::create(),// ç§»é™¤é‡‘å¸å›¾åƒ
+            FadeOut::create(0.1f),// µ­³ö
+            RemoveSelf::create(),// ÒÆ³ı½ğ±ÒÍ¼Ïñ
             nullptr)
     );
 }
