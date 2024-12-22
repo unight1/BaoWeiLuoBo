@@ -14,6 +14,7 @@ protected:
 	int startHP;                    //萝卜初始生命
 	int unlockedLevel;              //解锁的关卡
 	bool music;                     //音乐是否打开
+	int difficulty;                 //游戏难度
 public:
 	
 	void consumeMoney(int n);       //花钱
@@ -27,8 +28,10 @@ public:
 	void clear();                   //清空记录
 	void save();                    //保存记录
 	void load();                    //加载记录
-	int getLevel();
+	int getLevel() const;
 	void changeULevel(int level);   //解锁关卡
+	int getDifficulty() const;
+	void changeDifficulty(int dif); //改变难度
 	playerInf();
 };
 

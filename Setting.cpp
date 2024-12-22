@@ -55,11 +55,24 @@ bool SettingScene::init()
     auto volumeCheckBox = ui::CheckBox::create("checkbox_normal.png", "checkbox_selected.png");
     volumeCheckBox->setPosition(Vec2(580,450)); // 设置复选框位置
     volumeCheckBox->addEventListener(CC_CALLBACK_2(SettingScene::checkBoxEvent, this)); // 添加事件监听
-    this->addChild(volumeCheckBox);
-    
+    this->addChild(volumeCheckBox);    
     volumeCheckBox->setSelected(player.getMusic()); // 设置复选框状态
 
+    //难度调节
+    auto dif = Sprite::create("difficulty.png");
+    dif->setPosition(Vec2(480, 350));
+    dif->setScale(0.6f);
+    this->addChild(dif);
     
+    // 创建进度条
+    auto difficultySlider = ui::Slider::create();
+    difficultySlider->loadBarTexture("Slider_Back.png");
+    difficultySlider->loadSlidBallTextures("SliderNode_Normal.png", "SliderNode_Press.png", "");
+    difficultySlider->loadProgressBarTexture("Slider_PressBar.png");
+    difficultySlider->setPosition(Vec2(680, 350));
+    difficultySlider->setPercent(player.getDifficulty()); 
+    difficultySlider->addEventListener(CC_CALLBACK_2(SettingScene::sliderEvent, this)); // 添加事件监听
+    this->addChild(difficultySlider);
 
 
     return true;
@@ -71,6 +84,17 @@ void SettingScene::checkBoxEvent(Ref* sender, ui::CheckBox::EventType type)
 {
     player.changeMusic();
     player.save();
+}
+
+//改变难度
+void SettingScene::sliderEvent(Ref* sender, ui::Slider::EventType type)
+{
+    if (type == ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        auto slider = dynamic_cast<ui::Slider*>(sender);
+        int percent = slider->getPercent();
+        player.changeDifficulty(percent);
+    }
 }
 
 
