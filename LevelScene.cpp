@@ -3,6 +3,7 @@
 #include "SceneMain.h"
 #include "UpScene.h"
 #include "audio/include/SimpleAudioEngine.h"
+#include "wave.h"
 
 
 Scene* LevelScene::createScene()
@@ -17,11 +18,7 @@ bool LevelScene::init()
         return false;
     }
 
-    // 加载保存的数据
-    money = UserDefault::getInstance()->getIntegerForKey("Money", 0);
-    m_unlockedLevel = UserDefault::getInstance()->getIntegerForKey("UnlockedLevel", 1); // 默认解锁第一关
-    skill1 = UserDefault::getInstance()->getIntegerForKey("Skill1Level", 0);
-    skill2 = UserDefault::getInstance()->getIntegerForKey("Skill2Level", 0);
+   player.load();
     
 
     // 添加背景
@@ -84,7 +81,7 @@ bool LevelScene::init()
 // 返回标题界面
 void LevelScene::goBack(Ref* pSender)
 {
-    save();
+    player.save();
 
     Director::getInstance()->popScene();
 }
@@ -96,12 +93,13 @@ void LevelScene::selectLevel1(Ref* sender)
 
     m_gameScene = Scene1::createScene(1, this); // 传递关卡编号
     Director::getInstance()->pushScene(m_gameScene);
-    save();
+    game.clear();
+    player.save();
 }
 
 void LevelScene::selectLevel2(Ref* sender)
 {
-    if (m_unlockedLevel >= 2) // 如果第二关已解锁
+    if (player.getLevel() >= 2) // 如果第二关已解锁
     {
 
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
@@ -109,12 +107,13 @@ void LevelScene::selectLevel2(Ref* sender)
         m_gameScene = Scene2::createScene(2, this); // 传递关卡编号和 LevelScene 场景的指针
         Director::getInstance()->pushScene(m_gameScene);
     }
-    save();
+    game.clear();
+    player.save();
 }
 
 void LevelScene::selectLevel3(Ref* sender)
 {
-    if (m_unlockedLevel >= 3) // 如果第三关已解锁
+    if (player.getLevel() >= 3) // 如果第三关已解锁
     {
 
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
@@ -122,13 +121,14 @@ void LevelScene::selectLevel3(Ref* sender)
         m_gameScene = Scene3::createScene(3, this); // 传递关卡编号和 LevelScene 场景的指针
         Director::getInstance()->pushScene(m_gameScene);
     }
-    save();
+    game.clear();
+    player.save();
 }
 
 void LevelScene::updateButtonState()
 {
-    m_moneyLabel->setString("       " + std::to_string(money));
-    if (m_unlockedLevel>=2)
+    m_moneyLabel->setString("       " + std::to_string(player.getMoney()));
+    if (player.getLevel() >= 2)
     {
         m_level2Button->setNormalImage(Sprite::create("game2.png")); // 解锁后的图片
     }
@@ -137,7 +137,7 @@ void LevelScene::updateButtonState()
         m_level2Button->setNormalImage(Sprite::create("game2_locked.png")); // 未解锁的图片
     }
 
-    if (m_unlockedLevel>=3)
+    if (player.getLevel() >=3)
     {
         m_level3Button->setNormalImage(Sprite::create("game3.png")); // 解锁后的图片
     }
@@ -149,20 +149,10 @@ void LevelScene::updateButtonState()
 
 void LevelScene::unlockLevel(int level)
 {
-    if (m_unlockedLevel < level)
-        m_unlockedLevel = level;
-    save();
+    player.changeULevel(level);
     updateButtonState(); // 更新按钮状态和图片
 }
 
-void LevelScene::consumeMoney(int n) {
-    money = money - n;
-    save();
-}
-
-int LevelScene::getMoney() {
-    return money;
-}
 
 void LevelScene::enterUpgradeScene(Ref* sender)
 {
@@ -170,56 +160,9 @@ void LevelScene::enterUpgradeScene(Ref* sender)
     Director::getInstance()->pushScene(scene);
 }
 
-// 技能1升级
-void LevelScene::upgradeItem1() {
-    skill1 += 1;
-    save();
-}
 
-// 技能2升级
-void LevelScene::upgradeItem2() {
-    skill2 += 1;
-    save();
-}
-
-// 返回技能1等级
-int LevelScene::getItem1Level() {
-    return skill1;
-}
-
-// 返回技能2等级
-int LevelScene::getItem2Level() {
-    return skill2;
-}
-
-//清空历史记录
 void LevelScene::clear(Ref* sender) {
-    // 清空保存的数据
-    UserDefault::getInstance()->setIntegerForKey("Money", 0);
-    UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", 1); // 重置为默认解锁第一关
-    UserDefault::getInstance()->setIntegerForKey("Skill1Level", 0);
-    UserDefault::getInstance()->setIntegerForKey("Skill2Level", 0);
-    UserDefault::getInstance()->flush(); 
-
-    // 更新当前数据
-    money = 0;
-    m_unlockedLevel = 1;
-    skill1 = 0;
-    skill2 = 0;
-
-    save();
-
+    player.clear();
     updateButtonState(); // 更新按钮状态
     Director::getInstance()->popScene();
-}
-
-//存档
-void LevelScene::save()
-{
-    // 保存数据
-    UserDefault::getInstance()->setIntegerForKey("Money", money);
-    UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", m_unlockedLevel);
-    UserDefault::getInstance()->setIntegerForKey("Skill1Level", skill1);
-    UserDefault::getInstance()->setIntegerForKey("Skill2Level", skill2);
-    UserDefault::getInstance()->flush(); // 确保数据被写入
 }

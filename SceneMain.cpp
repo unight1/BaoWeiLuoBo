@@ -7,6 +7,7 @@
 #include "TowerPosition.h"
 #include "ui/CocosGUI.h"
 #include "audio/include/SimpleAudioEngine.h"
+#include "wave.h"
 
 USING_NS_CC; //using namespace cocos2d
 
@@ -66,7 +67,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
         CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-1.mp3");
         CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-1.mp3", true);
 
-        moneyScene = 500 + 100 * (levelScene->getItem1Level());
+        moneyScene = player.getStartmoney();
         m_level = level;
         m_levelScene = levelScene; // 保存关卡选择场景的指针
         // 创建 Label，并设置字体、字号和初始文本内容
@@ -76,6 +77,11 @@ bool Scene1::init(int level, LevelScene* levelScene)
         m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
         m_lable->setPosition(Vec2(150, 750));
         this->addChild(m_lable, 1);
+
+        // 创建波次显示的 Label
+        waveLabel = Label::createWithTTF("Wave: 1", "fonts/arial.ttf", 48);
+        waveLabel->setPosition(Vec2(350, 750)); // 设置波次显示的位置
+        this->addChild(waveLabel, 1);
 
         std::string mapName = "L1.tmx";
         initScene(mapName);
@@ -95,7 +101,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
         auto create1 = CallFunc::create([=]() {initMonster(1); });
         auto create2 = CallFunc::create([=]() {initMonster(2); });
         auto create3 = CallFunc::create([=]() {initMonster(3); });
-
+        /*
         Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
         gameProgress->setPosition(Vec2(420, 730));
         do {
@@ -123,6 +129,9 @@ bool Scene1::init(int level, LevelScene* levelScene)
             this->addChild(gameProgress, 4);
 
         } while (0);
+        */
+        // 开始调度波次更新
+        schedule(CC_SCHEDULE_SELECTOR(Scene1::updateWave), 20.0f); // 每30秒更新一次波次
 
         runAction(Sequence::create(
             DelayTime::create(2), create1,
@@ -130,7 +139,7 @@ bool Scene1::init(int level, LevelScene* levelScene)
             DelayTime::create(2), create1,
             DelayTime::create(2), create1,
 
-            DelayTime::create(12), create2,
+            DelayTime::create(13), create2,
             DelayTime::create(2), create1,
             DelayTime::create(2), create2,
             DelayTime::create(2), create1,
@@ -141,15 +150,23 @@ bool Scene1::init(int level, LevelScene* levelScene)
             DelayTime::create(2), create2,
             DelayTime::create(2), create1,
             DelayTime::create(2), create2,
-            DelayTime::create(1), create1,
 
-
+            DelayTime::create(12), create1,
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create1,
+            DelayTime::create(2), create1,
+            DelayTime::create(1), create2,
+            DelayTime::create(1), create2,
             CallFunc::create([=]() {monsterFlag = true; }),
             nullptr));
-
         return true;
 
     } while (0);
+}
+
+void Scene1::updateWave(float t) {
+    game.nextWave();
+    waveLabel->setString("Wave: " + std::to_string(game.getWave()));
 }
 
 Scene2* Scene2::createScene(int level, LevelScene* levelScene)
@@ -191,7 +208,16 @@ void Scene2::initMonster(int choose)
         this->addChild(Monster);
         Monster->moveToSequence(path);
     }
+    else if (choose == 4)
+    {
+        Boss* Monster = Boss::create();
+        Monster->setPosition(Vec2(100 + 50, 300 + 50));
+        this->addChild(Monster);
+        Monster->moveToSequence(path1);
+    }
 }
+
+
 
 bool Scene2::init(int level, LevelScene* levelScene)
 {
@@ -204,7 +230,7 @@ bool Scene2::init(int level, LevelScene* levelScene)
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-2.mp3");
     CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-2.mp3", true);
 
-    moneyScene = 700 + 100 * (levelScene->getItem1Level());
+    moneyScene = player.getStartmoney();
     m_level = level;
     m_levelScene = levelScene; // 保存关卡选择场景的指针
 
@@ -214,6 +240,11 @@ bool Scene2::init(int level, LevelScene* levelScene)
     m_lable = Label::createWithTTF(text, "fonts/arial.ttf", 48);
     m_lable->setPosition(Vec2(150, 750));
     this->addChild(m_lable, 1);
+
+    // 创建波次显示的 Label
+    waveLabel = Label::createWithTTF("Wave: 1", "fonts/arial.ttf", 48);
+    waveLabel->setPosition(Vec2(350, 750)); // 设置波次显示的位置
+    this->addChild(waveLabel, 1);
 
     std::string mapName = "L2.tmx";
     initScene(mapName);
@@ -228,12 +259,18 @@ bool Scene2::init(int level, LevelScene* levelScene)
     cocos2d::Vec2(900 + 50, 400 + 50),
     cocos2d::Vec2(900 + 50, 500 + 50),
     cocos2d::Vec2(1100 + 50, 500 + 50),
+    cocos2d::Vec2(1150 + 50, 550 + 50),
+    };
+
+    path1 = {
+        cocos2d::Vec2(1150 + 50, 550 + 50),
     };
 
     auto create1 = CallFunc::create([=]() {initMonster(1); });
     auto create3 = CallFunc::create([=]() {initMonster(2); });
     auto create2 = CallFunc::create([=]() {initMonster(3); });
-
+    auto createBoss = CallFunc::create([=]() {initMonster(4); });
+    /*
     Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
     gameProgress->setPosition(Vec2(420, 730));
     do {
@@ -261,14 +298,16 @@ bool Scene2::init(int level, LevelScene* levelScene)
         this->addChild(gameProgress, 4);
 
     } while (0);
-
+    */
+    // 开始调度波次更新
+    schedule(CC_SCHEDULE_SELECTOR(Scene2::updateWave), 20.0f); // 每30秒更新一次波次
     runAction(Sequence::create(
         DelayTime::create(2), create1,
         DelayTime::create(2), create3,
         DelayTime::create(2), create1,
         DelayTime::create(2), create1,
 
-        DelayTime::create(12), create2,
+        DelayTime::create(13), create2,
         DelayTime::create(2), create1,
         DelayTime::create(2), create2,
         DelayTime::create(2), create1,
@@ -286,10 +325,16 @@ bool Scene2::init(int level, LevelScene* levelScene)
         DelayTime::create(2), create3,
         DelayTime::create(2), create2,
         DelayTime::create(1), create1,
+        DelayTime::create(2), createBoss,
         CallFunc::create([=]() {monsterFlag = true; }),
         nullptr));
 
     return true;
+}
+
+void Scene2::updateWave(float t) {
+    game.nextWave();
+    waveLabel->setString("Wave: " + std::to_string(game.getWave()));
 }
 
 Scene3* Scene3::createScene(int level, LevelScene* levelScene)
@@ -308,7 +353,7 @@ Scene3* Scene3::createScene(int level, LevelScene* levelScene)
     return scene;
 }
 
-void Scene3::initMonster(int choose)    //1-3在上方出生点，4-6在下方出生点
+void Scene3::initMonster(int choose)    
 {
     if (choose == 1)
     {
@@ -334,9 +379,9 @@ void Scene3::initMonster(int choose)    //1-3在上方出生点，4-6在下方�
     else if (choose == 4)
     {
         Boss* Monster = Boss::create();
-        Monster->setPosition(Vec2(1000, 200 + 100));
+        Monster->setPosition(Vec2(1000, 200 + 50));
         this->addChild(Monster);
-        Monster->moveToSequence(path1);
+        Monster->moveToSequence(path);
     }
 
 }
@@ -353,9 +398,14 @@ bool Scene3::init(int level, LevelScene* levelScene)
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("level-3.mp3");
     CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("level-3.mp3", true);
 
-    moneyScene = 1000 + 100 * (levelScene->getItem1Level());
+    moneyScene = player.getStartmoney();
     m_level = level;
     m_levelScene = levelScene; // 保存关卡选择场景的指针
+
+    // 创建波次显示的 Label
+    waveLabel = Label::createWithTTF("Wave: 1", "fonts/arial.ttf", 48);
+    waveLabel->setPosition(Vec2(350, 750)); // 设置波次显示的位置
+    this->addChild(waveLabel, 1);
 
     std::string mapName = "L3.tmx";
     initScene(mapName);
@@ -378,11 +428,7 @@ bool Scene3::init(int level, LevelScene* levelScene)
     cocos2d::Vec2(1100 + 50, 82 + 50)
     };
 
-    path1 = {
-    cocos2d::Vec2(1100 + 50, 200 + 100),
-    cocos2d::Vec2(1100 + 50, 82 + 100)
-    };
-
+    /*
     Sprite* gameProgress = Sprite::create("gege1.png");    //创建进度条
     gameProgress->setPosition(Vec2(420, 730));
     do {
@@ -410,31 +456,40 @@ bool Scene3::init(int level, LevelScene* levelScene)
         this->addChild(gameProgress, 4);
 
     } while (0);
-
+    */
     auto create1 = CallFunc::create([=]() {initMonster(1); });
     auto create2 = CallFunc::create([=]() {initMonster(2); });
     auto create3 = CallFunc::create([=]() {initMonster(3); });
     auto createBoss = CallFunc::create([=]() {initMonster(4); });
 
+    // 开始调度波次更新
+    schedule(CC_SCHEDULE_SELECTOR(Scene3::updateWave), 20.0f); // 每30秒更新一次波次
     runAction(Sequence::create(
-        DelayTime::create(2), createBoss,
         DelayTime::create(2), create1,
         DelayTime::create(2), create2,
         DelayTime::create(2), create1,
         DelayTime::create(2), create2,
 
+        DelayTime::create(13), create1,
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
+        DelayTime::create(2), create2,
+        DelayTime::create(2), create2,
+
+        DelayTime::create(12), create1,
+        DelayTime::create(2), create1,
         DelayTime::create(2), create1,
         DelayTime::create(2), create1,
         DelayTime::create(2), create2,
 
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create1,
-
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create1,
-        DelayTime::create(2), create2,
+        DelayTime::create(12), createBoss,
 
         CallFunc::create([=]() {monsterFlag = true; }),
         nullptr));
     return true;
+}
+
+void Scene3::updateWave(float t) {
+    game.nextWave();
+    waveLabel->setString("Wave: " + std::to_string(game.getWave()));
 }

@@ -5,7 +5,7 @@
 
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
-
+#include "PlayerInf.h"
 
 class SettingScene : public cocos2d::Scene
 {
@@ -16,8 +16,10 @@ public:
     virtual bool init();
 
     //开关音量
-    void SettingScene::checkBoxEvent(Ref* sender, cocos2d::ui::CheckBox::EventType type);
+    void checkBoxEvent(Ref* sender, cocos2d::ui::CheckBox::EventType type);
 
+    //改变难度
+    void sliderEvent(Ref* sender, cocos2d::ui::Slider::EventType type);
 
     //返回标题界面
     void goBack(cocos2d::Ref* pSender);

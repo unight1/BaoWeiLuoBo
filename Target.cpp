@@ -7,6 +7,7 @@ USING_NS_CC;
 static Target* selectedTarget = nullptr; // 保证同一时刻只有一个实体被集火
 void Target::takeDamage(int damage) {
     HP -= damage;
+    cure();         //boss技能
     if (!isAlive()) {
         if (this == selectedTarget) {
             selectedTarget = nullptr;
@@ -110,4 +111,9 @@ void Target::setAllTarget() {
         choose->setPosition(Vec2(this->getContentSize().width / 2, this->getContentSize().height));//精灵在怪物头顶
         addChild(choose);
     }
+}
+
+//boss技能
+void Target::cure() {
+
 }

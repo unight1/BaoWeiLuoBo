@@ -19,6 +19,8 @@ public:
     int getRadius();
     //设置集火目标
     void setAllTarget();
+    //治疗
+    virtual void cure();
 
 
 protected:

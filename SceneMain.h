@@ -10,6 +10,7 @@ public:
     static Scene1* createScene(int level, LevelScene* levelScene);
     virtual bool init(int level, LevelScene* levelScene) override;
     virtual void initMonster(int choose) override;
+    void updateWave(float t);
     virtual ~Scene1() {};
 };
 
@@ -19,8 +20,11 @@ public:
     static Scene2* createScene(int level, LevelScene* levelScene);
     virtual bool init(int level, LevelScene* levelScene) override;
     virtual void initMonster(int choose) override;
+    void updateWave(float t);
     // ÐéÎö¹¹
     virtual ~Scene2() {};
+protected:
+    std::vector<Vec2> path1;
 };
 
 class Scene3 : public SceneBase
@@ -29,9 +33,9 @@ public:
     static Scene3* createScene(int level, LevelScene* levelScene);
     virtual bool init(int level, LevelScene* levelScene) override;
     virtual void initMonster(int choose) override;
+    void updateWave(float t);
     // ÐéÎö¹¹
     virtual ~Scene3() {};
-protected:
-    std::vector<Vec2> path1;
+
 };
 #endif // __SCENCEMAIN_SCENE_H__

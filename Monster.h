@@ -2,6 +2,7 @@
 #define __MONSTER_H__
 
 #include "MonsterBase.h"
+#include "target.h"
 
 class Sheep : public Monster {
 public:
@@ -37,6 +38,6 @@ public:
 
     virtual void moveToSequence(const std::vector<Vec2>& positions) override;
     virtual bool init() override;
-
+    void cure();
 };
 #endif // __MONSTER_H__

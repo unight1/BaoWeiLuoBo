@@ -8,13 +8,13 @@ class UpScene : public Scene
 {
 public:
     static UpScene* create(LevelScene* levelScene);
-    Label* m_upgrade1Label;
-    Label* m_upgrade2Label;
+    Label* upgrade1Label;
+    Label* upgrade2Label;
     virtual bool init(LevelScene* levelScene);
     void onItem1Button(Ref* sender);
     void onItem2Button(Ref* sender);
-    Label* m_item1LevelLabel;
-    Label* m_item2LevelLabel;
+    Label* startmoneyLabel;
+    Label* startHPLabel;
 private:
 
     void onBackButton(Ref* sender);

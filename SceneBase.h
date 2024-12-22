@@ -73,6 +73,7 @@ protected:
     int m_level;                        //保存当前的关卡编号
     LevelScene* m_levelScene;           //保存关卡选择场景的指针
     Carrot* carrot=Carrot::create();    //指向萝卜的唯一实例
+    Label* waveLabel;                   //波次显示
 };
 
 #endif  //__SCENCEBASE_SCENE_H__
