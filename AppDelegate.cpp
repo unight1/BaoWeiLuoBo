@@ -107,8 +107,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // run
     //²¥·ÅÒôÀÖ
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("BGMusic.mp3");
-    if (UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState", true))
-        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGMusic.mp3", true);
+    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("BGMusic.mp3", true);
     director->runWithScene(scene);
 
     return true;

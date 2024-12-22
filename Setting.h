@@ -15,9 +15,6 @@ public:
     //初始化
     virtual bool init();
 
-    //开关音量
-    void checkBoxEvent(Ref* sender, cocos2d::ui::CheckBox::EventType type);
-
     //改变难度
     void sliderEvent(Ref* sender, cocos2d::ui::Slider::EventType type);
 

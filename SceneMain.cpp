@@ -159,9 +159,9 @@ bool Scene1::init(int level, LevelScene* levelScene)
             DelayTime::create(1), create2,
             CallFunc::create([=]() {monsterFlag = true; }),
             nullptr));
-        return true;
-
     } while (0);
+    return true;
+
 }
 
 void Scene1::updateWave(float t) {
