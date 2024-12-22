@@ -21,7 +21,7 @@ bool Sheep::init() {
     addChild(BUTTON);
 
     // 初始化HP
-    maxHP = HP = 100;
+    maxHP = HP = 100 + 3 * player.getDifficulty();
     // 初始化击杀奖励
     value = 50;
     // 初始化速度
@@ -87,7 +87,7 @@ bool Bird::init() {
 
     // 初始化怪物的外观和属性
     // 初始化HP
-    maxHP = HP = 80;
+    maxHP = HP = 80 + 2 * player.getDifficulty();
     // 初始化击杀奖励
     value = 50;
     // 初始化速度
@@ -164,7 +164,7 @@ bool Star::init() {
 
     // 初始化怪物的外观和属性
     // 初始化HP
-    maxHP = HP = 200;
+    maxHP = HP = 200 + 2 * player.getDifficulty();
     // 初始化击杀奖励
     value = 75;
     // 初始化速度
@@ -250,7 +250,7 @@ bool Boss::init() {
     addChild(BUTTON);
 
     // 初始化HP
-    maxHP = HP = 300;
+    maxHP = HP = 300 + 2 * player.getDifficulty();
     // 初始化击杀奖励
     value = 50;
     // 初始化速度

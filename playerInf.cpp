@@ -6,6 +6,7 @@ playerInf::playerInf() {
 	startmoney = UserDefault::getInstance()->getIntegerForKey("Startmoney", 600);
 	startHP = UserDefault::getInstance()->getIntegerForKey("StartHP", 10);
 	music = UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState", true);
+	difficulty= UserDefault::getInstance()->getIntegerForKey("Difficulty", 1);
 }
 
 //花钱
@@ -47,6 +48,7 @@ void playerInf::clear() {
 	UserDefault::getInstance()->setIntegerForKey("Startmoney", 600);
 	UserDefault::getInstance()->setIntegerForKey("StartHP", 10);
 	UserDefault::getInstance()->setBoolForKey("Music", true);
+	UserDefault::getInstance()->setIntegerForKey("Difficulty", 1);
 	UserDefault::getInstance()->flush();
 
 	money = 0;
@@ -62,7 +64,8 @@ void playerInf::save() {
 	UserDefault::getInstance()->setIntegerForKey("UnlockedLevel", unlockedLevel);
 	UserDefault::getInstance()->setIntegerForKey("Startmoney", startmoney);
 	UserDefault::getInstance()->setIntegerForKey("StartHP", startHP);
-	UserDefault::getInstance()->setBoolForKey("VolumeCheckBoxState", true);
+	UserDefault::getInstance()->setBoolForKey("VolumeCheckBoxState", music);
+	UserDefault::getInstance()->setIntegerForKey("Difficulty", difficulty);
 	UserDefault::getInstance()->flush(); // 确保数据被写入
 }
 
@@ -72,6 +75,7 @@ void playerInf::load() {
 	startmoney = UserDefault::getInstance()->getIntegerForKey("Startmoney", 600);
 	startHP = UserDefault::getInstance()->getIntegerForKey("StartHP", 10);
 	music = UserDefault::getInstance()->getBoolForKey("VolumeCheckBoxState", true);
+	difficulty = UserDefault::getInstance()->getIntegerForKey("Difficulty", 1);
 }
 
 bool playerInf::getMusic() const {
@@ -82,13 +86,22 @@ void playerInf::changeMusic() {
 	music = !music;
 }
 
-int playerInf::getLevel() {
+int playerInf::getLevel() const{
 	return unlockedLevel;
 }
 
 void playerInf::changeULevel(int level) {
 	if (unlockedLevel < level)
 		unlockedLevel = level;
+	player.save();
+}
+
+int playerInf::getDifficulty() const {
+	return difficulty;
+}
+
+void playerInf::changeDifficulty(int dif) {
+	difficulty = dif;
 	player.save();
 }
 
