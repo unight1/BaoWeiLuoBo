@@ -259,11 +259,11 @@ bool Scene2::init(int level, LevelScene* levelScene)
     cocos2d::Vec2(900 + 50, 400 + 50),
     cocos2d::Vec2(900 + 50, 500 + 50),
     cocos2d::Vec2(1100 + 50, 500 + 50),
-    cocos2d::Vec2(1150 + 50, 550 + 50),
+    //cocos2d::Vec2(1150 + 50, 550 + 50),
     };
 
     path1 = {
-        cocos2d::Vec2(1150 + 50, 550 + 50),
+        cocos2d::Vec2(1100 + 50, 500 + 50),
     };
 
     auto create1 = CallFunc::create([=]() {initMonster(1); });
@@ -482,7 +482,9 @@ bool Scene3::init(int level, LevelScene* levelScene)
         DelayTime::create(2), create1,
         DelayTime::create(2), create2,
 
-        DelayTime::create(12), createBoss,
+        DelayTime::create(12), createBoss, 
+        DelayTime::create(2), create1,
+        DelayTime::create(2), create2,
 
         CallFunc::create([=]() {monsterFlag = true; }),
         nullptr));

@@ -374,7 +374,7 @@ void SceneBase::createFire(Ref* sender)
             this->addChild(tower, 2);  // 将炮塔添加到场景中
             button->getParent()->setVisible(false);
             tower->bottom = bottom;//
-            this->updateMoney(-100);
+            this->updateMoney(-160);
         }
     }
 }
@@ -427,7 +427,7 @@ void SceneBase::createSunflower(cocos2d::Ref* sender)
             this->addChild(tower, 2);  // 将炮塔添加到场景中
             button->getParent()->setVisible(false);
             tower->bottom = bottom;
-            this->updateMoney(-120);
+            this->updateMoney(-200);
         }
     }
 }
