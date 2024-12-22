@@ -3,6 +3,7 @@
 #include "SceneMain.h"
 #include "UpScene.h"
 #include "audio/include/SimpleAudioEngine.h"
+#include "wave.h"
 
 
 Scene* LevelScene::createScene()
@@ -92,6 +93,7 @@ void LevelScene::selectLevel1(Ref* sender)
 
     m_gameScene = Scene1::createScene(1, this); // 传递关卡编号
     Director::getInstance()->pushScene(m_gameScene);
+    game.clear();
     player.save();
 }
 
@@ -105,6 +107,7 @@ void LevelScene::selectLevel2(Ref* sender)
         m_gameScene = Scene2::createScene(2, this); // 传递关卡编号和 LevelScene 场景的指针
         Director::getInstance()->pushScene(m_gameScene);
     }
+    game.clear();
     player.save();
 }
 
@@ -118,6 +121,7 @@ void LevelScene::selectLevel3(Ref* sender)
         m_gameScene = Scene3::createScene(3, this); // 传递关卡编号和 LevelScene 场景的指针
         Director::getInstance()->pushScene(m_gameScene);
     }
+    game.clear();
     player.save();
 }
 
@@ -148,9 +152,6 @@ void LevelScene::unlockLevel(int level)
     player.changeULevel(level);
     updateButtonState(); // 更新按钮状态和图片
 }
-
-
-
 
 
 void LevelScene::enterUpgradeScene(Ref* sender)

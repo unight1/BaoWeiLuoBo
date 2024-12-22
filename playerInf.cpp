@@ -1,4 +1,4 @@
-#include <PlayerInf.h>
+#include "PlayerInf.h"
 
 playerInf::playerInf() {
 	money = UserDefault::getInstance()->getIntegerForKey("Money", 0);

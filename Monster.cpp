@@ -1,6 +1,6 @@
 ﻿#include "Monster.h"
 #include "SceneBase.h"
-
+#include "wave.h"
 
 USING_NS_CC;
 
@@ -21,7 +21,7 @@ bool Sheep::init() {
     addChild(BUTTON);
 
     // 初始化HP
-    maxHP = HP = 100 + 3 * player.getDifficulty();
+    maxHP = HP = 50 + player.getDifficulty() + 100 * game.getWave();
     // 初始化击杀奖励
     value = 50;
     // 初始化速度
@@ -87,7 +87,7 @@ bool Bird::init() {
 
     // 初始化怪物的外观和属性
     // 初始化HP
-    maxHP = HP = 80 + 2 * player.getDifficulty();
+    maxHP = HP = 20 +  player.getDifficulty() + 40 * game.getWave();
     // 初始化击杀奖励
     value = 50;
     // 初始化速度
@@ -164,7 +164,7 @@ bool Star::init() {
 
     // 初始化怪物的外观和属性
     // 初始化HP
-    maxHP = HP = 200 + 2 * player.getDifficulty();
+    maxHP = HP = 60 + player.getDifficulty() + 30 * game.getWave();
     // 初始化击杀奖励
     value = 75;
     // 初始化速度
@@ -250,15 +250,15 @@ bool Boss::init() {
     addChild(BUTTON);
 
     // 初始化HP
-    maxHP = HP = 300 + 2 * player.getDifficulty();
+    maxHP = HP = 250 + player.getDifficulty() + 30 * game.getWave();
     // 初始化击杀奖励
     value = 50;
     // 初始化速度
-    speed = 40;
+    speed = 30;
     // 初始化半径
     radius = 10;
     //初始化伤害
-    hurt = 10;
+    hurt = 5;
 
     return true;
 }
@@ -308,8 +308,6 @@ void Boss::moveToSequence(const std::vector<Vec2>& positions)
     // 将动画动作应用到精灵对象上
     this->runAction(Spawn::create(animate, sequence, nullptr)); // 执行序列动作
 }
-
-
 
 //治疗技能
 void Boss::cure() 
